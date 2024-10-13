@@ -1,0 +1,50 @@
+/*css da navBar*/
+
+.appBar {
+    background-color: #252746 !important; /* !important para sobrescrever */
+}
+
+.BtnInscrever {
+    color: #fff !important;
+}
+
+.customButton {
+    background-color: #9b59b6 !important; 
+    color: white !important; 
+    border: none !important; 
+    border-radius: 8px !important; 
+    padding: 10px 20px !important; 
+    font-size: 16px !important; 
+    cursor: pointer !important; 
+    transition: background-color 0.3s !important; 
+}
+
+.customButton2{
+color: #fff !important;
+margin-right: 20px !important;
+}
+
+
+/* Formulário */
+.container {
+    display: flex; /* Permite disposição horizontal */
+    align-items: center; /* Alinha verticalmente ao centro */
+    min-height: 70vh;
+    padding-top: 25px; /* 4 unidades do Material UI é 32px */
+    padding-left: 10px;
+  }
+  
+  /* Ajuste de largura máxima */
+  .container-md {
+    padding-left: 300px;
+    width: 50%;
+    
+  }
+  
+  #img { 
+    width: 400px;
+    height: auto; 
+    border-radius: 8px;
+    
+  }
+
