@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from 'react';
+/*import React, { useState, FormEvent } from 'react';
 import { gerarQuestaoIa } from '../services/iaService';
 
 const GerarQuestao: React.FC = () => {
@@ -44,4 +44,4 @@ const GerarQuestao: React.FC = () => {
   );
 };
 
-export default GerarQuestao;
+export default GerarQuestao; */

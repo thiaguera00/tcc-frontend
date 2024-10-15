@@ -12,7 +12,7 @@
     background-color: #9b59b6 !important; 
     color: white !important; 
     border: none !important; 
-    border-radius: 8px !important; 
+    border-radius: 10px !important; 
     padding: 10px 20px !important; 
     font-size: 16px !important; 
     cursor: pointer !important; 
@@ -24,27 +24,111 @@ color: #fff !important;
 margin-right: 20px !important;
 }
 
+/* Container principal */
+.main-container {
+  background-color:  #252746; /* Cor de fundo escura */
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 
-/* Formulário */
-.container {
-    display: flex; /* Permite disposição horizontal */
-    align-items: center; /* Alinha verticalmente ao centro */
-    min-height: 70vh;
-    padding-top: 25px; /* 4 unidades do Material UI é 32px */
-    padding-left: 10px;
-  }
-  
-  /* Ajuste de largura máxima */
-  .container-md {
-    padding-left: 300px;
-    width: 50%;
-    
-  }
-  
-  #img { 
-    width: 400px;
-    height: auto; 
-    border-radius: 8px;
-    
-  }
+/* Área do conteúdo principal */
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 80%;
+  max-width: 1200px;
+  margin-top: 50px;
+}
+
+/* Seção do formulário e texto */
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 400px;
+}
+
+h1 {
+  color: #fff;
+  font-size: 2.5rem;
+}
+
+/* Imagem */
+#img {
+  width: 500px;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* Inputs e Botão */
+.MuiTextField-root, .MuiButton-root {
+  background-color: #2E294E;
+  color: white;
+}
+
+.MuiButton-root:hover {
+  background-color: #8E44AD;
+}
+
+/*-----------------------------Editor de codigo---------------------------------------------*/
+
+#Editor h1{
+  font-size: 4em;
+}
+
+
+#Editor img{
+ padding-left: 0px;
+ width: 100%;
+}
+
+#aprender {
+  background-color: #A66FD9;
+  border-radius: 10px;
+  margin-top: 50px;
+  width: 60%;
+  height: 100px;
+  display: flex; /* Alinha conteúdo horizontalmente */
+  align-items: center; /* Alinha verticalmente ao centro */
+  justify-content: space-between; /* Espaço entre itens */
+  padding: 10px;
+  gap: 15px; /* Espaço entre elementos */
+}
+
+#aprender h1 {
+  font-size: 1.8em;
+  color: white;
+  margin: 0;
+}
+
+#aprender img {
+  height: 190px;
+  margin-left: 20px; /* Espaçamento entre imagem e texto */
+}
+
+#conteudo {
+  flex: 1; /* Faz o conteúdo ocupar o espaço necessário */
+}
+
+#btn-aprender {
+  background-color: white;
+  color: #252746;
+  border: none;
+  border-radius: 10px;
+  height: 50px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  align-self: center; /* Alinha o botão à direita */
+}
+
+#btn-aprender:hover {
+  background-color: #f2f2f2;
+}
+
 
