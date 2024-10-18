@@ -28,5 +28,4 @@ const corrigirCodigo = async (code: string) => {
   }
 };
 
-
 export  { gerarQuestaoIa, corrigirCodigo };
