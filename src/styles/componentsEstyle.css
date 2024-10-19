@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Adlam+Display&display=swap');
+
+
 /*css da navBar*/
 
 .appBar {
@@ -9,14 +12,14 @@
 }
 
 .customButton {
-    background-color: #9b59b6 !important; 
-    color: white !important; 
-    border: none !important; 
-    border-radius: 10px !important; 
-    padding: 10px 20px !important; 
-    font-size: 16px !important; 
-    cursor: pointer !important; 
-    transition: background-color 0.3s !important; 
+  border: 2px solid #8E44AD !important; /* Borda com cor e espessura */
+  color: white !important; 
+  border-radius: 10px !important; 
+  padding: 10px 20px !important; 
+  font-size: 14px !important; 
+  cursor: pointer !important; 
+  transition: background-color 0.3s !important; 
+  position: relative;
 }
 
 .customButton2{
@@ -26,7 +29,6 @@ margin-right: 20px !important;
 
 /* Container principal */
 .main-container {
-  background-color:  #252746; /* Cor de fundo escura */
   min-height: 60vh;
   display: flex;
   flex-direction: column;
@@ -39,9 +41,9 @@ margin-right: 20px !important;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 80%;
+  width:100%;
   max-width: 1200px;
-  margin-top: 50px;
+  margin-top: 200px;
 }
 
 /* Seção do formulário e texto */
@@ -52,21 +54,25 @@ margin-right: 20px !important;
   max-width: 400px;
 }
 
+.texNix{
+  font-family: 'Adlam Display';
+}
+
 h1 {
   color: #fff;
-  font-size: 2.5rem;
+  font-size: 3.9rem;
 }
 
 /* Imagem */
 #img {
-  width: 500px;
+  width: 700px;
   height: auto;
   border-radius: 8px;
 }
 
 /* Inputs e Botão */
 .MuiTextField-root, .MuiButton-root {
-  background-color: #2E294E;
+  background-color: #A66FD9 ;
   color: white;
 }
 
@@ -78,19 +84,21 @@ h1 {
 
 #Editor h1{
   font-size: 4em;
+  margin-bottom: 50px;
 }
 
 
 #Editor img{
- padding-left: 0px;
- width: 100%;
+ padding-left: 20px;
+ width: 90%;
 }
 
+/* ---------------------------------Apreder/nix----------------------------------------------------- */
 #aprender {
   background-color: #A66FD9;
   border-radius: 10px;
   margin-top: 50px;
-  width: 60%;
+  width: 65%;
   height: 100px;
   display: flex; /* Alinha conteúdo horizontalmente */
   align-items: center; /* Alinha verticalmente ao centro */
@@ -100,7 +108,7 @@ h1 {
 }
 
 #aprender h1 {
-  font-size: 1.8em;
+  font-size: 1.5em;
   color: white;
   margin: 0;
 }
@@ -131,4 +139,110 @@ h1 {
   background-color: #f2f2f2;
 }
 
+/*-------------------------------Gamefic----------------------------------------------------------------*/
 
+#sectionGameficacao {
+  padding: 90px 20px; /* Espaçamento para todo o container */
+  display: flex;
+  flex-wrap: wrap; /* Para garantir que se ajuste bem em diferentes tamanhos de tela */
+  justify-content: space-around; /* Distribui os itens de forma uniforme */
+  gap: 20px; /* Espaço entre as colunas */
+  text-align: center; /* Centraliza os textos */
+  color: white;
+}
+
+.item {
+  width: 500px; /* Mantém o tamanho uniforme */
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column; /* Alinha verticalmente os itens */
+  align-items: center; /* Centraliza o conteúdo horizontalmente */
+  text-align: center; /* Garante que o texto dentro da div seja centralizado */
+}
+
+.item h1 {
+  font-size: 1.5em; /* Tamanho do título ajustado */
+  margin-bottom: 10px;
+}
+
+.item p {
+  font-size: 1em;
+  line-height: 1.5; /* Altura da linha para melhor leitura */
+  margin: 0; /* Remove margem para garantir alinhamento */
+  padding: 0; /* Remove padding para manter o layout consistente */
+}
+
+
+
+@media (min-width: 768px) {
+  #sectionGameficacao {
+      gap: 40px; /* Ajusta o espaçamento para telas maiores */
+  }
+}
+
+@media (min-width: 1024px) {
+  #sectionGameficacao {
+      justify-content: space-between; /* Para grandes telas, espaça melhor as colunas */
+  }
+}
+
+
+.sectionGameficacaoIMG{
+  width: 140px; /* Redimensiona a largura da imagem */
+  height: auto; /* Mantém a proporção correta */
+  margin-bottom: 10px; /* Espaçamento entre a imagem e o título */ 
+}
+
+/*-------------------------------integrantes-----------------------------------------------------*/
+
+#about {
+  padding: 50px 0; /* Espaçamento vertical */
+  display: flex;
+  justify-content: center; /* Centraliza o conteúdo no meio da página */
+}
+
+.textAbout {
+  max-width: 50%; /* Limita o texto a 50% da largura do container */
+  color: white;
+}
+
+.textAbout h1 {
+  font-size: 3em;
+  margin-bottom: 20px;
+  margin-left: 50%;
+}
+
+.textAbout p {
+  font-size: 1.4em;
+  line-height: 1.6;
+  margin-left: 50%;
+}
+
+.image {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  max-width: 70%; /* Limita a imagem a 50% da largura do container */
+}
+
+.integrantes {
+  width: auto;
+  max-height: 700px; /* Limita a altura máxima da imagem */
+  border-radius: 10px; /* Bordas arredondadas */
+  object-fit: cover; /* Garante que a imagem se ajuste corretamente */
+}
+
+@media (max-width: 768px) {
+  .content {
+      flex-direction: column; /* Organiza o layout em coluna em telas pequenas */
+      text-align: center; /* Centraliza o texto */
+  }
+
+  .textAbout, .image {
+      max-width: 100%; /* Em telas pequenas, ocupam 100% da largura */
+  }
+
+  .image {
+      margin-top: 20px; /* Adiciona espaçamento entre o texto e a imagem */
+  }
+}
