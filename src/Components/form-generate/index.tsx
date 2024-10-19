@@ -5,6 +5,8 @@ interface InputField {
   name: string;
   type: string;
   placeholder: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 interface FormGenerateProps {
@@ -37,6 +39,8 @@ export const FormGenerate: React.FC<FormGenerateProps> = ({ inputs, action, meth
             type={input.type}
             name={input.name}
             placeholder={input.placeholder}
+            value={input.value}
+            onChange={input.onChange}
             style={{
               padding: '16px',
               borderRadius: '12px',
