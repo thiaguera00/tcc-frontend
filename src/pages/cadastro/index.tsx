@@ -3,12 +3,11 @@ import { FormGenerate } from "../../Components/form-generate";
 import { NavBarButton } from "../../Components/nav-bar-button";
 import { Box } from '@mui/material';
 import { registrarEstudante } from "../../services/userService";
-import { useNavigate } from 'react-router-dom'; // Importando o hook useNavigate
+import { useNavigate } from 'react-router-dom';
 
 export const Cadastro = () => {
-  const navigate = useNavigate(); // Hook do react-router-dom para navegar para outras páginas
+  const navigate = useNavigate();
   
-  // Estados para armazenar valores dos inputs do formulário
   const [formData, setFormData] = useState({
     nome: '',
     email: '',
@@ -16,7 +15,6 @@ export const Cadastro = () => {
     confirmPassword: ''
   });
 
-  // Estado para exibir mensagem de erro ou sucesso
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
@@ -30,25 +28,22 @@ export const Cadastro = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setErrorMessage(null); // Limpar mensagens de erro ao enviar
-    setSuccessMessage(null); // Limpar mensagens de sucesso ao enviar
+    setErrorMessage(null);
+    setSuccessMessage(null);
 
-    // Validação básica para conferir se as senhas batem
     if (formData.password !== formData.confirmPassword) {
       setErrorMessage('As senhas não coincidem');
       return;
     }
 
     try {
-      // Chamada ao serviço para registrar o usuário
       const response = await registrarEstudante(formData.nome, formData.email, formData.password);
       console.log('Usuário registrado com sucesso:', response);
       
-      // Definindo a mensagem de sucesso e redirecionando para a página de login
       setSuccessMessage('Usuário registrado com sucesso! Redirecionando para a página de login...');
       
       setTimeout(() => {
-        navigate('/login'); // Redireciona o usuário para a página de login após 3 segundos
+        navigate('/login');
       }, 3000);
 
     } catch (error) {

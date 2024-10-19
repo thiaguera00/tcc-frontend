@@ -5,8 +5,8 @@ interface InputField {
   name: string;
   type: string;
   placeholder: string;
-  value: string; // Adicionei para receber o valor atual do campo
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; // Adicionei para receber o evento onChange
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 interface FormGenerateProps {
@@ -39,8 +39,8 @@ export const FormGenerate: React.FC<FormGenerateProps> = ({ inputs, action, meth
             type={input.type}
             name={input.name}
             placeholder={input.placeholder}
-            value={input.value} // Usando o valor do input recebido via props
-            onChange={input.onChange} // Chamando o onChange ao mudar o valor
+            value={input.value}
+            onChange={input.onChange}
             style={{
               padding: '16px',
               borderRadius: '12px',
