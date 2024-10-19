@@ -23,7 +23,7 @@ const Formulario: React.FC = () => {
       <Button id='btnLogin'
         variant="contained"
         fullWidth
-        sx={{ backgroundColor: '#9C27B0', '&:hover': { backgroundColor: '#7B1FA2' } }}
+        sx={{ backgroundColor: '#A66FD9', '&:hover': { backgroundColor: '#A66FD9' } }}
       >
         Inscreva-se gratuitamente
       </Button>

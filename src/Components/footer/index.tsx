@@ -5,10 +5,10 @@ export const Footer = () => {
     <footer style={{ backgroundColor: '#191B33', padding: '20px 0 100px 0', position: 'relative' }}>
       <div id="footerDiv" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
         <div>
-          <h1 style={{ color: '#FFFFFF', fontSize: '27.2px' }}>NIX</h1>
+          <h1 style={{ color: '#FFFFFF', fontSize: '27.2px', marginTop: '60px' }}>NIX</h1>
         </div>
         <div>
-          <h1 style={{ color: '#FFFFFF', fontSize: '27.2px' }}>Acompanhe a gente</h1>
+          <h1 style={{ color: '#FFFFFF', fontSize: '27.2px', paddingBottom: '20px' }}>Acompanhe a gente</h1>
         </div>
         <Link to={'https://discord.gg/pUwuhkPTVD'}> 
           <img src="/assets/Vector.png" alt="Discord" />
@@ -21,11 +21,11 @@ export const Footer = () => {
           right: '100px',
           bottom: '0',
           width: '150px', 
-          height: '150px' 
+          height: '200px' 
         }}
       />
       </div>
-
+   
       {/* Imagem da cabeça Nix posicionada na parte inferior direita */}
     </footer>
   );
