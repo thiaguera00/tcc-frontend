@@ -30,10 +30,13 @@ export const Login = () => {
     try {
       const response = await loginEstudante(formData.email, formData.password);
       console.log('Login realizado com sucesso:', response);
-      
-      localStorage.setItem('token', response.access_token);
 
-      navigate('/paginaInicial');
+      if (response?.access_token) {
+        localStorage.setItem('access_token', response.access_token);
+        navigate('/paginaInicial');
+      } else {
+        setErrorMessage('Erro inesperado: token não recebido.');
+      }
     } catch (error) {
       setErrorMessage('Credenciais inválidas. Tente novamente.');
       console.error('Erro ao fazer login:', error);

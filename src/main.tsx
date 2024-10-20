@@ -7,6 +7,7 @@ import { Cadastro } from './pages/cadastro';
 import { Login } from './pages/login';
 import PrivateRoute from './routes/privateRoute';
 import { PaginaInicial } from './pages/pagina-inicial';
+import { Pesquisa } from './pages/pesquisa';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -20,6 +21,14 @@ createRoot(document.getElementById('root')!).render(
           element={
             <PrivateRoute>
               <PaginaInicial />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/pesquisa"
+          element={
+            <PrivateRoute>
+              <Pesquisa />
             </PrivateRoute>
           }
         />
