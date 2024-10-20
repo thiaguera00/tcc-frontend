@@ -7,6 +7,7 @@ import { Cadastro } from './pages/cadastro';
 import { Login } from './pages/login';
 import PrivateRoute from './routes/privateRoute';
 import { PaginaInicial } from './pages/pagina-inicial';
+import { Perfil } from './pages/perfil/PerfilInicio';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -15,11 +16,13 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Cadastro />} />
+        <Route path="/perfil" element={<Perfil />} />
         <Route
           path="/paginaInicial"
           element={
             <PrivateRoute>
               <PaginaInicial />
+
             </PrivateRoute>
           }
         />
