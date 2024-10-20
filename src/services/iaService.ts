@@ -29,14 +29,8 @@ const corrigirCodigo = async (code: string) => {
 
 const classificarEstudante = async (responseStudents: string[], userId: string) => {
   try {
-    // Obter o token do localStorage
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
 
-    if (!token) {
-      throw new Error('Usuário não autenticado');
-    }
-
-    // Fazer a requisição para a API
     const response = await axios.post(
       `${API_URL}/ia/classificationStudent`,
       {
@@ -46,7 +40,7 @@ const classificarEstudante = async (responseStudents: string[], userId: string) 
       {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`, // Adiciona o token JWT no cabeçalho
+          'Authorization': `Bearer ${token}`,
         },
       }
     );
@@ -57,7 +51,6 @@ const classificarEstudante = async (responseStudents: string[], userId: string) 
     throw error;
   }
 };
-
 
 
 export  { gerarQuestaoIa, corrigirCodigo, classificarEstudante };

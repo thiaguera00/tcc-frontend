@@ -3,8 +3,10 @@ import { Box, Card, Typography, LinearProgress, Button, IconButton, Modal } from
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { classificarEstudante } from '../../services/iaService';
 import { getUserIdFromToken } from '../../utils/authUtils';
+import { useNavigate } from 'react-router-dom';
 
 export const Pesquisa = () => {
+  const navigate = useNavigate();
   const questions = [
     {
       question: 'Bem-vindo! Eu sou a Nix. Serei sua companheira em toda a sua jornada de aprendizado!',
@@ -55,20 +57,17 @@ export const Pesquisa = () => {
       setAnswers(updatedAnswers);
     }
 
-    // Se estiver na última pergunta, chama a API
     if (currentQuestionIndex === questions.length - 1) {
       try {
-
         const userId = getUserIdFromToken();
-        console.log(userId);
+
         if (!userId) {
           throw new Error('Usuário não autenticado.');
         }
 
-        // Fazemos a chamada para classificar o estudante com o estado atualizado e o userId
         const response = await classificarEstudante(updatedAnswers.slice(2), userId);
-        setClassificationResult(response); // Armazena o resultado da classificação
-        setShowModal(true); // Mostra a modal com o resultado
+        setClassificationResult(response);
+        setShowModal(true);
       } catch (error) {
         console.error('Erro ao classificar estudante:', error);
       }
@@ -81,6 +80,11 @@ export const Pesquisa = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
     }
+  };
+
+  const handleModalClose = () => {
+    setShowModal(false);
+    navigate('/paginaInicial');
   };
 
   return (
@@ -226,10 +230,9 @@ export const Pesquisa = () => {
         />
       </Box>
 
-      {/* Modal com o resultado da classificação */}
       <Modal
         open={showModal}
-        onClose={() => setShowModal(false)}
+        onClose={handleModalClose}
         sx={{
           display: 'flex',
           alignItems: 'center',
@@ -253,7 +256,7 @@ export const Pesquisa = () => {
             {classificationResult}
           </Typography>
           <Button
-            onClick={() => setShowModal(false)}
+            onClick={handleModalClose}
             sx={{
               marginTop: '24px',
               backgroundColor: '#A66FD9',

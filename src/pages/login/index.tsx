@@ -32,7 +32,7 @@ export const Login = () => {
       console.log('Login realizado com sucesso:', response);
 
       if (response?.access_token) {
-        localStorage.setItem('access_token', response.access_token);
+        localStorage.setItem('token', response.access_token);
         navigate('/paginaInicial');
       } else {
         setErrorMessage('Erro inesperado: token não recebido.');
