@@ -4,44 +4,56 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
 import { useNavigate } from 'react-router-dom';
-import perfilIcon from '../../assets/home.png';
-import praticarIcon from '../../assets/Praticar.png';
-import conquistasIcon from '../../assets/conquista.png';
-import comunidadeIcon from '../../assets/comuni.png';
-import './NavLateral.css'; // Importando o arquivo CSS
+import perfilIcon from '../../assets/perfil.svg';
+import praticarIcon from '../../assets/praticar.svg';
+import conquistasIcon from '../../assets/conquista.svg';
+import comunidadeIcon from '../../assets/comunidade.svg';
+import './index.css';
 
 export default function NavLateral() {
   const navigate = useNavigate();
 
   return (
-    <div className="sidebar-container"> {/* Aplicando a classe CSS */}
+    <div className="sidebar-container">
       <List>
-        {/* Item "Perfil" */}
-        <ListItem onClick={() => navigate('/perfil')} style={{ cursor: 'pointer' }}>
+        <ListItem
+          onClick={() => navigate('/perfil')}
+          className="list-item"
+          style={{ cursor: 'pointer' }}
+        >
           <ListItemIcon>
             <Avatar src={perfilIcon} alt="Perfil" />
           </ListItemIcon>
           <ListItemText primary="PERFIL" />
         </ListItem>
 
-        {/* Item "Praticar" */}
-        <ListItem onClick={() => navigate('/praticar')} style={{ cursor: 'pointer' }}>
+        <ListItem
+          onClick={() => navigate('/paginaInicial')}
+          className="list-item"
+          style={{ cursor: 'pointer' }}
+        >
           <ListItemIcon>
             <Avatar src={praticarIcon} alt="Praticar" />
           </ListItemIcon>
           <ListItemText primary="PRATICAR" />
         </ListItem>
 
-        {/* Item "Conquistas" */}
-        <ListItem onClick={() => navigate('/conquistas')} style={{ cursor: 'pointer' }}>
+        <ListItem
+          onClick={() => navigate('/conquistas')}
+          className="list-item"
+          style={{ cursor: 'pointer' }}
+        >
           <ListItemIcon>
             <Avatar src={conquistasIcon} alt="Conquistas" />
           </ListItemIcon>
           <ListItemText primary="CONQUISTAS" />
         </ListItem>
 
-        {/* Item "Comunidade" */}
-        <ListItem onClick={() => navigate('/comunidade')} style={{ cursor: 'pointer' }}>
+        <ListItem
+          onClick={() => navigate('/comunidade')}
+          className="list-item"
+          style={{ cursor: 'pointer' }}
+        >
           <ListItemIcon>
             <Avatar src={comunidadeIcon} alt="Comunidade" />
           </ListItemIcon>
