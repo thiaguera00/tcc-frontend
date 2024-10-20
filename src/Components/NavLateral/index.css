@@ -1,0 +1,15 @@
+.sidebar-container {
+    width: 250px;
+    
+    height: 100vh;
+    color: #fff;
+    padding-top: 100px;
+    position: fixed;
+    left: 0; 
+    top: 0;
+    z-index: 1000;
+  }
+
+  .list-item:hover .MuiListItemText-root {
+    color: #A66FD9;
+  }
