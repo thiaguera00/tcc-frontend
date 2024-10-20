@@ -29,7 +29,7 @@ const corrigirCodigo = async (code: string) => {
 
 const classificarEstudante = async (responseStudents: string[], userId: string) => {
   try {
-    const token = localStorage.getItem('access_token');
+    const token = localStorage.getItem('token');
 
     const response = await axios.post(
       `${API_URL}/ia/classificationStudent`,
