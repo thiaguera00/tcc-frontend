@@ -14,9 +14,10 @@ interface FormGenerateProps {
   inputs: InputField[];
   action: (event: React.FormEvent<HTMLFormElement>) => void;
   method: 'POST' | 'GET';
+  inputStyles?: React.CSSProperties;
 }
 
-export const FormGenerate: React.FC<FormGenerateProps> = ({ inputs, action, method, buttonName }) => {
+export const FormGenerate: React.FC<FormGenerateProps> = ({ inputs, action, method, buttonName, inputStyles }) => {
   return (
     <Box 
       component="form" 
@@ -27,7 +28,7 @@ export const FormGenerate: React.FC<FormGenerateProps> = ({ inputs, action, meth
         flexDirection: 'column', 
         gap: '24px',
         padding: '16px',
-        width: '25%',
+        width: '100%', 
         maxWidth: '600px',
         margin: '0 auto',
       }}
@@ -42,6 +43,7 @@ export const FormGenerate: React.FC<FormGenerateProps> = ({ inputs, action, meth
             value={input.value}
             onChange={input.onChange}
             style={{
+              ...inputStyles,
               padding: '16px',
               borderRadius: '12px',
               border: 'none',
@@ -60,9 +62,11 @@ export const FormGenerate: React.FC<FormGenerateProps> = ({ inputs, action, meth
         sx={{ 
           backgroundColor: '#A66FD9', 
           color: '#FFFFFF', 
-          padding: '16px',
+          padding: '16px 32px', // Aumente o padding para deixar o botão maior
           borderRadius: '8px',
           fontWeight: 'bold',
+          fontSize: '16px', // Aumente o tamanho da fonte se necessário
+          width: '100%', // Para que o botão ocupe toda a largura disponível
         }}
       >
         {buttonName}
