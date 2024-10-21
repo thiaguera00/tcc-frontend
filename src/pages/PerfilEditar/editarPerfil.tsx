@@ -1,6 +1,7 @@
 import NixNavBarPerfil from '../../Components/nav-bar-perfil';
-import NavLateral from '../../Components/NavLateral/navLateral';
+import NavLateral from '../../Components/NavLateral';
 import ProfileCardEditar from '../../Components/PerfilEditar/editarPerfil';
+
 
 export const PerfilEditar = () => {
   return (

@@ -19,7 +19,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Cadastro />} />
         <Route path="/perfil" element={<Perfil />} />
-        <Route path="/PerfilEditar" element={<PerfilEditar/>} />
+        <Route path="/perfilEditar" element={<PerfilEditar/>} />
         <Route
           path="/paginaInicial"
           element={
