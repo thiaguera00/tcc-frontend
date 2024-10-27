@@ -1,0 +1,6 @@
+/* Define o fundo da tela de conquista */
+.tela-conquista-container {
+    background-color: #252746 !important; /* Define o fundo marrom desejado */
+    min-height: 100vh; /* Garante que o fundo cubra toda a altura da tela */
+}
+

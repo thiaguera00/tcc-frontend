@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Box, Avatar, Typography, Card } from '@mui/material';
 import { atualizarperfil } from "../../services/alterarService";
 import { FormGenerate } from "../../Components/form-generate";
-import '../PerfilEditar/styleperfilEditar.css';
+
 
 // import { useNavigate } from 'react-router-dom';
 

@@ -39,7 +39,7 @@ export default function NavLateral() {
         </ListItem>
 
         <ListItem
-          onClick={() => navigate('/conquistas')}
+          onClick={() => navigate('/TelaConquista')}
           className="list-item"
           style={{ cursor: 'pointer' }}
         >
