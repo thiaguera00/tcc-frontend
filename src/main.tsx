@@ -10,6 +10,7 @@ import { PaginaInicial } from './pages/pagina-inicial';
 import { Perfil } from './pages/perfil';
 import { Pesquisa } from './pages/pesquisa';
 import { PerfilEditar } from './pages/PerfilEditar/editarPerfil';
+import { Atividades } from './pages/atividades';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -19,7 +20,9 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Cadastro />} />
         <Route path="/perfil" element={<Perfil />} />
-        <Route path="/perfilEditar" element={<PerfilEditar/>} />
+        <Route path="/perfilEditar" element={<PerfilEditar />} />
+        <Route path="/atividades" element={<Atividades />} />
+
         <Route
           path="/paginaInicial"
           element={
