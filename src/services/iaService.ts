@@ -52,5 +52,27 @@ const classificarEstudante = async (responseStudents: string[], userId: string) 
   }
 };
 
+const gerarQuestaoForm = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    
+    const response = await axios.post(
+      `${API_URL}/ia/generateQuestionForm`,
+      {},
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      },
+    );
 
-export  { gerarQuestaoIa, corrigirCodigo, classificarEstudante };
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao gerar questões:', error);
+    throw error;
+  }
+};
+
+
+export  { gerarQuestaoIa, corrigirCodigo, classificarEstudante, gerarQuestaoForm };
