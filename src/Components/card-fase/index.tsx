@@ -9,13 +9,11 @@ interface CardFaseProps {
   caminho?: string;
 }
 
-export const CardFase: React.FC<CardFaseProps> = ({ fase, descricao, corFundo = '#ccc', caminho }) => {
+export const CardFase: React.FC<CardFaseProps> = ({ fase, descricao, corFundo = '#ccc' }) => {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
-    if (caminho) {
-      navigate(caminho);
-    }
+    navigate('/atividades', { state: { fase, descricao } });
   };
 
   return (

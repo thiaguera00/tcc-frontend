@@ -4,12 +4,22 @@ import NavBarPerfil from '../../Components/nav-bar-perfil';
 import { QuestionarioComponent } from '../../Components/questionario';
 import { IDEComponent } from '../../Components/ide';
 import { CardFase } from '../../Components/card-fase';
+import { useLocation } from 'react-router-dom';
 
 export const AtividadesPage = () => {
+  const location = useLocation();
+  const { fase, descricao } = location.state || {};
   const [etapa, setEtapa] = useState<number>(1);
-
+console.log("fase:",fase, "etapa: ", etapa)
   const handleNextStep = () => {
-    setEtapa((prev) => prev + 1);
+    if (fase === 'FASE 1' && etapa < 3) {
+      setEtapa((prev) => prev + 1);
+    } else if (fase !== 'FASE 1' && etapa < 3) {
+      setEtapa((prev) => prev + 1);
+    } else {
+      alert('Você completou a fase! Parabéns!');
+ 
+    }
   };
 
   return (
@@ -20,12 +30,12 @@ export const AtividadesPage = () => {
         sx={{
           display: 'flex',
           justifyContent: 'center',
-          paddingTop: '80px', 
+          paddingTop: '80px',
         }}
       >
         <CardFase
-          fase="FASE 1"
-          descricao="Introdução à Lógica de Programação"
+          fase={fase || "FASE"}
+          descricao={descricao || "Descrição da Fase"}
           corFundo="#9ade5b"
           caminho="#"
         />
@@ -37,12 +47,25 @@ export const AtividadesPage = () => {
           padding: '40px 20px',
           maxWidth: '1200px',
           margin: '0 auto',
-          marginTop: '40px', 
+          marginTop: '40px',
         }}
       >
-        {etapa === 1 && <QuestionarioComponent onFinish={handleNextStep} />}
-        {etapa === 2 && <IDEComponent onFinish={handleNextStep} />}
-        {etapa === 3 && <QuestionarioComponent onFinish={handleNextStep} />}
+        {fase === 'FASE 1' && (
+
+          <>
+            {etapa === 1 && <QuestionarioComponent onFinish={handleNextStep} />}
+            {etapa === 2 && <QuestionarioComponent onFinish={handleNextStep} />}
+            {etapa === 3 && <QuestionarioComponent onFinish={handleNextStep} />}
+          </>
+        )}
+        {fase !== 'FASE 1' && (
+
+          <>
+            {etapa === 1 && <QuestionarioComponent onFinish={handleNextStep} />}
+            {etapa === 2 && <IDEComponent onFinish={handleNextStep} />}
+            {etapa === 3 && <QuestionarioComponent onFinish={handleNextStep} />}
+          </>
+        )}
       </Box>
     </>
   );

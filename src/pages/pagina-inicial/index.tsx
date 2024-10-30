@@ -44,7 +44,7 @@ export const PaginaInicial = () => {
     <>
       <NavBarPerfil />
       <NavLateral />
-      
+
       <Box
         sx={{
           marginLeft: '250px',
@@ -65,31 +65,27 @@ export const PaginaInicial = () => {
             fase="FASE 1"
             descricao="Introdução à Lógica de Programação"
             corFundo="#9ade5b"
-            caminho="/fase1"
+            caminho='/atividades'
           />
           <CardFase
             fase="FASE 2"
             descricao="Introdução à Linguagem de Programação Python"
             corFundo="#afafaf"
-            caminho="/fase2"
           />
           <CardFase
             fase="FASE 3"
             descricao="Estrutura básica da linguagem, declaração de variáveis e tipos de dados"
             corFundo="#afafaf"
-            caminho="/fase3"
           />
           <CardFase
             fase="FASE 4"
             descricao="Estruturas lógicas"
             corFundo="#afafaf"
-            caminho="/fase4"
           />
           <CardFase
             fase="FASE 5"
             descricao="Funções"
             corFundo="#afafaf"
-            caminho="/fase5"
           />
         </Box>
       </Box>

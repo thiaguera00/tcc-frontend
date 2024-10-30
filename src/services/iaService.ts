@@ -74,5 +74,30 @@ const gerarQuestaoForm = async () => {
   }
 };
 
+const corrigirQuestaoForm = async (questao: string, resposta: string) => {
+  try {
+    const token = localStorage.getItem('token');
+    
+    const response = await axios.post(
+      `${API_URL}/ia/correctionQuestionForm`,
+      {
+        question: questao,
+        responseQuestion: resposta,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      },
+    );
 
-export  { gerarQuestaoIa, corrigirCodigo, classificarEstudante, gerarQuestaoForm };
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao verificar resposta da questão:', error);
+    throw error;
+  }
+};
+
+
+export  { gerarQuestaoIa, corrigirCodigo, classificarEstudante, gerarQuestaoForm, corrigirQuestaoForm };
