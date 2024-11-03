@@ -10,7 +10,7 @@ interface User {
 
 const UserCard: React.FC<{ user: User }> = ({ user }) => {
     return (
-        <Card sx={{ maxWidth: 200, margin: '16px', backgroundColor: '#3F4273', color: 'white', borderRadius: '8px' }}>
+        <Card sx={{ maxWidth: 300, margin: '16px', backgroundColor: '#3F4273', color: 'white', borderRadius: '8px' }}>
             <CardMedia
                 component="img"
                 image={user.photo} 
@@ -22,7 +22,7 @@ const UserCard: React.FC<{ user: User }> = ({ user }) => {
                 <Typography variant="body2" sx={{ textAlign: 'center', marginBottom: '12px' }}>{user.email}</Typography> 
                 <Button variant="contained" color="secondary" sx={{ width: '100%' }}>
                     Inativar usuário
-                </Button> {/* Botão para inativar */}
+                </Button>
             </CardContent>
         </Card>
     );

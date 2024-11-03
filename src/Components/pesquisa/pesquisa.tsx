@@ -41,7 +41,7 @@ const SearchComponent = () => {
                     }}
                 />
                 <Button variant="contained" color="secondary">
-                    Permissões
+                    Pesquisar
                 </Button>
             </Box>
         </Box>

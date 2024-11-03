@@ -21,6 +21,7 @@ const UserList: React.FC<UserListProps> = ({ users }) => {
                 justifyContent: 'center', 
                 padding: '16px',
                 borderRadius: '8px',
+                gap: '16px', // Adicionado para espaço entre os cards
             }}
         >
             {users.map((user) => (
