@@ -53,28 +53,30 @@ export const Pesquisa = () => {
   const handleNextQuestion = async (selectedOption?: string) => {
     const updatedAnswers = [...answers];
     if (selectedOption) {
-      updatedAnswers[currentQuestionIndex] = selectedOption;
-      setAnswers(updatedAnswers);
+        updatedAnswers[currentQuestionIndex] = selectedOption;
+        setAnswers(updatedAnswers);
     }
 
     if (currentQuestionIndex === questions.length - 1) {
-      try {
-        const userId = getUserIdFromToken();
+        try {
+            const userId = getUserIdFromToken();
+            console.log('User ID obtido do token:', userId);
 
-        if (!userId) {
-          throw new Error('Usuário não autenticado.');
+            if (!userId) {
+                throw new Error('Usuário não autenticado.');
+            }
+
+            const response = await classificarEstudante(updatedAnswers.slice(2), userId);
+            setClassificationResult(response);
+            setShowModal(true);
+        } catch (error) {
+            console.error('Erro ao classificar estudante:', error);
         }
-
-        const response = await classificarEstudante(updatedAnswers.slice(2), userId);
-        setClassificationResult(response);
-        setShowModal(true);
-      } catch (error) {
-        console.error('Erro ao classificar estudante:', error);
-      }
     } else {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
-  };
+};
+
 
   const handlePreviousQuestion = () => {
     if (currentQuestionIndex > 0) {

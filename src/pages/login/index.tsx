@@ -31,8 +31,8 @@ export const Login = () => {
       const response = await loginEstudante(formData.email, formData.password);
       console.log('Login realizado com sucesso:', response);
 
-      if (response?.access_token) {
-        localStorage.setItem('token', response.access_token);
+      if (response?.token) {
+        localStorage.setItem('token', response.token);
         navigate('/paginaInicial');
       } else {
         setErrorMessage('Erro inesperado: token não recebido.');
