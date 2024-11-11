@@ -25,7 +25,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/perfil" element={<Perfil />} />
         <Route path="/perfilEditar" element={<PerfilEditar />} />
         <Route path="/atividades" element={<AtividadesPage />} />
-        <Route path="/telaConquista" element={<TelaConquista />} />
+        <Route path="/conquista" element={<TelaConquista />} />
         <Route path="/gerenciarUsuario" element={<GerenciarUsuario />} />
         <Route path="/gerenciarFases" element={<GerenciarFases />} />
         <Route
