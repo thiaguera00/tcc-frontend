@@ -4,12 +4,13 @@ import NavBarPerfil from '../../Components/nav-bar-perfil';
 import { QuestionarioComponent } from '../../Components/questionario';
 import { IDEComponent } from '../../Components/ide';
 import { CardFase } from '../../Components/card-fase';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export const AtividadesPage = () => {
   const location = useLocation();
   const { fase, descricao } = location.state || {};
   const [etapa, setEtapa] = useState<number>(1);
+  const navigate = useNavigate();
 console.log("fase:",fase, "etapa: ", etapa)
   const handleNextStep = () => {
     if (fase === 'FASE 1' && etapa < 3) {
@@ -18,7 +19,7 @@ console.log("fase:",fase, "etapa: ", etapa)
       setEtapa((prev) => prev + 1);
     } else {
       alert('Você completou a fase! Parabéns!');
- 
+      navigate('/paginaInicial');
     }
   };
 

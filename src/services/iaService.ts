@@ -52,24 +52,21 @@ const classificarEstudante = async (responseStudents: string[], userId: string) 
   }
 };
 
-const gerarQuestaoForm = async (conteudo : string, nivel: string) => {
+const gerarQuestaoForm = async (conteudo : string) => {
   try {
-    const token = localStorage.getItem('token');
     
     const response = await axios.post(
-    'https://ia-assistente-python.onrender.com/gerar-questao/',
+      'https://ia-assistente-python.onrender.com/gerar-questionario/',
+      {},
       {
-        conteudo : conteudo,
-        nivel: nivel
-      },
-      {
+        params: {
+          conteudo: conteudo,
+        },
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
         },
       },
     );
-
     return response.data.questao;
   } catch (error) {
     console.error('Erro ao gerar questões:', error);
@@ -77,7 +74,7 @@ const gerarQuestaoForm = async (conteudo : string, nivel: string) => {
   }
 };
 
-const corrigirQuestaoForm = async (questao: string, resposta: string) => {
+const corrigirQuestaoForm = async (questao: string, alternativas: string, resposta: string) => {
   try {
     const token = localStorage.getItem('token');
     
@@ -85,6 +82,7 @@ const corrigirQuestaoForm = async (questao: string, resposta: string) => {
       'https://ia-assistente-python.onrender.com/verificar-resposta-questionario/',
       {
         questao,
+        alternativas,
         resposta,
       },
       {

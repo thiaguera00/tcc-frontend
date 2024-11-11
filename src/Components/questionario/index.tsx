@@ -20,6 +20,7 @@ export const QuestionarioComponent = ({ onFinish }: QuestionarioProps) => {
   const [userResponses, setUserResponses] = useState<{ questionId: string; response: string; isCorrect: boolean }[]>([]); // Adicionado estado para userResponses
 
   useEffect(() => {
+    
     const fetchUserDetails = async () => {
       try {
         const userDetails = await usuarioLogado();
@@ -32,7 +33,7 @@ export const QuestionarioComponent = ({ onFinish }: QuestionarioProps) => {
     
     const fetchQuestao = async () => {
       try {
-        const questaoGerada = await gerarQuestaoForm("algoritmo", level);
+        const questaoGerada = await gerarQuestaoForm("algoritmo, variaveis operadores lógicos");
 
         if (questaoGerada) {
           await atualizarQuestao(questaoGerada);
@@ -84,7 +85,9 @@ export const QuestionarioComponent = ({ onFinish }: QuestionarioProps) => {
     setFeedback(null);
   
     try {
-      const respostaCorrecao = await corrigirQuestaoForm(questao, resposta);
+      const alternativasConcatenadas = alternativas.join('\n');
+  
+      const respostaCorrecao = await corrigirQuestaoForm(questao, alternativasConcatenadas, resposta);
   
       let isCorrect = false;
   
@@ -98,7 +101,7 @@ export const QuestionarioComponent = ({ onFinish }: QuestionarioProps) => {
         setFeedback(respostaCorrecao.mensagem);
         setTimeout(async () => {
           try {
-            const novaQuestao = await gerarQuestaoForm("algoritmo", level);
+            const novaQuestao = await gerarQuestaoForm("algoritmo");
             await atualizarQuestao(novaQuestao);
           } catch (error) {
             setQuestao('Erro ao gerar uma nova questão. Tente novamente mais tarde.');
@@ -106,7 +109,7 @@ export const QuestionarioComponent = ({ onFinish }: QuestionarioProps) => {
           }
         }, 3000);
       }
-
+  
       if (questionId) {
         const respostaAtual = {
           questionId: questionId,
@@ -115,7 +118,7 @@ export const QuestionarioComponent = ({ onFinish }: QuestionarioProps) => {
         };
   
         setUserResponses((prevResponses) => [...prevResponses, respostaAtual]);
-
+  
         await registrarRespostasUsuario([respostaAtual]);
       } else {
         console.error('Erro: questionId não definido.');
@@ -127,6 +130,7 @@ export const QuestionarioComponent = ({ onFinish }: QuestionarioProps) => {
       setLoading(false);
     }
   };
+
   return (
     <Box
       sx={{
