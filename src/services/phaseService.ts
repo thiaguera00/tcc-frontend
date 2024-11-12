@@ -1,34 +1,45 @@
-import axios from "axios";
+import axios from 'axios';
 
 const API_URL = 'http://localhost:3000';
 
-export const cadastrarFase = async (titulo: string, descricao: string, conteudo: string, quantidadeQuestoes: number) => {
-  const token = localStorage.getItem('token'); // Obtém o token do localStorage
+export const buscarFases = async () => {
+  const token = localStorage.getItem('token');
+  const response = await axios.get(`${API_URL}/phases/all`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.data;
+};
 
-  if (!token) {
-    throw new Error('Token não encontrado. Por favor, faça login novamente.');
-  }
+export const cadastrarFase = async (title: string, description: string, contentDescription: string, count: number) => {
+  const token = localStorage.getItem('token');
+  const response = await axios.post(
+    `${API_URL}/phases/create`,
+    { title, description, contentDescription, count },
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  return response.data;
+};
 
-  try {
-    const response = await axios.post(
-      `${API_URL}/phases/create`, 
-      {
-        title: titulo,
-        description: descricao,
-        count:quantidadeQuestoes,
-        contentDescription: conteudo,
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`, 
-        }
-      }
-    );
+export const atualizarFase = async (
+  id: string,
+  title: string,
+  description: string,
+  contentDescription: string,
+  count: number
+) => {
+  const token = localStorage.getItem('token');
+  const response = await axios.put(
+    `${API_URL}/phases/update/${id}`,
+    { title, description, contentDescription, count },
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  return response.data;
+};
 
-    return response.data; 
-  } catch (error) {
-    console.error("Erro ao registrar a fase:", error);
-    throw error; 
-  }
+export const excluirFase = async (id: string) => {
+  const token = localStorage.getItem('token');
+  const response = await axios.delete(`${API_URL}/phases/delete/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.data;
 };

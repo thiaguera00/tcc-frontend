@@ -1,4 +1,4 @@
-import PersistentDrawerLeft from '../../Components/navGerenciarUser/navGerenciarUser';
+import NavBarAdmin from '../../Components/navGerenciarUser';
 import SearchComponent from '../../Components/pesquisa/pesquisa';
 import UserList from '../../Components/userlist/userlist'; 
 import { Box } from '@mui/material';
@@ -17,7 +17,7 @@ export const GerenciarUsuario = () => {
 
     return (
         <div className="mainContainer" style={{ padding: '16px' }}> 
-             <PersistentDrawerLeft title="Gerenciar usuários" />
+             <NavBarAdmin title="Gerenciar usuários" />
 
             <Box
                 sx={{
