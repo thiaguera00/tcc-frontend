@@ -43,3 +43,17 @@ export const excluirFase = async (id: string) => {
   });
   return response.data;
 };
+
+export const buscarConteudoDaFase = async (faseId: string) => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.get(`${API_URL}/phases/${faseId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar conteúdo da fase:", error);
+    throw error;
+  }
+};

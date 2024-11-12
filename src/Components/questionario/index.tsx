@@ -6,9 +6,10 @@ import { registrarQuestao, registrarRespostasUsuario, usuarioLogado } from '../.
 
 interface QuestionarioProps {
   onFinish: () => void;
+  conteudo: string; // Adicionando a prop para receber o conteúdo
 }
 
-export const QuestionarioComponent = ({ onFinish }: QuestionarioProps) => {
+export const QuestionarioComponent = ({ onFinish, conteudo }: QuestionarioProps) => {
   const [questao, setQuestao] = useState<string>('Carregando a questão...');
   const [alternativas, setAlternativas] = useState<string[]>([]);
   const [resposta, setResposta] = useState<string>('');
@@ -17,28 +18,28 @@ export const QuestionarioComponent = ({ onFinish }: QuestionarioProps) => {
   const [level, setLevel] = useState<string>('normal');
   const [questionId, setQuestionId] = useState<string>('');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [userResponses, setUserResponses] = useState<{ questionId: string; response: string; isCorrect: boolean }[]>([]); // Adicionado estado para userResponses
+  const [userResponses, setUserResponses] = useState<{ questionId: string; response: string; isCorrect: boolean }[]>([]);
 
   useEffect(() => {
-    
     const fetchUserDetails = async () => {
       try {
         const userDetails = await usuarioLogado();
-        
         setLevel(userDetails.points > 50 ? 'normal' : 'iniciante');
       } catch (error) {
         console.error("Erro ao buscar dados do estudante:", error);
       }
     };
-    
+
     const fetchQuestao = async () => {
       try {
-        const questaoGerada = await gerarQuestaoForm("algoritmo, variaveis operadores lógicos");
+        if (conteudo) {
+          const questaoGerada = await gerarQuestaoForm(conteudo); // Passando o conteúdo da fase para gerar a questão
 
-        if (questaoGerada) {
-          await atualizarQuestao(questaoGerada);
-        } else {
-          setQuestao('Erro ao carregar a questão. Resposta inesperada do servidor.');
+          if (questaoGerada) {
+            await atualizarQuestao(questaoGerada);
+          } else {
+            setQuestao('Erro ao carregar a questão. Resposta inesperada do servidor.');
+          }
         }
       } catch (error) {
         setQuestao('Erro ao carregar a questão. Tente novamente mais tarde.');
@@ -48,25 +49,25 @@ export const QuestionarioComponent = ({ onFinish }: QuestionarioProps) => {
 
     fetchUserDetails();
     fetchQuestao();
-  }, [level]);
+  }, [level, conteudo]);
 
   const atualizarQuestao = async (questaoGerada: string) => {
     const questaoDividida = questaoGerada.split('\n').map(line => line.trim()).filter(line => line !== '');
-    
+
     const enunciadoIndex = questaoDividida.findIndex(line => line.startsWith("##"));
-    
+
     let enunciado = "Questão não encontrada.";
-    
+
     if (enunciadoIndex !== -1) {
       enunciado = questaoDividida.slice(enunciadoIndex + 1).find(line => !line.match(/^[a-d]\)/)) || enunciado;
     }
     const alternativasGeradas = questaoDividida.filter((line: string) => line.match(/^[a-d]\)/));
-  
+
     setQuestao(enunciado);
     setAlternativas(alternativasGeradas);
     setResposta('');
     setFeedback(null);
- 
+
     try {
       const id = await registrarQuestao({ question: enunciado, difficulty_level: level });
       setQuestionId(id);
@@ -80,17 +81,17 @@ export const QuestionarioComponent = ({ onFinish }: QuestionarioProps) => {
       alert('Por favor, selecione uma alternativa.');
       return;
     }
-  
+
     setLoading(true);
     setFeedback(null);
-  
+
     try {
       const alternativasConcatenadas = alternativas.join('\n');
-  
+
       const respostaCorrecao = await corrigirQuestaoForm(questao, alternativasConcatenadas, resposta);
-  
+
       let isCorrect = false;
-  
+
       if (respostaCorrecao?.correto) {
         isCorrect = true;
         setFeedback('Resposta correta! Muito bem! 🎉');
@@ -101,7 +102,7 @@ export const QuestionarioComponent = ({ onFinish }: QuestionarioProps) => {
         setFeedback(respostaCorrecao.mensagem);
         setTimeout(async () => {
           try {
-            const novaQuestao = await gerarQuestaoForm("algoritmo");
+            const novaQuestao = await gerarQuestaoForm(conteudo); // Usando o conteúdo atual novamente para gerar uma nova questão
             await atualizarQuestao(novaQuestao);
           } catch (error) {
             setQuestao('Erro ao gerar uma nova questão. Tente novamente mais tarde.');
@@ -109,16 +110,16 @@ export const QuestionarioComponent = ({ onFinish }: QuestionarioProps) => {
           }
         }, 3000);
       }
-  
+
       if (questionId) {
         const respostaAtual = {
           questionId: questionId,
           response: resposta,
           isCorrect: isCorrect,
         };
-  
+
         setUserResponses((prevResponses) => [...prevResponses, respostaAtual]);
-  
+
         await registrarRespostasUsuario([respostaAtual]);
       } else {
         console.error('Erro: questionId não definido.');

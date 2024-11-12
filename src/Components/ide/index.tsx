@@ -1,22 +1,25 @@
 import { useState, useEffect } from 'react';
-import { Box, Button, Grid } from '@mui/material';
+import { Box, Button, Grid, Typography } from '@mui/material';
 import { CodeiumEditor } from '@codeium/react-code-editor';
 import ReactMarkdown from 'react-markdown';
 import { AvatarFeedback } from '../../Components/avatar';
-import { gerarQuestaoIa } from '../../services/iaService';
+import { gerarQuestaoIa, corrigirCodigoIa } from '../../services/iaService';
 
 interface IDEProps {
   onFinish: () => void;
+  conteudo: string;
 }
 
-export const IDEComponent = ({ onFinish }: IDEProps) => {
+export const IDEComponent = ({ onFinish, conteudo }: IDEProps) => {
   const [codigo, setCodigo] = useState<string>('');
   const [questao, setQuestao] = useState<string>('Carregando a questão...');
+  const [feedback, setFeedback] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchQuestao = async () => {
       try {
-        const questaoGerada = await gerarQuestaoIa('iniciante', 'variáveis');
+        const questaoGerada = await gerarQuestaoIa(conteudo);
         console.log('Questão gerada:', questaoGerada);
         setQuestao(questaoGerada.questao);
       } catch (error) {
@@ -25,7 +28,7 @@ export const IDEComponent = ({ onFinish }: IDEProps) => {
       }
     };
     fetchQuestao();
-  }, []);
+  }, [conteudo]);
 
   const handleCodigoChange = (newCodigo?: string) => {
     if (newCodigo !== undefined) {
@@ -33,10 +36,27 @@ export const IDEComponent = ({ onFinish }: IDEProps) => {
     }
   };
 
-  const handleEnviarResposta = () => {
+  const handleEnviarResposta = async () => {
     console.log('Código enviado:', codigo);
-    alert('Código submetido. Bom trabalho!');
-    onFinish();
+    setLoading(true);
+    setFeedback(null);
+
+    try {
+      const respostaVerificacao = await corrigirCodigoIa(questao, codigo);
+      if (respostaVerificacao.correto) {
+        setFeedback('Resposta correta! Muito bem! 🎉');
+        setTimeout(() => {
+          onFinish();
+        }, 3000);
+      } else {
+        setFeedback(respostaVerificacao.mensagem);
+      }
+    } catch (error) {
+      setFeedback('Erro ao verificar a resposta. Tente novamente mais tarde.');
+      console.error('Erro ao verificar a resposta:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -50,8 +70,8 @@ export const IDEComponent = ({ onFinish }: IDEProps) => {
               color: '#ffffff',
               padding: '16px',
               borderRadius: '8px',
-              minHeight: '400px',
-              maxHeight: '400px',
+              minHeight: '500px',
+              maxHeight: '500px',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'flex-start',
@@ -59,6 +79,7 @@ export const IDEComponent = ({ onFinish }: IDEProps) => {
               textAlign: 'left',
               overflowY: 'auto',
               wordBreak: 'break-word',
+              width: '450px',
             }}
           >
             <ReactMarkdown>{questao}</ReactMarkdown>
@@ -89,16 +110,23 @@ export const IDEComponent = ({ onFinish }: IDEProps) => {
               theme="vs-dark"
               onChange={handleCodigoChange}
               options={{ fontSize: 14, tabSize: 4, quickSuggestions: false, suggestOnTriggerCharacters: false }}
-              height={'435px'}
+              height={'532px'}
             />
           </Box>
         </Grid>
       </Grid>
 
       {/* Botão de Enviar Resposta */}
-      <Button variant="contained" onClick={handleEnviarResposta} sx={{ marginTop: '20px' }}>
-        Enviar Resposta
+      <Button variant="contained" onClick={handleEnviarResposta} sx={{ marginTop: '20px' }} disabled={loading}>
+        {loading ? 'Verificando...' : 'Enviar Resposta'}
       </Button>
+
+      {/* Exibindo o feedback da resposta */}
+      {feedback && (
+        <Typography variant="subtitle1" sx={{ marginTop: '20px', color: feedback.includes('correta') ? '#4caf50' : '#f44336' }}>
+          {feedback}
+        </Typography>
+      )}
     </Box>
   );
 };

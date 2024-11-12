@@ -1,19 +1,21 @@
+// CardFase.tsx (ajustado)
 import React from 'react';
 import { Card, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 interface CardFaseProps {
+  id?: string;
   title: string;
   description: string;
   corFundo?: string;
   caminho?: string;
 }
 
-export const CardFase: React.FC<CardFaseProps> = ({ title, description, corFundo = '#ccc', caminho = '/atividades' }) => {
+export const CardFase: React.FC<CardFaseProps> = ({ id, title, description, corFundo = '#ccc', caminho = '/atividades' }) => {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
-    navigate(caminho, { state: { title, description } });
+    navigate(caminho, { state: { id, title, description } });
   };
 
   return (

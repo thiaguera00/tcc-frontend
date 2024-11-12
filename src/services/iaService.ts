@@ -2,11 +2,10 @@ import axios from 'axios';
 
 const API_URL =' http://localhost:3000';
 
-const gerarQuestaoIa = async (level: string, content: string) => {
+const gerarQuestaoIa = async ( conteudo: string) => {
   try {
-    const response = await axios.post(`${API_URL}/ia/questions`, {
-      level,
-      content,
+    const response = await axios.post('https://ia-assistente-python.onrender.com/gerar-questao/', {
+      conteudo,
     });
     return response.data;
   } catch (error) {
@@ -15,10 +14,11 @@ const gerarQuestaoIa = async (level: string, content: string) => {
   }
 };
 
-const corrigirCodigo = async (code: string) => {
+const corrigirCodigoIa = async (questao: string, codigo: string) => {
   try {
-    const response = await axios.post(`${API_URL}/ia/codeCorrection`, {
-      code,
+    const response = await axios.post(`https://ia-assistente-python.onrender.com/corrigir-codigo/`, {
+      questao,
+      codigo
     });
     return response.data;
   } catch (error) {
@@ -101,4 +101,4 @@ const corrigirQuestaoForm = async (questao: string, alternativas: string, respos
 };
 
 
-export  { gerarQuestaoIa, corrigirCodigo, classificarEstudante, gerarQuestaoForm, corrigirQuestaoForm };
+export  { gerarQuestaoIa, corrigirCodigoIa, classificarEstudante, gerarQuestaoForm, corrigirQuestaoForm };

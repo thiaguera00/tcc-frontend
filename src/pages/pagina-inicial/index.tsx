@@ -86,10 +86,11 @@ export const PaginaInicial = () => {
         </Typography>
 
         <Box sx={{ marginTop: '32px', display: 'flex', flexDirection: 'column', gap: '36px', alignItems: 'center' }}>
-          {fases.map((fase, index) => (
+          {fases.map((fase) => (
             <CardFase
               key={fase.id}
-              title={`Fase ${index + 1} ${fase.title}`}
+              id={fase.id}
+              title={`Fase ${fase.title}`}
               description={fase.description}
               corFundo="#9ade5b"
               caminho='/atividades'
