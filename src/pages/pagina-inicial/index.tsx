@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { usuarioLogado } from "../../services/userService";
+import { buscarFases } from "../../services/phaseService";
 import { Usuario } from '../../utils/interfaces';
 import { useNavigate } from 'react-router-dom';
 import NavBarPerfil from '../../Components/nav-bar-perfil';
@@ -7,10 +8,17 @@ import NavLateral from '../../Components/NavLateral';
 import { Box, Typography } from '@mui/material';
 import { CardFase } from '../../Components/card-fase';
 
+interface Fase {
+  id: string;
+  title: string;
+  description: string;
+}
+
 export const PaginaInicial = () => {
   const [usuario, setUsuario] = useState<Usuario | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [fases, setFases] = useState<Fase[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,15 +29,29 @@ export const PaginaInicial = () => {
           navigate('/pesquisa');
         }
         setUsuario(usuarioData);
-        setLoading(false);
       } catch (err) {
         console.error("Erro ao buscar dados do estudante:", err);
         setError('Erro ao buscar dados do estudante');
+      } finally {
         setLoading(false);
       }
     };
 
     fetchUsuarioLogado();
+  }, [navigate]);
+
+  useEffect(() => {
+    const fetchFases = async () => {
+      try {
+        const fasesData = await buscarFases();
+        setFases(fasesData);
+      } catch (err) {
+        console.error("Erro ao buscar fases:", err);
+        setError('Erro ao buscar fases');
+      }
+    };
+
+    fetchFases();
   }, []);
 
   if (loading) {
@@ -60,33 +82,16 @@ export const PaginaInicial = () => {
           Olá, {usuario?.name}
         </Typography>
 
-        <Box sx={{ marginTop: '32px', display: 'flex', flexDirection: 'column', gap: '36px', alignItems: 'center'}}>
-          <CardFase
-            fase="FASE 1"
-            descricao="Introdução à Lógica de Programação"
-            corFundo="#9ade5b"
-            caminho='/atividades'
-          />
-          <CardFase
-            fase="FASE 2"
-            descricao="Introdução à Linguagem de Programação Python"
-            corFundo="#afafaf"
-          />
-          <CardFase
-            fase="FASE 3"
-            descricao="Estrutura básica da linguagem, declaração de variáveis e tipos de dados"
-            corFundo="#afafaf"
-          />
-          <CardFase
-            fase="FASE 4"
-            descricao="Estruturas lógicas"
-            corFundo="#afafaf"
-          />
-          <CardFase
-            fase="FASE 5"
-            descricao="Funções"
-            corFundo="#afafaf"
-          />
+        <Box sx={{ marginTop: '32px', display: 'flex', flexDirection: 'column', gap: '36px', alignItems: 'center' }}>
+          {fases.map((fase, index) => (
+            <CardFase
+              key={fase.id}
+              title={`Fase ${index + 1} ${fase.title}`}
+              description={fase.description}
+              corFundo="#9ade5b"
+              caminho='/atividades'
+            />
+          ))}
         </Box>
       </Box>
     </>

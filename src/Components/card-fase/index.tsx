@@ -3,17 +3,17 @@ import { Card, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 interface CardFaseProps {
-  fase: string;
-  descricao: string;
+  title: string;
+  description: string;
   corFundo?: string;
   caminho?: string;
 }
 
-export const CardFase: React.FC<CardFaseProps> = ({ fase, descricao, corFundo = '#ccc' }) => {
+export const CardFase: React.FC<CardFaseProps> = ({ title, description, corFundo = '#ccc', caminho = '/atividades' }) => {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
-    navigate('/atividades', { state: { fase, descricao } });
+    navigate(caminho, { state: { title, description } });
   };
 
   return (
@@ -34,10 +34,10 @@ export const CardFase: React.FC<CardFaseProps> = ({ fase, descricao, corFundo = 
       }}
     >
       <Typography variant="h6" fontWeight="bold">
-        {fase}
+        {title}
       </Typography>
-      <Typography variant="body1" marginTop={'8px'}>
-        {descricao}
+      <Typography variant="body1" marginTop="8px">
+        {description}
       </Typography>
     </Card>
   );
