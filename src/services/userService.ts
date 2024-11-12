@@ -19,7 +19,6 @@ export const registrarEstudante = async  (name: string, email: string, password:
 export const usuarioLogado = async () => {
     try {
         const token = localStorage.getItem('token');
-        console.log(token)
         if (!token) {
             throw new Error('Token não encontrado. Por favor, faça login novamente.');
         }
@@ -30,13 +29,20 @@ export const usuarioLogado = async () => {
                 'Authorization': `Bearer ${token}`,
             }
         });
+        if (response.status == 401) {
+          alert("Seu token expirou faça login novamente")
+          window.location.href = '/login';
+          throw new Error('Token inválido. Por favor, faça login novamente.');
+        }
 
         return response.data;
-    } catch (error) {
+
+      } catch (error) {
         console.error("Erro ao buscar dados do estudante:", error);
-        throw error;
+        throw error; 
     }
-}
+};
+
 
 export const registrarQuestao = async (questao: { question: string; difficulty_level: string }) => {
     try {

@@ -4,7 +4,7 @@ import { buscarFases } from "../../services/phaseService";
 import { Usuario } from '../../utils/interfaces';
 import { useNavigate } from 'react-router-dom';
 import NavBarPerfil from '../../Components/nav-bar-perfil';
-import NavLateral from '../../Components/NavLateral';
+import NavLateral from '../../Components/nav-lateral';
 import { Box, Typography } from '@mui/material';
 import { CardFase } from '../../Components/card-fase';
 
@@ -12,6 +12,7 @@ interface Fase {
   id: string;
   title: string;
   description: string;
+  content: { description: string };
 }
 
 export const PaginaInicial = () => {
@@ -25,9 +26,11 @@ export const PaginaInicial = () => {
     const fetchUsuarioLogado = async () => {
       try {
         const usuarioData = await usuarioLogado();
+
         if (usuarioData.is_first_access === true) {
           navigate('/pesquisa');
         }
+
         setUsuario(usuarioData);
       } catch (err) {
         console.error("Erro ao buscar dados do estudante:", err);

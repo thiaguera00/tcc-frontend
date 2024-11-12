@@ -28,7 +28,7 @@ export default function NavLateral() {
         </ListItem>
 
         <ListItem
-          onClick={() => navigate('/paginaInicial')}
+          onClick={() => navigate('/playground')}
           className="list-item"
           style={{ cursor: 'pointer' }}
         >
@@ -39,7 +39,7 @@ export default function NavLateral() {
         </ListItem>
 
         <ListItem
-          onClick={() => navigate('/TelaConquista')}
+          onClick={() => navigate('/conquistas')}
           className="list-item"
           style={{ cursor: 'pointer' }}
         >

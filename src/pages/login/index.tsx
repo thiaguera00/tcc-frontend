@@ -33,7 +33,7 @@ export const Login = () => {
 
       if (response?.token) {
         localStorage.setItem('token', response.token);
-        navigate('/paginaInicial');
+        navigate('/playground');
       } else {
         setErrorMessage('Erro inesperado: token não recebido.');
       }

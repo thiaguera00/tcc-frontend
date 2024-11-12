@@ -1,6 +1,6 @@
 import NixNavBarPerfil from '../../Components/nav-bar-perfil';
-import NavLateral from '../../Components/NavLateral';
-import Conquistas from '../../Components/cardConquistas/cardConquistas';
+import NavLateral from '../../Components/nav-lateral';
+import Conquistas from '../../Components/card-conquista';
 import '../conquistas/conquistas.css';
 
 export const TelaConquista = () => {

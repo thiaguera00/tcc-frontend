@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material';
 import { format } from 'date-fns';
 import { buscarFases, cadastrarFase, atualizarFase, excluirFase } from '../../services/phaseService';
-import NavBarAdmin from '../../Components/navGerenciarUser';
+import NavBarAdmin from '../../Components/nav-gerenciar-user';
 
 interface Fase {
   id: string;

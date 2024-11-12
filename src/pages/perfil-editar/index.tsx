@@ -1,12 +1,11 @@
 import NixNavBarPerfil from '../../Components/nav-bar-perfil';
-import NavLateral from '../../Components/NavLateral';
-import ProfileCardEditar from '../../Components/PerfilEditar/editarPerfil';
+import NavLateral from '../../Components/nav-lateral';
+import ProfileCardEditar from '../../Components/editar-perfil';
 
 
 export const PerfilEditar = () => {
   return (
     <div><NixNavBarPerfil />
-    
     <div style={{ display: 'flex', height: '100vh' }}>
         
         {/* Navegação lateral à esquerda */}
@@ -14,12 +13,7 @@ export const PerfilEditar = () => {
 
         {/* Conteúdo principal (ProfileCard) */}
         <ProfileCardEditar />
-       
       </div>
-    
-    
     </div>
-
-    
   );
 }; 
