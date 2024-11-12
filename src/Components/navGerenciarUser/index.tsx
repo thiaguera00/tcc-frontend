@@ -15,6 +15,11 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import List from '@mui/material/List';
+import { useNavigate } from 'react-router-dom';
+
+interface PersistentDrawerLeftProps {
+  title: string;
+}
 
 const drawerWidth = 240;
 
@@ -66,7 +71,8 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
-export default function PersistentDrawerLeft() {
+export default function NavBarAdmin({ title }: PersistentDrawerLeftProps) {
+  const navigate = useNavigate();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -96,7 +102,7 @@ export default function PersistentDrawerLeft() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Gerenciar Usuário
+            {title}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -123,17 +129,17 @@ export default function PersistentDrawerLeft() {
         <Divider />
         <List sx={{ color: '#fff' }}>
           <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemText primary="Perfil" />
+            <ListItemButton onClick={() => navigate('/perfil')}>
+              <ListItemText primary="perfil" />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton>
+            <ListItemButton onClick={() => navigate('/gerenciarUsuario')}>
               <ListItemText primary="Gerenciar Usuário" />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton>
+            <ListItemButton onClick={() => navigate('/gerenciarFases')}>
               <ListItemText primary="Gerenciar Fases" />
             </ListItemButton>
           </ListItem>
@@ -141,7 +147,6 @@ export default function PersistentDrawerLeft() {
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
-
       </Main>
     </Box>
   );

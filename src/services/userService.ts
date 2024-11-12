@@ -4,7 +4,7 @@ const API_URL = 'http://localhost:3000';
 
 export const registrarEstudante = async  (name: string, email: string, password: string) => {
     try {
-        const response = await axios.post(`${API_URL}/users/register`, {
+        const response = await axios.post(`${API_URL}/users/create`, {
             name: name,
             email: email,
             password: password,
