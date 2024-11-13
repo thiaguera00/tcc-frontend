@@ -39,9 +39,9 @@ export const Home = () => {
 
             <div id="aprender">
                 <div id="conteudo">
-                    <h1>Comece a aprender a <br /> programar agora mesmo no <br /> seu computador!</h1>
+                    <h1>Comece a aprender a <br /> programar agora mesmo<br />no seu computador!</h1>
                 </div>
-                <img id="img" src={NixGrande} className="NixGrande" alt="Mascote Nix" />
+                <img id="imgnix" src={NixGrande} className="NixGrande" alt="Mascote Nix" />
                 <button id="btn-aprender">Comece a aprender</button>
             </div>
 

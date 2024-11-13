@@ -26,12 +26,12 @@ const Conquistas = () => {
       bgcolor="#3F4273" 
       borderRadius={2}
       color="white"
-      height={"580px"}
-      marginTop={"150px"}
-      width={"20%"}
-      marginLeft={"35%"}
-      border={2} /* Define a espessura da borda do Box */
-      borderColor="#A66FD9" /* Define a cor da borda do Box */
+      height={"700px"}
+      marginTop={"10px"}  
+      width={"25%"}  
+      marginLeft={"35%"} 
+      border={2}            
+      borderColor="#A66FD9"
     >
       {conquistas.map((conquista, index) => (
         <Card 
@@ -41,8 +41,8 @@ const Conquistas = () => {
             maxWidth: 400, 
             backgroundColor: '#3F4273', 
             color: 'white',
-            border: 1, /* Define a espessura da borda do Card */
-            borderColor: '#A66FD9' /* Define a cor da borda do Card */
+            border: 1,
+            borderColor: '#A66FD9' 
           }}
         >
           <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>

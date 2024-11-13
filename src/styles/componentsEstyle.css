@@ -115,7 +115,7 @@ h1 {
 
 #aprender img {
   height: 190px;
-  margin-left: 20px; /* Espaçamento entre imagem e texto */
+  margin-left: 10px; /* Espaçamento entre imagem e texto */
 }
 
 #conteudo {
@@ -223,6 +223,7 @@ h1 {
   display: flex;
   justify-content: center;
   max-width: 70%; /* Limita a imagem a 50% da largura do container */
+ 
 }
 
 .integrantes {

@@ -10,6 +10,7 @@ import conquistasIcon from '../../assets/conquista.svg';
 import comunidadeIcon from '../../assets/comunidade.svg';
 import './index.css';
 
+
 export default function NavLateral() {
   const navigate = useNavigate();
 
@@ -50,7 +51,7 @@ export default function NavLateral() {
         </ListItem>
 
         <ListItem
-          onClick={() => navigate('/comunidade')}
+          onClick={() => window.open("https://discord.gg/pUwuhkPTVD", "_blank")}
           className="list-item"
           style={{ cursor: 'pointer' }}
         >
