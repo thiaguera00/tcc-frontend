@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Typography, IconButton, Button } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
+import perfilPadrao from '../../assets/usuario-de-perfil.png';
 
 interface User {
   id: number;
@@ -15,8 +16,7 @@ interface UserCardProps {
 }
 
 const UserCard: React.FC<UserCardProps> = ({ user, onEditClick }) => {
-  const defaultPhoto = 'https://via.placeholder.com/80'; // URL da imagem padrão
-
+ 
   return (
     <Box
       sx={{
@@ -49,7 +49,7 @@ const UserCard: React.FC<UserCardProps> = ({ user, onEditClick }) => {
       {/* Imagem do usuário centralizada, com fallback para a imagem padrão */}
       <Box
         component="img"
-        src={user.photo || defaultPhoto}
+        src={user.photo || perfilPadrao}
         alt={`${user.name} photo`}
         sx={{
           width: '80px',

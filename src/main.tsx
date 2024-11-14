@@ -14,7 +14,7 @@ import { AtividadesPage } from './pages/atividades';
 import { TelaConquista } from './pages/conquistas/conquistas';
 import {GerenciarUsuario} from './pages/gerenciar-usuario'
 import { GerenciarFases } from './pages/gerenciar-fases';
-import { Home } from './pages/home';
+import { Home } from './pages/Home';
 
 
 createRoot(document.getElementById('root')!).render(

@@ -134,12 +134,12 @@ export default function NavBarAdmin({ title }: PersistentDrawerLeftProps) {
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton onClick={() => navigate('/gerenciarUsuario')}>
+            <ListItemButton onClick={() => navigate('/gerenciar-usuario')}>
               <ListItemText primary="Gerenciar Usuário" />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton onClick={() => navigate('/gerenciarFases')}>
+            <ListItemButton onClick={() => navigate('/gerenciar-fases')}>
               <ListItemText primary="Gerenciar Fases" />
             </ListItemButton>
           </ListItem>

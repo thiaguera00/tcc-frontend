@@ -1,6 +1,7 @@
 import { Box } from '@mui/material';
 import UserCard from '../card-user';
 
+
 interface User {
   id: number;
   name: string;
@@ -26,7 +27,8 @@ const UserList: React.FC<UserListProps> = ({ users, onEditUser }) => {
       }}
     >
       {users.map((user) => (
-        <UserCard key={user.id} user={user} onEditClick={onEditUser} />
+        
+        <UserCard key={user.id} user={user}  onEditClick={onEditUser} />
       ))}
     </Box>
   );
