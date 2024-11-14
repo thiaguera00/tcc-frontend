@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Usuario } from '../../utils/interfaces';
 import { usuarioLogado } from '../../services/userService';
+import perfilPadrao from '../../assets/usuario-de-perfil.png';
+
 
 const ProfileCard = () => {
   
@@ -70,7 +72,7 @@ const ProfileCard = () => {
             right: 10,
             color: '#FFFFFF',
           }}
-          onClick={()=> navigate('/perfileditar')} 
+          onClick={()=> navigate('/editar-perfil')} 
         >
          
           <Typography variant="caption"   sx={{ marginLeft: '4px' }}>Editar</Typography>
@@ -80,7 +82,7 @@ const ProfileCard = () => {
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Avatar
             alt="Carlos Silva Souza"
-            src="/static/images/avatar.png" // Substitua com o caminho do avatar
+            src={perfilPadrao} // Substitua com o caminho do avatar
             sx={{ width: 100, height: 100, marginBottom: 2 }}
           />
           <Typography variant="h6" sx={{ color: 'white', fontWeight: 'bold' }}>{usuario?.name}</Typography>

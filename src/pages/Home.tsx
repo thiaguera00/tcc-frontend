@@ -1,9 +1,8 @@
 import NavBar from '../Components/nix-nav-bar/Index';
-import Formulario from '../Components/nix-formulario'; // Importando o Formulário
+import Formulario from '../Components/nix-formulario'; 
 import NixImg from '../assets/nixImgs.svg';
 import EditorCode from '../assets/EditorCode.svg';
 import NixGrande from '../assets/NixGrande.svg';
-
 import gameficImg from '../assets/gamefic.png';
 import pcImg from '../assets/IconePC.png';
 import comunidadeImg from '../assets/comunidade.png';

@@ -1,0 +1,18 @@
+.campos{
+        background-color: #fff !important;
+    }
+
+    .btns:hover {
+        color: #fff !important;
+        background-color: #4b889b !important; 
+        border-color: #4b889b !important; 
+       
+        transition: all 0.3s; 
+    }
+
+
+    .container {
+        background-color: #252746 !important; 
+        min-height: 100vh; 
+    }
+    

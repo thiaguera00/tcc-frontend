@@ -3,6 +3,9 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, B
 import { format } from 'date-fns';
 import { buscarFases, cadastrarFase, atualizarFase, excluirFase } from '../../services/phaseService';
 import NavBarAdmin from '../../Components/nav-gerenciar-user';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import '../../pages/gerenciar-fases/gerenciarFases.css';
 
 interface Fase {
   id: string;
@@ -63,10 +66,11 @@ export const GerenciarFases = () => {
 
   return (
     <>
+      <div className='container'>
       <NavBarAdmin title="Gerenciar Fases" />
-      <Box display="flex" justifyContent="center" alignItems="center" mt={2}>
+      <Box  display="flex" justifyContent="center" alignItems="center" mt={2} >
         <Typography variant="h4" component="div" align="center" color="#ffffff">
-          Gerenciar Fases
+          Fases
         </Typography>
       </Box>
       <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight="50vh">
@@ -96,11 +100,11 @@ export const GerenciarFases = () => {
                   <TableCell>{fase.count_question}</TableCell>
                   <TableCell>{format(new Date(fase.created_at), 'dd/MM/yyyy HH:mm')}</TableCell>
                   <TableCell>
-                    <Button variant="outlined" onClick={() => abrirFormulario(fase)} style={{ marginRight: '10px' }}>
-                      Editar
+                    <Button variant="outlined" className='btns' onClick={() => abrirFormulario(fase)} style={{ marginRight: '10px' }}>
+                      <EditIcon />
                     </Button>
-                    <Button variant="outlined" color="error" onClick={() => handleExcluir(fase.id)}>
-                      Excluir
+                    <Button className='btns' variant="outlined" color="error" onClick={() => handleExcluir(fase.id)}>
+                      <DeleteIcon />
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -111,47 +115,49 @@ export const GerenciarFases = () => {
 
         <Dialog open={openFormulario} onClose={fecharFormulario}>
           <DialogTitle>{faseEditando ? 'Editar Fase' : 'Adicionar Fase'}</DialogTitle>
-          <DialogContent>
-            <TextField
+          <DialogContent >
+            <TextField className='campos'
               label="Título"
               variant="outlined"
               fullWidth
               margin="normal"
               value={formValues.title}
-              onChange={(e) => setFormValues((prev) => ({ ...prev, title: e.target.value }))}
+              onChange={(e) => setFormValues((prev) => ({ ...prev, title: e.target.value }))} 
             />
-            <TextField
+            <TextField className='campos'
               label="Descrição"
               variant="outlined"
               fullWidth
               margin="normal"
               value={formValues.description}
-              onChange={(e) => setFormValues((prev) => ({ ...prev, description: e.target.value }))}
+              onChange={(e) => setFormValues((prev) => ({ ...prev, description: e.target.value }))} 
             />
-            <TextField
+            <TextField className='campos'
               label="Conteúdo"
               variant="outlined"
               fullWidth
               margin="normal"
               value={formValues.contentDescription}
-              onChange={(e) => setFormValues((prev) => ({ ...prev, contentDescription: e.target.value }))}
+              onChange={(e) => setFormValues((prev) => ({ ...prev, contentDescription: e.target.value }))} 
             />
-            <TextField
+            <TextField className='campos'
               label="Quantidade de Questões"
               variant="outlined"
               fullWidth
               type="number"
               margin="normal"
               value={formValues.count}
-              onChange={(e) => setFormValues((prev) => ({ ...prev, count: Number(e.target.value) }))}
+              onChange={(e) => setFormValues((prev) => ({ ...prev, count: Number(e.target.value) }))} 
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={fecharFormulario}>Cancelar</Button>
-            <Button onClick={handleSalvar}>Salvar</Button>
+            <Button className='btns' onClick={fecharFormulario}>Cancelar</Button>
+            <Button className='btns' onClick={handleSalvar}>Salvar</Button>
           </DialogActions>
         </Dialog>
       </Box>
+      </div>
+      
     </>
   );
 };

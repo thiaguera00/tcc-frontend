@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Adlam+Display&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap');
+
 
 
 /*css da navBar*/
@@ -55,7 +56,7 @@ margin-right: 20px !important;
 }
 
 .texNix{
-  font-family: 'Adlam Display';
+  font-family: 'Silkscreen';
 }
 
 h1 {

@@ -6,7 +6,7 @@ import ProfileCardEditar from '../../Components/editar-perfil';
 export const PerfilEditar = () => {
   return (
     <div><NixNavBarPerfil />
-    <div style={{ display: 'flex', height: '100vh' }}>
+    <div style={{ display: 'flex', height: '100vh', backgroundColor:'#252746' }}>
         
         {/* Navegação lateral à esquerda */}
         <NavLateral />

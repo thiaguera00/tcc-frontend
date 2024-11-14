@@ -5,6 +5,7 @@ import SearchComponent from '../../Components/pesquisa';
 import UserList from '../../Components/user-list';
 import axios from 'axios';
 
+
 interface User {
   id: number;
   name: string;
@@ -76,7 +77,7 @@ export const GerenciarUsuario = () => {
   }
 
   return (
-    <div className="mainContainer" style={{ padding: '16px' }}>
+    <div className="mainContainer" style={{ padding: '16px', backgroundColor:'#252746'}}>
       <NavBarAdmin title="Gerenciar usuários" />
       <Box
         sx={{
