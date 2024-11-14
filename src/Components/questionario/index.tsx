@@ -53,19 +53,30 @@ export const QuestionarioComponent = ({ onFinish, conteudo }: QuestionarioProps)
   const atualizarQuestao = async (questaoGerada: string) => {
     const questaoDividida = questaoGerada.split('\n').map(line => line.trim()).filter(line => line !== '');
 
-    const enunciadoIndex = questaoDividida.findIndex(line => line.startsWith("##"));
-
     let enunciado = "Questão não encontrada.";
+    const alternativasGeradas: string[] = [];
 
-    if (enunciadoIndex !== -1) {
-      enunciado = questaoDividida.slice(enunciadoIndex + 1).find(line => !line.match(/^[a-d]\)/)) || enunciado;
+    // Extrair o enunciado da questão
+    const questaoInicioIndex = questaoDividida.findIndex(line => line.startsWith("**Questão:**"));
+    if (questaoInicioIndex !== -1) {
+      enunciado = questaoDividida[questaoInicioIndex + 1]; // Pega a linha seguinte ao "Questão:" para o enunciado
     }
-    const alternativasGeradas = questaoDividida.filter((line: string) => line.match(/^[a-d]\)/));
+
+    // Extrair alternativas
+    for (let i = questaoInicioIndex + 1; i < questaoDividida.length; i++) {
+      const line = questaoDividida[i];
+      if (line.match(/^[a-d]\)/)) {
+        alternativasGeradas.push(line);
+      } else if (line.startsWith("**Resposta correta:**")) {
+        break; // Para ao encontrar a resposta correta
+      }
+    }
 
     setQuestao(enunciado);
     setAlternativas(alternativasGeradas);
     setResposta('');
     setFeedback(null);
+
 
     try {
       const id = await registrarQuestao({ question: enunciado, difficulty_level: level });
