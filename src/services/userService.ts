@@ -2,6 +2,14 @@ import axios from "axios";
 
 const API_URL = 'http://localhost:3000';
 
+interface IAtualizarUsuario {
+  name?: string;
+  email?: string;
+  level?: string;
+  points?: number;
+  is_first_access?: boolean;
+}
+
 export const registrarEstudante = async  (name: string, email: string, password: string) => {
     try {
         const response = await axios.post(`${API_URL}/users/create`, {
@@ -84,6 +92,24 @@ export const registrarQuestao = async (questao: { question: string; difficulty_l
           'Content-Type': 'application/json',
         },
       });
+    } catch (error) {
+      console.error('Erro ao registrar UserQuestion:', error);
+      throw error;
+    }
+  };
+
+  export const atualizarUsuario = async (userId: string, data: IAtualizarUsuario) => {
+    try {
+      const token = localStorage.getItem('token');
+  
+      const response = await axios.put(`${API_URL}/users/update/${userId}`, data, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+  
+      return response.data;
     } catch (error) {
       console.error('Erro ao registrar UserQuestion:', error);
       throw error;

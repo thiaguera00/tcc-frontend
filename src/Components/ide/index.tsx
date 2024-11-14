@@ -6,7 +6,7 @@ import { AvatarFeedback } from '../../Components/avatar';
 import { gerarQuestaoIa, corrigirCodigoIa } from '../../services/iaService';
 
 interface IDEProps {
-  onFinish: () => void;
+  onFinish: (isCorrect: boolean) => void;  // Alterando para receber um boolean que indica se a resposta está correta
   conteudo: string;
 }
 
@@ -43,13 +43,16 @@ export const IDEComponent = ({ onFinish, conteudo }: IDEProps) => {
 
     try {
       const respostaVerificacao = await corrigirCodigoIa(questao, codigo);
-      if (respostaVerificacao.correto) {
-        setFeedback('Resposta correta! Muito bem! 🎉');
+      console.log('Resposta da correção:', respostaVerificacao);
+
+      if (respostaVerificacao.esta_correto) {
+        setFeedback(`Resposta correta! Muito bem! 🎉\n\n${respostaVerificacao.feedback}`);
         setTimeout(() => {
-          onFinish();
-        }, 3000);
+          onFinish(true);  // Passando "true" para indicar que o código está correto
+        }, 5000); // Delay de 5 segundos para o usuário ver o feedback antes de prosseguir
       } else {
-        setFeedback(respostaVerificacao.mensagem);
+        setFeedback(`Resposta incorreta. Aqui está o feedback:\n\n${respostaVerificacao.feedback}`);
+        onFinish(false);  // Passando "false" para indicar que o código está incorreto
       }
     } catch (error) {
       setFeedback('Erro ao verificar a resposta. Tente novamente mais tarde.');
@@ -123,9 +126,17 @@ export const IDEComponent = ({ onFinish, conteudo }: IDEProps) => {
 
       {/* Exibindo o feedback da resposta */}
       {feedback && (
-        <Typography variant="subtitle1" sx={{ marginTop: '20px', color: feedback.includes('correta') ? '#4caf50' : '#f44336' }}>
-          {feedback}
-        </Typography>
+        <Box
+          sx={{
+            marginTop: '20px',
+            padding: '16px',
+            backgroundColor: feedback.includes('correta') ? '#e0f7fa' : '#ffebee',
+            color: feedback.includes('correta') ? '#006064' : '#c62828',
+            borderRadius: '8px',
+          }}
+        >
+          <Typography variant="subtitle1">{feedback}</Typography>
+        </Box>
       )}
     </Box>
   );
