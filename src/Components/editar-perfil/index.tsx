@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Avatar, Card } from '@mui/material';
-import { atualizarperfil } from "../../services/alterarService";
 import { FormGenerate } from "../form-generate";
-import { usuarioLogado } from '../../services/userService'; 
+import { usuarioLogado, atualizarUsuario } from '../../services/userService'; 
 
 const ProfileCardEditar = () => {
   const [formData, setFormData] = useState({
@@ -12,21 +11,20 @@ const ProfileCardEditar = () => {
     confirmPassword: ''
   });
 
-  const [userId, setUserId] = useState<string>('');  // Estado para armazenar o ID do usuário
+  const [userId, setUserId] = useState<string>(''); 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  // Carregar os dados do usuário logado
   useEffect(() => {
     const fetchUsuario = async () => {
       try {
-        const usuarioData = await usuarioLogado();  // Chama o serviço para buscar os dados do usuário logado
-        setUserId(usuarioData.id);  // Armazena o ID do usuário
+        const usuarioData = await usuarioLogado();  
+        setUserId(usuarioData.id);  
         setFormData({
           nome: usuarioData.name || '',
           email: usuarioData.email || '',
-          password: '',  // Deixa a senha vazia inicialmente
-          confirmPassword: '' // Deixa a confirmação de senha vazia
+          password: '',  
+          confirmPassword: '' 
         });
       } catch (error) {
         console.error('Erro ao carregar dados do usuário', error);
@@ -56,12 +54,17 @@ const ProfileCardEditar = () => {
     }
 
     try {
-      if (userId) {  
-        await atualizarperfil(userId, {
-          nome: formData.nome,
+      if (userId) {
+        const payload: { name?: string; email?: string; password?: string } = {
+          name: formData.nome,
           email: formData.email,
-          password: formData.password,
-        });
+        };
+
+        if (formData.password) {
+          payload.password = formData.password;  
+        }
+        
+        await atualizarUsuario(userId, payload);  
 
         setSuccessMessage('Usuário alterado com sucesso!');
       } else {
