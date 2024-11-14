@@ -5,8 +5,8 @@ import { gerarQuestaoForm, corrigirQuestaoForm } from '../../services/iaService'
 import { registrarQuestao, registrarRespostasUsuario, usuarioLogado } from '../../services/userService';
 
 interface QuestionarioProps {
-  onFinish: () => void;
-  conteudo: string; // Adicionando a prop para receber o conteúdo
+  onFinish: (isCorrect: boolean) => void; // Modificar para receber um boolean indicando se está correto
+  conteudo: string; // Conteúdo da fase
 }
 
 export const QuestionarioComponent = ({ onFinish, conteudo }: QuestionarioProps) => {
@@ -33,8 +33,7 @@ export const QuestionarioComponent = ({ onFinish, conteudo }: QuestionarioProps)
     const fetchQuestao = async () => {
       try {
         if (conteudo) {
-          const questaoGerada = await gerarQuestaoForm(conteudo); // Passando o conteúdo da fase para gerar a questão
-
+          const questaoGerada = await gerarQuestaoForm(conteudo);
           if (questaoGerada) {
             await atualizarQuestao(questaoGerada);
           } else {
@@ -87,7 +86,6 @@ export const QuestionarioComponent = ({ onFinish, conteudo }: QuestionarioProps)
 
     try {
       const alternativasConcatenadas = alternativas.join('\n');
-
       const respostaCorrecao = await corrigirQuestaoForm(questao, alternativasConcatenadas, resposta);
 
       let isCorrect = false;
@@ -96,18 +94,12 @@ export const QuestionarioComponent = ({ onFinish, conteudo }: QuestionarioProps)
         isCorrect = true;
         setFeedback('Resposta correta! Muito bem! 🎉');
         setTimeout(() => {
-          onFinish();
+          onFinish(true); // Passando "true" para indicar que a resposta está correta
         }, 3000);
       } else {
         setFeedback(respostaCorrecao.mensagem);
-        setTimeout(async () => {
-          try {
-            const novaQuestao = await gerarQuestaoForm(conteudo); // Usando o conteúdo atual novamente para gerar uma nova questão
-            await atualizarQuestao(novaQuestao);
-          } catch (error) {
-            setQuestao('Erro ao gerar uma nova questão. Tente novamente mais tarde.');
-            console.error('Erro ao gerar nova questão:', error);
-          }
+        setTimeout(() => {
+          onFinish(false); // Passando "false" para indicar que a resposta está incorreta
         }, 3000);
       }
 
@@ -119,7 +111,6 @@ export const QuestionarioComponent = ({ onFinish, conteudo }: QuestionarioProps)
         };
 
         setUserResponses((prevResponses) => [...prevResponses, respostaAtual]);
-
         await registrarRespostasUsuario([respostaAtual]);
       } else {
         console.error('Erro: questionId não definido.');
