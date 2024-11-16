@@ -6,18 +6,21 @@ import { IDEComponent } from '../../Components/ide';
 import { CardFase } from '../../Components/card-fase';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { buscarConteudoDaFase } from '../../services/phaseService';
-import { atualizarUsuario, usuarioLogado } from '../../services/userService'; // Importa a função para atualizar o usuário e obter usuário logado
+import { atualizarUsuario, usuarioLogado } from '../../services/userService'; 
+import { atualizarFaseProgresso, buscarProgressoOuCriar } from '../../services/progressPhaseService';
 
 export const AtividadesPage = () => {
   const location = useLocation();
   const { id, title, description } = location.state || {};
   const [etapa, setEtapa] = useState<number>(1);
   const [conteudo, setConteudo] = useState<string>('');
-  const [numErros, setNumErros] = useState<number>(0); // Estado para rastrear o número de erros
-  const [userId, setUserId] = useState<string | null>(null); // Estado para armazenar o userId
+  const [numErros, setNumErros] = useState<number>(0);
+  const [numAcertos, setNumAcertos] = useState<number>(0);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [progressId, setProgressId] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  // Buscar conteúdo da fase ao carregar a página
   useEffect(() => {
     const fetchConteudo = async () => {
       try {
@@ -33,59 +36,86 @@ export const AtividadesPage = () => {
     fetchConteudo();
   }, [id]);
 
-  // Buscar userId do usuário logado ao carregar a página
   useEffect(() => {
     const fetchUserId = async () => {
       try {
         const usuarioData = await usuarioLogado();
-        setUserId(usuarioData.id); // Armazenar o userId do usuário logado
+        setUserId(usuarioData.id);
+        if (usuarioData.id && id) {
+          await fetchOrCreateProgress(usuarioData.id, id);
+        }
       } catch (error) {
         console.error('Erro ao buscar dados do usuário:', error);
       }
     };
 
     fetchUserId();
-  }, []);
+  }, [id]);
 
-  const handleNextStep = (isCorrect: boolean) => {
-    // Atualizar o número de erros se a resposta estiver incorreta
-    if (!isCorrect) {
-      setNumErros((prev) => prev + 1);
-    }
-  
-    // Se todas as etapas estiverem completas, verifique se o usuário passou
-    if (etapa === 3) {
-      // Calcular se o usuário passou na fase
-      if (numErros < 3) {
-        // Calcular e atualizar a pontuação do usuário ao final da fase
-        const pontosGanhos = 50; // Pontuação maior para quem erra menos de 3 vezes
-        atualizarPontuacaoUsuario(pontosGanhos);
-  
-        alert('Você completou a fase! Parabéns!');
-        navigate('/playground');
-      } else {
-        alert('Você não atingiu a pontuação necessária. Tente novamente!');
-        // Aqui você pode redefinir a fase para o início ou fazer qualquer outra lógica de retentativa
-        setEtapa(1);
-        setNumErros(0);
-      }
-    } else {
-      // Caso contrário, continue para a próxima etapa
-      setEtapa((prev) => prev + 1);
+  const fetchOrCreateProgress = async (userId: string, phaseId: string) => {
+    try {
+      const progressData = await buscarProgressoOuCriar(userId, phaseId);
+      setProgressId(progressData.id);
+    } catch (error) {
+      console.error('Erro ao buscar ou criar progresso da fase:', error);
     }
   };
 
+  const handleNextStep = (isCorrect: boolean) => {
+    if (loading) return; 
+
+    if (isCorrect) {
+      setNumAcertos((prev) => prev + 1);
+    } else {
+      setNumErros((prev) => prev + 1);
+    }
+
+    if (numAcertos + (isCorrect ? 1 : 0) >= 3) {
+      const pontosGanhos = 50;
+      atualizarPontuacaoUsuario(pontosGanhos);
+      atualizarProgressoFase('concluida');
+
+      alert('Você completou a fase! Parabéns!');
+      navigate('/playground');
+    } else {
+      if (title !== 'Fase Lógica de programação') {
+        if (etapa === 1 && isCorrect) {
+          setEtapa(2);
+        } else if (etapa === 2) {
+          setEtapa(3);
+        } else if (etapa === 3 && isCorrect) {
+          setEtapa(1);
+        } else {
+          setEtapa(1);
+        }
+      } else {
+        if (isCorrect) {
+          setEtapa((prev) => prev + 1);
+        }
+      }
+    }
+  };
+
+  const atualizarProgressoFase = async (status: string) => {
+    try {
+      const dataAtual = new Date();
+      if (progressId) {
+        await atualizarFaseProgresso(progressId, {
+          status,
+          score: numAcertos,
+          finished_at: dataAtual,
+        });
+      }
+    } catch (error) {
+      console.error('Erro ao atualizar progresso da fase:', error);
+    }
+  };
   const atualizarPontuacaoUsuario = async (pontos: number) => {
     try {
       if (userId) {
-        // Primeiro, obtenha os dados atuais do usuário para pegar os pontos atuais
         const usuarioData = await usuarioLogado();
         const pontosAtuais = usuarioData.points || 0;
-  
-        // Some os pontos ganhos
         const novosPontos = pontosAtuais + pontos;
-  
-        // Atualize o usuário com a nova pontuação
         await atualizarUsuario(userId, { points: novosPontos });
       } else {
         console.error('Erro: userId não fornecido para atualizar a pontuação');
@@ -94,10 +124,10 @@ export const AtividadesPage = () => {
       console.error('Erro ao atualizar a pontuação do usuário:', error);
     }
   };
+
   return (
     <>
       <NavBarPerfil />
-      {/* Card da Fase */}
       <Box
         sx={{
           display: 'flex',
@@ -107,14 +137,13 @@ export const AtividadesPage = () => {
       >
         <CardFase
           id={id}
-          title={title || 'FASE'}
-          description={description || 'Descrição da Fase'}
+          title={title}
+          description={description}
           corFundo="#9ade5b"
           caminho="#"
         />
       </Box>
 
-      {/* Conteúdo da Atividade */}
       <Box
         sx={{
           padding: '40px 20px',
@@ -125,19 +154,31 @@ export const AtividadesPage = () => {
       >
         {conteudo && (
           <>
-            {title === 'Fase Logica de programação' ? (
+            {title === 'Fase Lógica de programação' ? (
               <>
-                {/* Primeira fase: somente questionário em todas as etapas */}
-                {etapa === 1 && <QuestionarioComponent onFinish={(isCorrect: boolean) => handleNextStep(isCorrect)} conteudo={conteudo} />}
-                {etapa === 2 && <QuestionarioComponent onFinish={(isCorrect: boolean) => handleNextStep(isCorrect)} conteudo={conteudo} />}
-                {etapa === 3 && <QuestionarioComponent onFinish={(isCorrect: boolean) => handleNextStep(isCorrect)} conteudo={conteudo} />}
+                <QuestionarioComponent
+                  onFinish={(isCorrect: boolean) => handleNextStep(isCorrect)}
+                  conteudo={conteudo}
+                  setLoading={setLoading} 
+                />
               </>
             ) : (
               <>
-                {/* Outras fases: Questionário -> IDE -> Questionário */}
-                {etapa === 1 && <QuestionarioComponent onFinish={(isCorrect: boolean) => handleNextStep(isCorrect)} conteudo={conteudo} />}
-                {etapa === 2 && <IDEComponent onFinish={(isCorrect: boolean) => handleNextStep(isCorrect)} conteudo={conteudo}/>}
-                {etapa === 3 && <QuestionarioComponent onFinish={(isCorrect: boolean) => handleNextStep(isCorrect)} conteudo={conteudo} />}
+                {etapa === 1 && (
+                  <QuestionarioComponent
+                    onFinish={(isCorrect: boolean) => handleNextStep(isCorrect)}
+                    conteudo={conteudo}
+                    setLoading={setLoading}
+                  />
+                )}
+                {etapa === 2 && <IDEComponent onFinish={(isCorrect: boolean) => handleNextStep(isCorrect)} conteudo={conteudo} />}
+                {etapa === 3 && (
+                  <QuestionarioComponent
+                    onFinish={(isCorrect: boolean) => handleNextStep(isCorrect)}
+                    conteudo={conteudo}
+                    setLoading={setLoading} 
+                  />
+                )}
               </>
             )}
           </>
