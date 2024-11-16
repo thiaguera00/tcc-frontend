@@ -7,6 +7,7 @@ import { CardFase } from '../../Components/card-fase';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { buscarConteudoDaFase } from '../../services/phaseService';
 import { atualizarUsuario, usuarioLogado } from '../../services/userService'; 
+import { atualizarFaseProgresso, buscarProgressoOuCriar } from '../../services/progressPhaseService';
 
 export const AtividadesPage = () => {
   const location = useLocation();
@@ -16,6 +17,7 @@ export const AtividadesPage = () => {
   const [numErros, setNumErros] = useState<number>(0);
   const [numAcertos, setNumAcertos] = useState<number>(0);
   const [userId, setUserId] = useState<string | null>(null);
+  const [progressId, setProgressId] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
@@ -39,13 +41,25 @@ export const AtividadesPage = () => {
       try {
         const usuarioData = await usuarioLogado();
         setUserId(usuarioData.id);
+        if (usuarioData.id && id) {
+          await fetchOrCreateProgress(usuarioData.id, id);
+        }
       } catch (error) {
         console.error('Erro ao buscar dados do usuário:', error);
       }
     };
 
     fetchUserId();
-  }, []);
+  }, [id]);
+
+  const fetchOrCreateProgress = async (userId: string, phaseId: string) => {
+    try {
+      const progressData = await buscarProgressoOuCriar(userId, phaseId);
+      setProgressId(progressData.id);
+    } catch (error) {
+      console.error('Erro ao buscar ou criar progresso da fase:', error);
+    }
+  };
 
   const handleNextStep = (isCorrect: boolean) => {
     if (loading) return; 
@@ -59,6 +73,7 @@ export const AtividadesPage = () => {
     if (numAcertos + (isCorrect ? 1 : 0) >= 3) {
       const pontosGanhos = 50;
       atualizarPontuacaoUsuario(pontosGanhos);
+      atualizarProgressoFase('concluida');
 
       alert('Você completou a fase! Parabéns!');
       navigate('/playground');
@@ -81,6 +96,20 @@ export const AtividadesPage = () => {
     }
   };
 
+  const atualizarProgressoFase = async (status: string) => {
+    try {
+      const dataAtual = new Date();
+      if (progressId) {
+        await atualizarFaseProgresso(progressId, {
+          status,
+          score: numAcertos,
+          finished_at: dataAtual,
+        });
+      }
+    } catch (error) {
+      console.error('Erro ao atualizar progresso da fase:', error);
+    }
+  };
   const atualizarPontuacaoUsuario = async (pontos: number) => {
     try {
       if (userId) {
@@ -127,11 +156,10 @@ export const AtividadesPage = () => {
           <>
             {title === 'Fase Lógica de programação' ? (
               <>
-                {/* Primeira fase: somente questionário em todas as etapas */}
                 <QuestionarioComponent
                   onFinish={(isCorrect: boolean) => handleNextStep(isCorrect)}
                   conteudo={conteudo}
-                  setLoading={setLoading} // Adicionando estado de loading
+                  setLoading={setLoading} 
                 />
               </>
             ) : (
@@ -140,7 +168,7 @@ export const AtividadesPage = () => {
                   <QuestionarioComponent
                     onFinish={(isCorrect: boolean) => handleNextStep(isCorrect)}
                     conteudo={conteudo}
-                    setLoading={setLoading} // Adicionando estado de loading
+                    setLoading={setLoading}
                   />
                 )}
                 {etapa === 2 && <IDEComponent onFinish={(isCorrect: boolean) => handleNextStep(isCorrect)} conteudo={conteudo} />}
@@ -148,7 +176,7 @@ export const AtividadesPage = () => {
                   <QuestionarioComponent
                     onFinish={(isCorrect: boolean) => handleNextStep(isCorrect)}
                     conteudo={conteudo}
-                    setLoading={setLoading} // Adicionando estado de loading
+                    setLoading={setLoading} 
                   />
                 )}
               </>

@@ -73,7 +73,7 @@ export const QuestionarioComponent = ({ onFinish, conteudo, setLoading }: Questi
     setFeedback(null);
 
     try {
-      const alternativasConcatenadas = questaoData.options.join('\n');
+      const alternativasConcatenadas = questaoData.options.map((opt: any) => `${opt.label}. ${opt.text}`).join('\n');
       const respostaCorrecao = await corrigirQuestaoForm(questaoData.question, alternativasConcatenadas, resposta);
 
       let isCorrect = false;
@@ -82,7 +82,7 @@ export const QuestionarioComponent = ({ onFinish, conteudo, setLoading }: Questi
         isCorrect = true;
         setFeedback('Resposta correta! Muito bem! 🎉');
         setTimeout(() => {
-          onFinish(true);
+          onFinish(true); 
           resetQuestao();
         }, 2000);
       } else {
@@ -150,15 +150,32 @@ export const QuestionarioComponent = ({ onFinish, conteudo, setLoading }: Questi
               value={resposta}
               onChange={(e) => setResposta(e.target.value)}
             >
-              {questaoData.options.map((option: string, index: number) => (
-                <FormControlLabel
-                  key={index}
-                  value={option}
-                  control={<Radio />}
-                  label={option}
-                  sx={{ color: '#ffffff' }}
-                />
-              ))}
+              {questaoData.options.map((option: any, index: number) => {
+                if (typeof option === 'string') {
+                  return (
+                    <FormControlLabel
+                      key={index}
+                      value={option}
+                      control={<Radio />}
+                      label={option}
+                      sx={{ color: '#ffffff' }}
+                    />
+                  );
+                } else if (typeof option === 'object' && option.label && option.text) {
+                  return (
+                    <FormControlLabel
+                      key={index}
+                      value={option.text}
+                      control={<Radio />}
+                      label={`${option.label}. ${option.text}`}
+                      sx={{ color: '#ffffff' }}
+                    />
+                  );
+                } else {
+                  console.warn(`Opção inválida no índice ${index}:`, option);
+                  return null;
+                }
+              })}
             </RadioGroup>
           </FormControl>
 
