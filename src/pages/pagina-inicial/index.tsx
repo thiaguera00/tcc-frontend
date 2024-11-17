@@ -71,15 +71,16 @@ export const PaginaInicial = () => {
       <NavLateral />
 
       <Box
-        sx={{
-          marginLeft: '250px',
-          paddingTop: '100px',
-          paddingX: '32px',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '24px',
-        }}
+      sx={{
+        position: 'absolute', 
+        top: '40%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)', 
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '24px',
+      }}
       >
         <Typography variant="h4" gutterBottom>
           Olá, {usuario?.name}
