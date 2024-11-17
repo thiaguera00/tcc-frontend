@@ -14,18 +14,19 @@ interface IAtualizarProgress {
  * @param phaseId - O ID da fase
  * @returns O progresso da fase
  */
-export const buscarProgressoOuCriar = async (userId: string, phaseId: string) => {
+export const buscarProgresso = async (userId: string, phaseId: string) => {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.get(`${API_URL}/progress/find-or-create/${userId}/${phaseId}`, {
+    const response = await axios.get(`${API_URL}/progress/find/${userId}/${phaseId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
+    console.log(response.data)
 
     return response.data;
   } catch (error) {
-    console.error('Erro ao buscar ou criar progresso da fase:', error);
+    console.error('Erro ao buscar progresso da fase:', error);
     throw error;
   }
 };

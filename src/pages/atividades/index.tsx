@@ -7,7 +7,8 @@ import { CardFase } from '../../Components/card-fase';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { buscarConteudoDaFase } from '../../services/phaseService';
 import { atualizarUsuario, usuarioLogado } from '../../services/userService'; 
-import { atualizarFaseProgresso, buscarProgressoOuCriar } from '../../services/progressPhaseService';
+import { atualizarFaseProgresso, buscarProgresso } from '../../services/progressPhaseService';
+import { AxiosError } from 'axios';
 
 export const AtividadesPage = () => {
   const location = useLocation();
@@ -42,22 +43,33 @@ export const AtividadesPage = () => {
         const usuarioData = await usuarioLogado();
         setUserId(usuarioData.id);
         if (usuarioData.id && id) {
-          await fetchOrCreateProgress(usuarioData.id, id);
+          const acessoPermitido = await findProgress(usuarioData.id, id);
+          if (!acessoPermitido) {
+            alert('Você não tem permissão para acessar esta fase. Complete a fase anterior primeiro.');
+            navigate('/playground');
+          }
         }
       } catch (error) {
         console.error('Erro ao buscar dados do usuário:', error);
       }
     };
-
+  
     fetchUserId();
   }, [id]);
-
-  const fetchOrCreateProgress = async (userId: string, phaseId: string) => {
+  
+  const findProgress = async (userId: string, phaseId: string) => {
     try {
-      const progressData = await buscarProgressoOuCriar(userId, phaseId);
+      const progressData = await buscarProgresso(userId, phaseId);
       setProgressId(progressData.id);
+      return true;
     } catch (error) {
-      console.error('Erro ao buscar ou criar progresso da fase:', error);
+      if (error instanceof AxiosError && error.response?.status === 500) {
+        console.error('Usuário não completou a fase anterior:', error);
+        return false;
+      } else {
+        console.error('Erro ao buscar ou criar progresso da fase:', error);
+        return false;
+      }
     }
   };
 
