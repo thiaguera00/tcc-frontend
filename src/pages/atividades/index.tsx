@@ -9,6 +9,7 @@ import { buscarConteudoDaFase } from '../../services/phaseService';
 import { atualizarUsuario, usuarioLogado } from '../../services/userService'; 
 import { atualizarFaseProgresso, buscarProgresso } from '../../services/progressPhaseService';
 import { AxiosError } from 'axios';
+import ErroModal from '../../Components/componenteErro'; // Importando o ErroModal
 
 export const AtividadesPage = () => {
   const location = useLocation();
@@ -20,6 +21,7 @@ export const AtividadesPage = () => {
   const [userId, setUserId] = useState<string | null>(null);
   const [progressId, setProgressId] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [modalOpen, setModalOpen] = useState<boolean>(false); // Controle para o modal
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -45,8 +47,7 @@ export const AtividadesPage = () => {
         if (usuarioData.id && id) {
           const acessoPermitido = await findProgress(usuarioData.id, id);
           if (!acessoPermitido) {
-            alert('Você não tem permissão para acessar esta fase. Complete a fase anterior primeiro.');
-            navigate('/playground');
+            setModalOpen(true); // Abre o modal em vez de alert
           }
         }
       } catch (error) {
@@ -122,6 +123,7 @@ export const AtividadesPage = () => {
       console.error('Erro ao atualizar progresso da fase:', error);
     }
   };
+  
   const atualizarPontuacaoUsuario = async (pontos: number) => {
     try {
       if (userId) {
@@ -135,6 +137,11 @@ export const AtividadesPage = () => {
     } catch (error) {
       console.error('Erro ao atualizar a pontuação do usuário:', error);
     }
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    navigate('/playground'); // Redireciona ao fechar o modal
   };
 
   return (
@@ -196,6 +203,13 @@ export const AtividadesPage = () => {
           </>
         )}
       </Box>
+
+      <ErroModal
+        titulo="Acesso Negado"
+        open={modalOpen}
+        onClose={handleCloseModal}
+        descricao="Você não tem permissão para acessar esta fase. Complete a fase anterior primeiro."
+      />
     </>
   );
 };
