@@ -9,7 +9,7 @@ import { buscarConteudoDaFase } from '../../services/phaseService';
 import { atualizarUsuario, usuarioLogado } from '../../services/userService'; 
 import { atualizarFaseProgresso, buscarProgresso } from '../../services/progressPhaseService';
 import { AxiosError } from 'axios';
-import ErroModal from '../../Components/componenteErro'; // Importando o ErroModal
+import ErroModal from '../../Components/componenteErro';
 
 export const AtividadesPage = () => {
   const location = useLocation();
@@ -21,7 +21,7 @@ export const AtividadesPage = () => {
   const [userId, setUserId] = useState<string | null>(null);
   const [progressId, setProgressId] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [modalOpen, setModalOpen] = useState<boolean>(false); // Controle para o modal
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export const AtividadesPage = () => {
         if (usuarioData.id && id) {
           const acessoPermitido = await findProgress(usuarioData.id, id);
           if (!acessoPermitido) {
-            setModalOpen(true); // Abre o modal em vez de alert
+            setModalOpen(true);
           }
         }
       } catch (error) {
@@ -141,7 +141,7 @@ export const AtividadesPage = () => {
 
   const handleCloseModal = () => {
     setModalOpen(false);
-    navigate('/playground'); // Redireciona ao fechar o modal
+    navigate('/playground');
   };
 
   return (

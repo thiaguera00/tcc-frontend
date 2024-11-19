@@ -6,7 +6,7 @@ import { AvatarFeedback } from '../../Components/avatar';
 import { gerarQuestaoIa, corrigirCodigoIa } from '../../services/iaService';
 
 interface IDEProps {
-  onFinish: (isCorrect: boolean) => void;  // Alterando para receber um boolean que indica se a resposta está correta
+  onFinish: (isCorrect: boolean) => void;
   conteudo: string;
 }
 
@@ -48,11 +48,11 @@ export const IDEComponent = ({ onFinish, conteudo }: IDEProps) => {
       if (respostaVerificacao.esta_correto) {
         setFeedback(`Resposta correta! Muito bem! 🎉\n\n${respostaVerificacao.feedback}`);
         setTimeout(() => {
-          onFinish(true);  // Passando "true" para indicar que o código está correto
-        }, 5000); // Delay de 5 segundos para o usuário ver o feedback antes de prosseguir
+          onFinish(true);
+        }, 5000);
       } else {
         setFeedback(`Resposta incorreta. Aqui está o feedback:\n\n${respostaVerificacao.feedback}`);
-        onFinish(false);  // Passando "false" para indicar que o código está incorreto
+        onFinish(false);
       }
     } catch (error) {
       setFeedback('Erro ao verificar a resposta. Tente novamente mais tarde.');

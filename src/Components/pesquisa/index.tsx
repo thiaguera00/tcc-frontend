@@ -21,6 +21,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ value, onChange }) =>
         },
         label: {
           color: '#ffffff',
+          fontSize: '15px',
         },
         '& .MuiOutlinedInput-root': {
           '& fieldset': {

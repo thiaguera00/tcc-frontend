@@ -115,3 +115,21 @@ export const registrarQuestao = async (questao: { question: string; difficulty_l
       throw error;
     }
   };
+
+  export const inativarUsuario = async (userId: string) => {
+    try {
+      const token = localStorage.getItem('token');
+  
+      const response = await axios.delete(`${API_URL}/users/inactive/${userId}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+  
+      return response.data;
+    } catch (error) {
+      console.error('Erro ao inativar Usuario:', error);
+      throw error;
+    }
+  };
