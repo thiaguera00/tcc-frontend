@@ -4,7 +4,9 @@ import NavBarAdmin from '../../Components/nav-gerenciar-user';
 import SearchComponent from '../../Components/pesquisa';
 import axios from 'axios';
 import { format } from 'date-fns';
-import { inativarUsuario } from '../../services/userService'; // Importa a função inativarUsuario
+import { inativarUsuario } from '../../services/userService'; 
+import NavAdm from '../../Components/navLateralADM';
+
 
 interface User {
   id: string;
@@ -89,14 +91,16 @@ export const GerenciarUsuario = () => {
 
   return (
     <div className="mainContainer" style={{ padding: '16px', backgroundColor:'#252746' }}>
-      <NavBarAdmin title="Gerenciar usuários" />
-      <Box display="flex" justifyContent="start" alignItems="start" mt={2} marginLeft={23.5}>
+      <NavBarAdmin title="NIX admin" />
+
+      <NavAdm />
+
+      <Box display="flex" justifyContent="start" alignItems="start" mt={2} marginLeft={45.5}>
         <Typography variant="h4" component="div" align="center" color="#ffffff">
-          GERENCIAR USUÁRIOS
+        Gerenciar usuário
         </Typography>
       </Box>
 
-      {/* Caixa de pesquisa posicionada acima da tabela */}
       <Box
         sx={{
           display: 'flex',
@@ -106,10 +110,10 @@ export const GerenciarUsuario = () => {
           width: '30%',
         }}
       >
-        <SearchComponent value={searchQuery} onChange={handleSearchChange} />
+        <SearchComponent   value={searchQuery} onChange={handleSearchChange}  />
       </Box>
 
-      <TableContainer component={Paper} sx={{ marginTop: '20px', backgroundColor: '#dedede', width: '80%', marginLeft: 'auto', marginRight: 'auto' }}>
+      <TableContainer component={Paper} sx={{ marginTop: '20px', backgroundColor: '#dedede', width: '60%', marginLeft: 'auto', marginRight: 'auto' }}>
         <Table sx={{ minWidth: 650 }} aria-label="tabela de usuários">
           <TableHead>
             <TableRow style={{ background: '#b6b6b6' }}>
@@ -152,7 +156,6 @@ export const GerenciarUsuario = () => {
         </Table>
       </TableContainer>
 
-      {/* Modal para exibir detalhes do usuário */}
       <Modal
         open={!!selectedUser}
         onClose={handleCloseModal}
