@@ -95,7 +95,7 @@ export const GerenciarUsuario = () => {
 
       <NavAdm />
 
-      <Box display="flex" justifyContent="start" alignItems="start" mt={2} marginLeft={45.5}>
+      <Box display="flex" justifyContent="start" alignItems="start" mt={2} marginLeft={44.5}>
         <Typography variant="h4" component="div" align="center" color="#ffffff">
         Gerenciar usuário
         </Typography>

@@ -6,6 +6,7 @@ import NavBarAdmin from '../../Components/nav-gerenciar-user';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import '../../pages/gerenciar-fases/gerenciarFases.css';
+import NavAdm from '../../Components/navLateralADM';
 
 interface Fase {
   id: string;
@@ -67,14 +68,17 @@ export const GerenciarFases = () => {
   return (
     <>
       <div className='container'>
-      <NavBarAdmin title="Gerenciar Fases" />
-      <Box  display="flex" justifyContent="center" alignItems="center" mt={2} >
-        <Typography variant="h4" component="div" align="center" color="#ffffff">
-          Fases
+      <NavBarAdmin title="NIX admin" />
+
+      <NavAdm />
+
+      <Box  display="flex" justifyContent="left" alignItems="center" mt={2}  marginLeft={46.5} >
+        <Typography variant="h4" component="div" align="center" color="#ffffff" >
+          Gerenciar fases
         </Typography>
       </Box>
       <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight="50vh">
-        <TableContainer component={Paper} style={{ maxWidth: '75%', marginTop: '20px' }}>
+        <TableContainer component={Paper} style={{ maxWidth: '60%', marginTop: '20px' }}>
           <Box display="flex" justifyContent="flex-end" p={2}>
             <Button style={{ backgroundColor: '#8E44AD', color: '#FFFFFF', fontSize: '16px', outline: 'none', borderColor: '#8E44AD'}} onClick={() => abrirFormulario()}>
               Adicionar Fase
