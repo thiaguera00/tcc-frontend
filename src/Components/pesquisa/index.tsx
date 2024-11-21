@@ -34,6 +34,8 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ value, onChange }) =>
             borderColor: '#c56bc5',
           },
         },
+         
+        
       }}
     />
   );
