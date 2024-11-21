@@ -23,18 +23,30 @@ export const QuestionarioComponent = ({ onFinish, conteudo, setLoading }: Questi
       if (conteudo) {
         const questaoGerada = await gerarQuestaoForm(conteudo);
         console.log("Questão gerada:", questaoGerada);
+  
+        if (questaoGerada && typeof questaoGerada === 'object') {
+          const { question, options } = questaoGerada;
 
-        if (questaoGerada && questaoGerada.options && Array.isArray(questaoGerada.options)) {
-          setQuestaoData(questaoGerada);
-
-          const id = await registrarQuestao({
-            question: questaoGerada.question,
-            difficulty_level: level,
-          });
-          setQuestionId(id);
+          if (
+            typeof question === 'string' &&
+            Array.isArray(options) &&
+            options.length > 0 &&
+            options.every(opt => typeof opt === 'string')
+          ) {
+            setQuestaoData(questaoGerada);
+  
+            const id = await registrarQuestao({
+              question: questaoGerada.question,
+              difficulty_level: level,
+            });
+            setQuestionId(id);
+          } else {
+            console.error('Estrutura de dados inválida para questaoGerada: ', questaoGerada);
+            setQuestaoData(null);
+          }
         } else {
-          console.error('Estrutura de dados inválida para questaoGerada:', questaoGerada);
-          setQuestaoData('Erro ao carregar a questão. Tente novamente mais tarde.');
+          console.error('Estrutura de dados inválida para questaoGerada (não é um objeto válido):', questaoGerada);
+          setQuestaoData(null);
         }
       }
     } catch (error) {
@@ -73,7 +85,7 @@ export const QuestionarioComponent = ({ onFinish, conteudo, setLoading }: Questi
     setFeedback(null);
 
     try {
-      const alternativasConcatenadas = questaoData.options.map((opt: any) => `${opt.label}. ${opt.text}`).join('\n');
+      const alternativasConcatenadas = questaoData.options.join('\n');
       const respostaCorrecao = await corrigirQuestaoForm(questaoData.question, alternativasConcatenadas, resposta);
 
       let isCorrect = false;
@@ -143,39 +155,27 @@ export const QuestionarioComponent = ({ onFinish, conteudo, setLoading }: Questi
               Expressão: {questaoData.expression}
             </Typography>
           )}
-
           <FormControl component="fieldset">
             <RadioGroup
               name="alternativas"
               value={resposta}
               onChange={(e) => setResposta(e.target.value)}
             >
-              {questaoData.options.map((option: any, index: number) => {
-                if (typeof option === 'string') {
-                  return (
-                    <FormControlLabel
-                      key={index}
-                      value={option}
-                      control={<Radio />}
-                      label={option}
-                      sx={{ color: '#ffffff' }}
-                    />
-                  );
-                } else if (typeof option === 'object' && option.label && option.text) {
-                  return (
-                    <FormControlLabel
-                      key={index}
-                      value={option.text}
-                      control={<Radio />}
-                      label={`${option.label}. ${option.text}`}
-                      sx={{ color: '#ffffff' }}
-                    />
-                  );
-                } else {
-                  console.warn(`Opção inválida no índice ${index}:`, option);
-                  return null;
-                }
-              })}
+              {questaoData.options.length > 0 ? (
+                questaoData.options.map((option: string, index: number) => (
+                  <FormControlLabel
+                    key={index}
+                    value={option}
+                    control={<Radio />}
+                    label={`${String.fromCharCode(65 + index)}. ${option}`}
+                    sx={{ color: '#ffffff' }}
+                  />
+                ))
+              ) : (
+                <Typography variant="subtitle1" color="error">
+                  Erro ao carregar as opções. Tente novamente mais tarde.
+                </Typography>
+              )}
             </RadioGroup>
           </FormControl>
 

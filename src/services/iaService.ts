@@ -1,5 +1,10 @@
 import axios from 'axios';
 
+interface ICodigoCorrecaoPayload {
+  questao: string;
+  codigo: string;
+}
+
 const API_URL =' http://localhost:3000';
 
 const gerarQuestaoIa = async ( conteudo: string) => {
@@ -14,12 +19,9 @@ const gerarQuestaoIa = async ( conteudo: string) => {
   }
 };
 
-const corrigirCodigoIa = async (questao: string, codigo: string) => {
+const corrigirCodigoIa = async (payload: ICodigoCorrecaoPayload) => {
   try {
-    const response = await axios.post(`https://ia-assistente-python.onrender.com/corrigir-codigo/`, {
-      questao,
-      codigo
-    });
+    const response = await axios.post(`https://ia-assistente-python.onrender.com/corrigir-codigo/`, payload);
     return response.data;
   } catch (error) {
     console.error('Erro ao corrigir código:', error);

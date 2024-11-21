@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Box, Button, Grid, Typography } from '@mui/material';
 import { CodeiumEditor } from '@codeium/react-code-editor';
-import ReactMarkdown from 'react-markdown';
 import { AvatarFeedback } from '../../Components/avatar';
 import { gerarQuestaoIa, corrigirCodigoIa } from '../../services/iaService';
 
@@ -12,7 +11,7 @@ interface IDEProps {
 
 export const IDEComponent = ({ onFinish, conteudo }: IDEProps) => {
   const [codigo, setCodigo] = useState<string>('');
-  const [questao, setQuestao] = useState<string>('Carregando a questão...');
+  const [questao, setQuestao] = useState<any>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -21,7 +20,13 @@ export const IDEComponent = ({ onFinish, conteudo }: IDEProps) => {
       try {
         const questaoGerada = await gerarQuestaoIa(conteudo);
         console.log('Questão gerada:', questaoGerada);
-        setQuestao(questaoGerada.questao);
+
+        if (questaoGerada && typeof questaoGerada === 'object' && questaoGerada.questao) {
+          setQuestao(questaoGerada.questao);
+        } else {
+          console.error('Questão gerada não está no formato esperado:', questaoGerada);
+          setQuestao(null);
+        }
       } catch (error) {
         setQuestao('Erro ao carregar a questão. Tente novamente mais tarde.');
         console.error('Erro ao gerar a questão:', error);
@@ -40,11 +45,20 @@ export const IDEComponent = ({ onFinish, conteudo }: IDEProps) => {
     console.log('Código enviado:', codigo);
     setLoading(true);
     setFeedback(null);
-
+  
     try {
-      const respostaVerificacao = await corrigirCodigoIa(questao, codigo);
+      const questaoTexto = questao?.titulo || '';
+  
+      const payload = {
+        questao: questaoTexto,
+        codigo: codigo
+      };
+  
+      console.log('Payload enviado:', payload);
+  
+      const respostaVerificacao = await corrigirCodigoIa(payload);
       console.log('Resposta da correção:', respostaVerificacao);
-
+  
       if (respostaVerificacao.esta_correto) {
         setFeedback(`Resposta correta! Muito bem! 🎉\n\n${respostaVerificacao.feedback}`);
         setTimeout(() => {
@@ -85,7 +99,35 @@ export const IDEComponent = ({ onFinish, conteudo }: IDEProps) => {
               width: '450px',
             }}
           >
-            <ReactMarkdown>{questao}</ReactMarkdown>
+            {questao ? (
+              <>
+                {questao.titulo && (
+                  <Typography variant="h6" sx={{ marginBottom: '16px', fontWeight: 'bold' }}>
+                    {questao.titulo}
+                  </Typography>
+                )}
+                {questao.instrucao && (
+                  <Typography variant="body1" sx={{ marginBottom: '16px' }}>
+                    <strong>Instrução:</strong> {questao.instrucao}
+                  </Typography>
+                )}
+                {questao.objetivo && (
+                  <Typography variant="body1" sx={{ marginBottom: '16px' }}>
+                    <strong>Objetivo:</strong> {questao.objetivo}
+                  </Typography>
+                )}
+                {questao.exemplo && (
+                  <Typography variant="body1" sx={{ marginBottom: '16px' }}>
+                    <strong>Exemplo:</strong>
+                    <pre style={{ background: '#333', padding: '10px', borderRadius: '5px' }}>
+                      <code style={{ color: '#fff' }}>{questao.exemplo}</code>
+                    </pre>
+                  </Typography>
+                )}
+              </>
+            ) : (
+              <Typography variant="h6">Carregando a questão...</Typography>
+            )}
           </Box>
         </Grid>
 

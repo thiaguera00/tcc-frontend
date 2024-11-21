@@ -76,18 +76,18 @@ export const AtividadesPage = () => {
 
   const handleNextStep = (isCorrect: boolean) => {
     if (loading) return; 
-
+  
     if (isCorrect) {
       setNumAcertos((prev) => prev + 1);
     } else {
       setNumErros((prev) => prev + 1);
     }
-
+  
     if (numAcertos + (isCorrect ? 1 : 0) >= 3) {
       const pontosGanhos = 50;
       atualizarPontuacaoUsuario(pontosGanhos);
       atualizarProgressoFase('concluida');
-
+  
       alert('Você completou a fase! Parabéns!');
       navigate('/playground');
     } else {
@@ -95,7 +95,11 @@ export const AtividadesPage = () => {
         if (etapa === 1 && isCorrect) {
           setEtapa(2);
         } else if (etapa === 2) {
-          setEtapa(3);
+          if (isCorrect) {
+            setEtapa(3);
+          } else {
+            setEtapa(2);
+          }
         } else if (etapa === 3 && isCorrect) {
           setEtapa(1);
         } else {
