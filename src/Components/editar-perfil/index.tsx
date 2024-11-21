@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Box, Avatar, Card } from '@mui/material';
 import { FormGenerate } from "../form-generate";
 import { usuarioLogado, atualizarUsuario } from '../../services/userService'; 
+import SuccessSnackbar from '../../Components/componenteSave/index';
+import perfilPadrao from '../../assets/usuario-de-perfil.png'; 
 
 const ProfileCardEditar = () => {
   const [formData, setFormData] = useState({
@@ -14,6 +16,7 @@ const ProfileCardEditar = () => {
   const [userId, setUserId] = useState<string>(''); 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false); 
 
   useEffect(() => {
     const fetchUsuario = async () => {
@@ -67,6 +70,7 @@ const ProfileCardEditar = () => {
         await atualizarUsuario(userId, payload);  
 
         setSuccessMessage('Usuário alterado com sucesso!');
+        setSnackbarOpen(true);
       } else {
         setErrorMessage('Erro: Não foi possível encontrar o ID do usuário.');
       }
@@ -77,6 +81,10 @@ const ProfileCardEditar = () => {
         setErrorMessage('Erro desconhecido. Tente novamente.');
       }
     }
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false); 
   };
 
   const formInputs = [
@@ -109,7 +117,7 @@ const ProfileCardEditar = () => {
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Avatar
             alt="Carlos Silva Souza"
-            src="/static/images/avatar.png"
+            src={perfilPadrao}
             sx={{ width: 100, height: 100, marginBottom: 2 }}
           />
         </Box>
@@ -126,11 +134,15 @@ const ProfileCardEditar = () => {
           {errorMessage && (
             <p style={{ color: 'red', marginTop: '16px' }}>{errorMessage}</p>
           )}
-          {successMessage && (
-            <p style={{ color: 'green', marginTop: '16px' }}>{successMessage}</p>
-          )}
         </Box>
       </Card>
+
+      {/* Usa o componente reutilizável para mensagens de sucesso */}
+      <SuccessSnackbar
+        open={snackbarOpen}
+        message={successMessage || ''}
+        onClose={handleSnackbarClose}
+      />
     </Box>
   );
 };

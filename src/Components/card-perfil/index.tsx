@@ -49,8 +49,8 @@ const ProfileCard = () => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        width: '100%', // Garanta que o box ocupe toda a largura
-        padding: 2,    // Adicione padding
+        width: '100%', 
+        padding: 2,    
       }}
     >
        
@@ -60,7 +60,7 @@ const ProfileCard = () => {
           padding: 3, 
           borderRadius: '16px', 
           backgroundColor: '#3F4273',
-          position: 'relative', // Ajuste o posicionamento relativo para o botão "Editar"
+          position: 'relative', 
           boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
         }}
       >
@@ -82,7 +82,7 @@ const ProfileCard = () => {
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Avatar
             alt="Carlos Silva Souza"
-            src={perfilPadrao} // Substitua com o caminho do avatar
+            src={perfilPadrao} 
             sx={{ width: 100, height: 100, marginBottom: 2 }}
           />
           <Typography variant="h6" sx={{ color: 'white', fontWeight: 'bold' }}>{usuario?.name}</Typography>

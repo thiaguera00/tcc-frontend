@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
 import pointIcon from '../../assets/points.png';
 import { usuarioLogado } from '../../services/userService';
+import perfilPadrao from '../../assets/usuario-de-perfil.png'; 
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -53,7 +54,7 @@ export default function NavBarPerfil() {
             </IconButton>
             <Avatar
               alt="Perfil"
-              src="/static/images/avatar/1.jpg"
+              src={perfilPadrao}
               sx={{ cursor: 'pointer' }}
               onClick={() => navigate('/perfil')}
             />
