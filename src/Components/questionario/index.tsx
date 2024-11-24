@@ -15,6 +15,7 @@ export const QuestionarioComponent = ({ onFinish, conteudo, setLoading }: Questi
   const [feedback, setFeedback] = useState<string | null>(null);
   const [level, setLevel] = useState<string>('normal');
   const [questionId, setQuestionId] = useState<string>('');
+  const [showNextButton, setShowNextButton] = useState<boolean>(false);
   const isMounted = useRef<boolean>(false);
 
   const fetchQuestao = async () => {
@@ -77,7 +78,7 @@ export const QuestionarioComponent = ({ onFinish, conteudo, setLoading }: Questi
 
   const handleResponder = async () => {
     if (!resposta) {
-      alert('Por favor, selecione uma alternativa.');
+      setFeedback('Por favor, selecione uma alternativa.');
       return;
     }
 
@@ -93,16 +94,8 @@ export const QuestionarioComponent = ({ onFinish, conteudo, setLoading }: Questi
       if (respostaCorrecao?.correto) {
         isCorrect = true;
         setFeedback('Resposta correta! Muito bem! 🎉');
-        setTimeout(() => {
-          onFinish(true); 
-          resetQuestao();
-        }, 2000);
       } else {
         setFeedback(respostaCorrecao?.mensagem || 'Resposta incorreta. Tente novamente.');
-        setTimeout(() => {
-          onFinish(false);
-          resetQuestao();
-        }, 2000);
       }
 
       if (questionId) {
@@ -116,12 +109,20 @@ export const QuestionarioComponent = ({ onFinish, conteudo, setLoading }: Questi
       } else {
         console.error('Erro: questionId não definido.');
       }
+
+      setShowNextButton(true); // Exibe o botão "Próxima Questão"
+      onFinish(isCorrect); // Informa o resultado da questão
     } catch (error) {
       setFeedback('Erro ao verificar a resposta. Tente novamente mais tarde.');
       console.error('Erro ao verificar resposta da questão:', error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleNextQuestion = () => {
+    setShowNextButton(false); // Oculta o botão Próxima Questão
+    resetQuestao(); // Reseta a questão atual e carrega a próxima
   };
 
   const resetQuestao = () => {
@@ -179,9 +180,11 @@ export const QuestionarioComponent = ({ onFinish, conteudo, setLoading }: Questi
             </RadioGroup>
           </FormControl>
 
-          <Button variant="contained" onClick={handleResponder} sx={{ marginTop: '20px' }}>
-            Responder
-          </Button>
+          {!showNextButton && (
+            <Button variant="contained" onClick={handleResponder} sx={{ marginTop: '20px' }}>
+              Responder
+            </Button>
+          )}
 
           {feedback && (
             <Typography
@@ -193,6 +196,12 @@ export const QuestionarioComponent = ({ onFinish, conteudo, setLoading }: Questi
             >
               {feedback}
             </Typography>
+          )}
+
+          {showNextButton && (
+            <Button variant="contained" onClick={handleNextQuestion} sx={{ marginTop: '20px' }}>
+              Próxima Questão
+            </Button>
           )}
         </>
       ) : (

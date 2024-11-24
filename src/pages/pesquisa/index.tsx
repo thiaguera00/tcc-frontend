@@ -129,7 +129,7 @@ export const Pesquisa = () => {
               value={((currentQuestionIndex + 1) / questions.length) * 100}
               sx={{
                 backgroundColor: '#2E2E54',
-                '& .MuiLinearProgress-bar': {
+                '& .MuiLinearProgress-bar': { //copiar aqui e colocar na atividade 
                   backgroundColor: '#A66FD9',
                 },
               }}
