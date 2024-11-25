@@ -1,6 +1,5 @@
 import { Box, Card, CardContent, Typography } from '@mui/material';
 import cerebro from "../../assets/cerebro.svg";
-//import cobra from "../../assets/cobra.svg";
 import variavel from "../../assets/variavel.svg";
 import decisao from "../../assets/decisao.svg";
 import estrutura from "../../assets/estrutura.svg";
@@ -9,11 +8,10 @@ import projetofinal from "../../assets/projetofinal.svg";
 const Conquistas = () => {
   const conquistas = [
     { icon: <img src={cerebro} alt="Cérebro" style={{ width: '60px', height: '70px' }} />, texto: 'VOCÊ JÁ PENSA COMO UM PROGRAMADOR!' },
-    //{ icon: <img src={cobra} alt="Cérebro" style={{ width: '60px', height: '70px' }} />, texto: 'PARABÉNS, O UNIVERSO PYTHON TE ESPERA!' },
-    { icon: <img src={variavel} alt="Cérebro" style={{ width: '60px', height: '70px' }} />, texto: 'VARIÁVEIS E TIPOS DE DADOS? FÁCIL PARA VOCÊ!' },
-    { icon: <img src={decisao} alt="Cérebro" style={{ width: '60px', height: '70px' }} />, texto: 'DECISÕES INTELIGENTES NO CÓDIGO, ÓTIMO TRABALHO!' },
-    { icon: <img src={estrutura} alt="Cérebro" style={{ width: '60px', height: '70px' }} />, texto: 'ESTRUTURAS LÓGICAS? FEITAS COM SUCESSO!' },
-    { icon: <img src={projetofinal} alt="Cérebro" style={{ width: '60px', height: '70px' }} />, texto: 'VOCÊ CHEGOU AO GRANDE DESAFIO FINAL!' }
+    { icon: <img src={variavel} alt="variavel" style={{ width: '60px', height: '70px' }} />, texto: 'VARIÁVEIS E TIPOS DE DADOS? FÁCIL PARA VOCÊ!' },
+    { icon: <img src={decisao} alt="decisao" style={{ width: '60px', height: '70px' }} />, texto: 'DECISÕES INTELIGENTES NO CÓDIGO, ÓTIMO TRABALHO!' },
+    { icon: <img src={estrutura} alt="estrutura" style={{ width: '60px', height: '70px' }} />, texto: 'ESTRUTURAS LÓGICAS? FEITAS COM SUCESSO!' },
+    { icon: <img src={projetofinal} alt="projetofinal" style={{ width: '60px', height: '70px' }} />, texto: 'VOCÊ CHEGOU AO GRANDE DESAFIO FINAL!' }
   ];
 
   return (

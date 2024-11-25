@@ -19,7 +19,7 @@ import projetofinal from "../../assets/projetofinal.svg";
 
 export const AtividadesPage = () => {
   const location = useLocation();
-  const { id, title, description } = location.state || {};
+  const { id, title, description} = location.state || {};
   const [etapa, setEtapa] = useState<number>(0); 
   const [conteudo, setConteudo] = useState<string>('');
   const [numErros, setNumErros] = useState<number>(0);
@@ -31,7 +31,7 @@ export const AtividadesPage = () => {
   const [faseConcluida, setFaseConcluida] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const totalEtapas = 3; 
+  const totalEtapas = 3; // Define o número total de etapas
 
   // Conquistas associadas às fases
   const conquistas = [
@@ -42,7 +42,7 @@ export const AtividadesPage = () => {
     { icon: <img src={projetofinal} alt="Projeto Final" style={{ width: '60px', height: '70px' }} />, texto: 'VOCÊ CHEGOU AO GRANDE DESAFIO FINAL!' },
   ];
 
-  useEffect(() => {
+  useEffect(() => { 
     const fetchConteudo = async () => {
       try {
         if (id) {
@@ -102,6 +102,7 @@ export const AtividadesPage = () => {
     }
 
     if (etapa + 1 >= totalEtapas) {
+      // Caso o usuário complete todas as etapas
       const pontosGanhos = 50;
       atualizarPontuacaoUsuario(pontosGanhos);
       atualizarProgressoFase('concluida');
@@ -204,7 +205,7 @@ export const AtividadesPage = () => {
       {faseConcluida && (
         <FaseProgresso
           fase={{ fase: etapa, acertos: numAcertos, erros: numErros, pontos: 50, mensagem: "Você completou a fase com sucesso!" }}
-          conquista={conquistas[etapa - 1]} 
+          conquista={conquistas[etapa - 1]} // Passa a conquista correspondente
           onNextFase={() => navigate('/playground')}
         />
       )}
