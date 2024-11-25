@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material';
-import iconaviso from '../../assets/aviso.png'; // Ícone padrão
+import iconaviso from '../../assets/aviso.png'; 
 
 interface ErroModalProps {
   titulo: string;

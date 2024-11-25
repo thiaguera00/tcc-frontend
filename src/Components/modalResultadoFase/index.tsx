@@ -20,7 +20,7 @@ interface FaseProgressoProps {
   onNextFase: () => void; 
 }
 
-const FaseProgresso: React.FC<FaseProgressoProps> = ({ fase, conquista, onNextFase }) => {
+const modalResultadoFase: React.FC<FaseProgressoProps> = ({ fase, conquista, onNextFase }) => {
   return (
     <Modal
       open={true}  
@@ -81,4 +81,4 @@ const FaseProgresso: React.FC<FaseProgressoProps> = ({ fase, conquista, onNextFa
   );
 };
 
-export default FaseProgresso;
+export default modalResultadoFase;

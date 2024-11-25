@@ -10,7 +10,7 @@ import { atualizarUsuario, usuarioLogado } from '../../services/userService';
 import { atualizarFaseProgresso, buscarProgresso } from '../../services/progressPhaseService';
 import { AxiosError } from 'axios';
 import ErroModal from '../../Components/componenteErro';
-import FaseProgresso from '../../Components/faseProgresso';
+import ModalFase from '../../Components/modalResultadoFase';
 import cerebro from "../../assets/cerebro.svg";
 import variavel from "../../assets/variavel.svg";
 import decisao from "../../assets/decisao.svg";
@@ -203,7 +203,7 @@ export const AtividadesPage = () => {
       </Box>
 
       {faseConcluida && (
-        <FaseProgresso
+        <ModalFase
           fase={{ fase: etapa, acertos: numAcertos, erros: numErros, pontos: 50, mensagem: "Você completou a fase com sucesso!" }}
           conquista={conquistas[etapa - 1]} // Passa a conquista correspondente
           onNextFase={() => navigate('/playground')}
