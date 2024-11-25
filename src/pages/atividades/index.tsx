@@ -33,7 +33,6 @@ export const AtividadesPage = () => {
 
   const totalEtapas = 3; 
 
-  // Conquistas associadas às fases
   const conquistas = [
     { icon: <img src={cerebro} alt="Cérebro" style={{ width: '60px', height: '70px' }} />, texto: 'VOCÊ JÁ PENSA COMO UM PROGRAMADOR!' },
     { icon: <img src={variavel} alt="Variável" style={{ width: '60px', height: '70px' }} />, texto: 'VARIÁVEIS E TIPOS DE DADOS? FÁCIL PARA VOCÊ!' },

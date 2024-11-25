@@ -1,7 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Box, Typography, Button, FormControl, RadioGroup, FormControlLabel, Radio } from '@mui/material';
-import { registrarQuestao, registrarRespostasUsuario, usuarioLogado } from '../../services/userService';
-import { gerarQuestaoForm, corrigirQuestaoForm } from '../../services/iaService';
+import { gerarQuestaoForm } from '../../services/iaService';
 
 interface QuestionarioProps {
   onFinish: (isCorrect: boolean) => void;
@@ -13,119 +12,61 @@ export const QuestionarioComponent = ({ onFinish, conteudo, setLoading }: Questi
   const [questaoData, setQuestaoData] = useState<any>(null);
   const [resposta, setResposta] = useState<string>('');
   const [feedback, setFeedback] = useState<string | null>(null);
-  const [level, setLevel] = useState<string>('normal');
-  const [questionId, setQuestionId] = useState<string>('');
   const [showNextButton, setShowNextButton] = useState<boolean>(false);
-  const isMounted = useRef<boolean>(false);
 
   const fetchQuestao = async () => {
     try {
       setLoading(true);
-      if (conteudo) {
-        const questaoGerada = await gerarQuestaoForm(conteudo);
-        console.log("Questão gerada:", questaoGerada);
-  
-        if (questaoGerada && typeof questaoGerada === 'object') {
-          const { question, options } = questaoGerada;
 
-          if (
-            typeof question === 'string' &&
-            Array.isArray(options) &&
-            options.length > 0 &&
-            options.every(opt => typeof opt === 'string')
-          ) {
-            setQuestaoData(questaoGerada);
-  
-            const id = await registrarQuestao({
-              question: questaoGerada.question,
-              difficulty_level: level,
-            });
-            setQuestionId(id);
-          } else {
-            console.error('Estrutura de dados inválida para questaoGerada: ', questaoGerada);
-            setQuestaoData(null);
-          }
-        } else {
-          console.error('Estrutura de dados inválida para questaoGerada (não é um objeto válido):', questaoGerada);
-          setQuestaoData(null);
-        }
+      if (!conteudo) {
+        console.error('Erro: Conteúdo não fornecido para gerar a questão.');
+        setQuestaoData(null);
+        return;
+      }
+
+      console.log('Enviando conteúdo para API:', conteudo);
+
+      const questaoGerada = await gerarQuestaoForm(conteudo);
+
+      if (questaoGerada && questaoGerada.question && questaoGerada.alternatives) {
+        setQuestaoData(questaoGerada);
+      } else {
+        console.error('Erro: Estrutura de dados inválida recebida da API.');
+        setQuestaoData(null);
       }
     } catch (error) {
-      setQuestaoData('Erro ao carregar a questão. Tente novamente mais tarde.');
-      console.error('Erro ao gerar questões:', error);
+      console.error('Erro ao gerar questão:', error);
+      setQuestaoData(null);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (!isMounted.current) {
-      isMounted.current = true;
+    fetchQuestao();
+  }, [conteudo]);
 
-      const fetchUserDetails = async () => {
-        try {
-          const userDetails = await usuarioLogado();
-          setLevel(userDetails.points > 50 ? 'normal' : 'iniciante');
-        } catch (error) {
-          console.error("Erro ao buscar dados do estudante:", error);
-        }
-      };
 
-      fetchUserDetails();
-      fetchQuestao();
-    }
-  }, [conteudo, setLoading]);
-
-  const handleResponder = async () => {
+  const handleResponder = () => {
     if (!resposta) {
       setFeedback('Por favor, selecione uma alternativa.');
       return;
     }
 
-    setLoading(true);
-    setFeedback(null);
+    const isCorrect = resposta === questaoData.correctAnswer;
 
-    try {
-      const alternativasConcatenadas = questaoData.options.join('\n');
-      const respostaCorrecao = await corrigirQuestaoForm(questaoData.question, alternativasConcatenadas, resposta);
-
-      let isCorrect = false;
-
-      if (respostaCorrecao?.correto) {
-        isCorrect = true;
-        setFeedback('Resposta correta! Muito bem! 🎉');
-      } else {
-        setFeedback(respostaCorrecao?.mensagem || 'Resposta incorreta. Tente novamente.');
-      }
-
-      if (questionId) {
-        const respostaAtual = {
-          questionId: questionId,
-          response: resposta,
-          isCorrect: isCorrect,
-        };
-
-        await registrarRespostasUsuario([respostaAtual]);
-      } else {
-        console.error('Erro: questionId não definido.');
-      }
-
-      setShowNextButton(true); // Exibe o botão "Próxima Questão"
-      onFinish(isCorrect); // Informa o resultado da questão
-    } catch (error) {
-      setFeedback('Erro ao verificar a resposta. Tente novamente mais tarde.');
-      console.error('Erro ao verificar resposta da questão:', error);
-    } finally {
-      setLoading(false);
+    if (isCorrect) {
+      setFeedback('Resposta correta! 🎉');
+    } else {
+      setFeedback(`Resposta incorreta. Correto: ${questaoData.correctAnswer}`);
     }
+
+    setShowNextButton(true);
+    onFinish(isCorrect);
   };
 
   const handleNextQuestion = () => {
-    setShowNextButton(false); // Oculta o botão Próxima Questão
-    resetQuestao(); // Reseta a questão atual e carrega a próxima
-  };
-
-  const resetQuestao = () => {
+    setShowNextButton(false);
     setQuestaoData(null);
     setResposta('');
     setFeedback(null);
@@ -145,38 +86,27 @@ export const QuestionarioComponent = ({ onFinish, conteudo, setLoading }: Questi
         gap: '20px',
       }}
     >
-      {questaoData && questaoData.question && questaoData.options ? (
+      {questaoData ? (
         <>
           <Typography variant="h6" sx={{ marginBottom: '16px' }}>
             {questaoData.question}
           </Typography>
 
-          {questaoData.expression && (
-            <Typography variant="body1" sx={{ marginBottom: '16px', fontStyle: 'italic' }}>
-              Expressão: {questaoData.expression}
-            </Typography>
-          )}
           <FormControl component="fieldset">
             <RadioGroup
               name="alternativas"
               value={resposta}
               onChange={(e) => setResposta(e.target.value)}
             >
-              {questaoData.options.length > 0 ? (
-                questaoData.options.map((option: string, index: number) => (
-                  <FormControlLabel
-                    key={index}
-                    value={option}
-                    control={<Radio />}
-                    label={`${String.fromCharCode(65 + index)}. ${option}`}
-                    sx={{ color: '#ffffff' }}
-                  />
-                ))
-              ) : (
-                <Typography variant="subtitle1" color="error">
-                  Erro ao carregar as opções. Tente novamente mais tarde.
-                </Typography>
-              )}
+              {questaoData.alternatives.map((option: { id: string, text: string }, index: number) => (
+                <FormControlLabel
+                  key={index}
+                  value={option.id}
+                  control={<Radio />}
+                  label={`${option.id}. ${option.text}`}
+                  sx={{ color: '#ffffff' }}
+                />
+              ))}
             </RadioGroup>
           </FormControl>
 

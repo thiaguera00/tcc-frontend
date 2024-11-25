@@ -54,24 +54,25 @@ const classificarEstudante = async (responseStudents: string[], userId: string) 
   }
 };
 
-const gerarQuestaoForm = async (conteudo : string) => {
+const gerarQuestaoForm = async (conteudo: string) => {
   try {
-    
     const response = await axios.post(
-      'https://ia-assistente-python.onrender.com/gerar-questionario/',
-      {},
+      `https://ia-assistente-python.onrender.com/gerar-questionario/?conteudo=${encodeURIComponent(conteudo)}`,
+      null,
       {
-        params: {
-          conteudo: conteudo,
-        },
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-      },
+      }
     );
-    return response.data.questao;
-  } catch (error) {
-    console.error('Erro ao gerar questões:', error);
+
+    if (!response.data) {
+      throw new Error('Resposta da API está vazia.');
+    }
+
+    return response.data;
+  } catch (error: any) {
+    console.error('Erro ao gerar questões:', error.response || error.message || error);
     throw error;
   }
 };
