@@ -46,7 +46,6 @@ export const QuestionarioComponent = ({ onFinish, conteudo, setLoading }: Questi
     fetchQuestao();
   }, [conteudo]);
 
-
   const handleResponder = () => {
     if (!resposta) {
       setFeedback('Por favor, selecione uma alternativa.');
@@ -61,11 +60,16 @@ export const QuestionarioComponent = ({ onFinish, conteudo, setLoading }: Questi
       setFeedback(`Resposta incorreta. Correto: ${questaoData.correctAnswer}`);
     }
 
+    // Mostrar o botão de próxima questão após responder
     setShowNextButton(true);
-    onFinish(isCorrect);
   };
 
   const handleNextQuestion = () => {
+    // Acionar a função onFinish ao avançar para a próxima questão
+    const isCorrect = resposta === questaoData.correctAnswer;
+    onFinish(isCorrect);
+
+    // Resetar o estado para uma nova questão
     setShowNextButton(false);
     setQuestaoData(null);
     setResposta('');
