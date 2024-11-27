@@ -60,7 +60,6 @@ export const Pesquisa = () => {
     if (currentQuestionIndex === questions.length - 1) {
         try {
             const userId = getUserIdFromToken();
-            console.log('User ID obtido do token:', userId);
 
             if (!userId) {
                 throw new Error('Usuário não autenticado.');

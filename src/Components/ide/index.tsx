@@ -6,7 +6,7 @@ import { gerarQuestaoIa, corrigirCodigoIa } from '../../services/iaService';
 
 interface IDEProps {
   onFinish: (isCorrect: boolean) => void;
-  conteudo: string;
+  conteudo: string[];
 }
 
 export const IDEComponent = ({ onFinish, conteudo }: IDEProps) => {
@@ -20,8 +20,6 @@ export const IDEComponent = ({ onFinish, conteudo }: IDEProps) => {
     const fetchQuestao = async () => {
       try {
         const questaoGerada = await gerarQuestaoIa(conteudo);
-        console.log('Questão gerada:', questaoGerada);
-
         if (questaoGerada && typeof questaoGerada === 'object' && questaoGerada.questao) {
           setQuestao(questaoGerada.questao);
         } else {
@@ -43,7 +41,6 @@ export const IDEComponent = ({ onFinish, conteudo }: IDEProps) => {
   };
 
   const handleEnviarResposta = async () => {
-    console.log('Código enviado:', codigo);
     setLoading(true);
     setFeedback(null);
     setShowNextButton(false);
@@ -56,10 +53,7 @@ export const IDEComponent = ({ onFinish, conteudo }: IDEProps) => {
         codigo: codigo
       };
   
-      console.log('Payload enviado:', payload);
-  
       const respostaVerificacao = await corrigirCodigoIa(payload);
-      console.log('Resposta da correção:', respostaVerificacao);
   
       if (respostaVerificacao.esta_correto) {
         setFeedback(`Resposta correta! Muito bem! 🎉\n\n${respostaVerificacao.feedback}`);

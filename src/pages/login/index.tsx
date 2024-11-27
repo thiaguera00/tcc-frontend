@@ -29,8 +29,7 @@ export const Login = () => {
 
     try {
       const response = await loginEstudante(formData.email, formData.password);
-      console.log('Login realizado com sucesso:', response);
-
+      
       if (response?.token) {
         localStorage.setItem('token', response.token);
         navigate('/playground');

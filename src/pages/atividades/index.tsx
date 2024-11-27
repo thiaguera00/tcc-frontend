@@ -21,7 +21,7 @@ export const AtividadesPage = () => {
   const location = useLocation();
   const { id, title, description } = location.state || {};
   const [etapa, setEtapa] = useState<number>(0); 
-  const [conteudo, setConteudo] = useState<string>('');
+  const [conteudo, setConteudo] = useState<string[]>([]); // Atualizado para lista de strings
   const [numErros, setNumErros] = useState<number>(0);
   const [numAcertos, setNumAcertos] = useState<number>(0);
   const [userId, setUserId] = useState<string | null>(null);
@@ -46,7 +46,10 @@ export const AtividadesPage = () => {
       try {
         if (id) {
           const conteudoData = await buscarConteudoDaFase(id);
-          setConteudo(conteudoData.content.description);
+          const conteudos = conteudoData.content.description
+            .split(',')
+            .map((item: string) => item.trim());
+          setConteudo(conteudos);
         }
       } catch (error) {
         console.error('Erro ao buscar conteúdo da fase:', error);
@@ -152,7 +155,6 @@ export const AtividadesPage = () => {
         <CardFase id={id} title={title} description={description} corFundo="#9ade5b" caminho="#" />
       </Box>
 
-      {/* Barra de progresso acima do questionário */}
       <Box sx={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
         <LinearProgress
           variant="determinate"
@@ -169,12 +171,12 @@ export const AtividadesPage = () => {
       </Box>
 
       <Box sx={{ padding: '40px 20px', maxWidth: '1200px', margin: '0 auto', marginTop: '20px' }}>
-        {conteudo && (
+        {conteudo.length > 0 && (
           <>
             {title === 'Fase Lógica de programação' ? (
               <QuestionarioComponent
                 onFinish={(isCorrect: boolean) => handleNextStep(isCorrect)}
-                conteudo={conteudo}
+                conteudo={conteudo} 
                 setLoading={setLoading} 
               />
             ) : (
@@ -190,7 +192,7 @@ export const AtividadesPage = () => {
                 {etapa === 2 && (
                   <QuestionarioComponent
                     onFinish={(isCorrect: boolean) => handleNextStep(isCorrect)}
-                    conteudo={conteudo}
+                    conteudo={conteudo} 
                     setLoading={setLoading} 
                   />
                 )}
