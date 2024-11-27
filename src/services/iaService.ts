@@ -7,17 +7,23 @@ interface ICodigoCorrecaoPayload {
 
 const API_URL =' http://localhost:3000';
 
-const gerarQuestaoIa = async ( conteudo: string) => {
+const gerarQuestaoIa = async (conteudo: string[]) => {
   try {
     const response = await axios.post('https://ia-assistente-python.onrender.com/gerar-questao/', {
       conteudo,
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
+
     return response.data;
-  } catch (error) {
-    console.error('Erro ao gerar questão:', error);
+  } catch (error: any) {
+    console.error('Erro ao gerar questão:', error.response?.data || error.message);
     throw error;
   }
 };
+
 
 const corrigirCodigoIa = async (payload: ICodigoCorrecaoPayload) => {
   try {
@@ -54,11 +60,11 @@ const classificarEstudante = async (responseStudents: string[], userId: string) 
   }
 };
 
-const gerarQuestaoForm = async (conteudo: string) => {
+const gerarQuestaoForm = async (conteudos: string[]) => {
   try {
     const response = await axios.post(
-      `https://ia-assistente-python.onrender.com/gerar-questionario/?conteudo=${encodeURIComponent(conteudo)}`,
-      null,
+      `https://ia-assistente-python.onrender.com/gerar-questionario/`,
+      conteudos,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -72,7 +78,7 @@ const gerarQuestaoForm = async (conteudo: string) => {
 
     return response.data;
   } catch (error: any) {
-    console.error('Erro ao gerar questões:', error.response || error.message || error);
+    console.error("Erro ao chamar a API:", error.response?.data || error.message);
     throw error;
   }
 };

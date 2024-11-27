@@ -37,8 +37,7 @@ export const Cadastro = () => {
     }
 
     try {
-      const response = await registrarEstudante(formData.nome, formData.email, formData.password);
-      console.log('Usuário registrado com sucesso:', response);
+      await registrarEstudante(formData.nome, formData.email, formData.password);
       
       setSuccessMessage('Usuário registrado com sucesso! Redirecionando para a página de login...');
       

@@ -22,7 +22,6 @@ export const buscarProgresso = async (userId: string, phaseId: string) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(response.data)
 
     return response.data;
   } catch (error) {

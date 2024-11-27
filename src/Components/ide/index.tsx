@@ -6,7 +6,7 @@ import { gerarQuestaoIa, corrigirCodigoIa } from '../../services/iaService';
 
 interface IDEProps {
   onFinish: (isCorrect: boolean) => void;
-  conteudo: string;
+  conteudo: string[];
 }
 
 export const IDEComponent = ({ onFinish, conteudo }: IDEProps) => {
@@ -14,13 +14,12 @@ export const IDEComponent = ({ onFinish, conteudo }: IDEProps) => {
   const [questao, setQuestao] = useState<any>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [showNextButton, setShowNextButton] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchQuestao = async () => {
       try {
         const questaoGerada = await gerarQuestaoIa(conteudo);
-        console.log('Questão gerada:', questaoGerada);
-
         if (questaoGerada && typeof questaoGerada === 'object' && questaoGerada.questao) {
           setQuestao(questaoGerada.questao);
         } else {
@@ -42,9 +41,9 @@ export const IDEComponent = ({ onFinish, conteudo }: IDEProps) => {
   };
 
   const handleEnviarResposta = async () => {
-    console.log('Código enviado:', codigo);
     setLoading(true);
     setFeedback(null);
+    setShowNextButton(false);
   
     try {
       const questaoTexto = questao?.titulo || '';
@@ -54,26 +53,26 @@ export const IDEComponent = ({ onFinish, conteudo }: IDEProps) => {
         codigo: codigo
       };
   
-      console.log('Payload enviado:', payload);
-  
       const respostaVerificacao = await corrigirCodigoIa(payload);
-      console.log('Resposta da correção:', respostaVerificacao);
   
       if (respostaVerificacao.esta_correto) {
         setFeedback(`Resposta correta! Muito bem! 🎉\n\n${respostaVerificacao.feedback}`);
-        setTimeout(() => {
-          onFinish(true);
-        }, 5000);
+        setShowNextButton(true);
       } else {
         setFeedback(`Resposta incorreta. Aqui está o feedback:\n\n${respostaVerificacao.feedback}`);
-        onFinish(false);
+        setShowNextButton(true);
       }
     } catch (error) {
       setFeedback('Erro ao verificar a resposta. Tente novamente mais tarde.');
       console.error('Erro ao verificar a resposta:', error);
+      setShowNextButton(false);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleProximaQuestao = () => {
+    onFinish(true);
   };
 
   return (
@@ -162,9 +161,11 @@ export const IDEComponent = ({ onFinish, conteudo }: IDEProps) => {
       </Grid>
 
       {/* Botão de Enviar Resposta */}
-      <Button variant="contained" onClick={handleEnviarResposta} sx={{ marginTop: '20px' }} disabled={loading}>
-        {loading ? 'Verificando...' : 'Enviar Resposta'}
-      </Button>
+      {!showNextButton && (
+        <Button variant="contained" onClick={handleEnviarResposta} sx={{ marginTop: '20px' }} disabled={loading}>
+          {loading ? 'Verificando...' : 'Enviar Resposta'}
+        </Button>
+      )}
 
       {/* Exibindo o feedback da resposta */}
       {feedback && (
@@ -179,6 +180,13 @@ export const IDEComponent = ({ onFinish, conteudo }: IDEProps) => {
         >
           <Typography variant="subtitle1">{feedback}</Typography>
         </Box>
+      )}
+
+      {/* Botão de Próxima Questão */}
+      {showNextButton && (
+        <Button variant="contained" color="primary" onClick={handleProximaQuestao} sx={{ marginTop: '20px' }}>
+          Próxima Questão
+        </Button>
       )}
     </Box>
   );

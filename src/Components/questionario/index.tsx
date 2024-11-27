@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Box, Typography, Button, FormControl, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 import { gerarQuestaoForm } from '../../services/iaService';
+import { registrarQuestao, registrarRespostasUsuario } from '../../services/userService';
 
 interface QuestionarioProps {
   onFinish: (isCorrect: boolean) => void;
-  conteudo: string;
+  conteudo: string[];
   setLoading: (loading: boolean) => void;
 }
 
@@ -13,6 +14,7 @@ export const QuestionarioComponent = ({ onFinish, conteudo, setLoading }: Questi
   const [resposta, setResposta] = useState<string>('');
   const [feedback, setFeedback] = useState<string | null>(null);
   const [showNextButton, setShowNextButton] = useState<boolean>(false);
+  const [questaoId, setQuestaoId] = useState<string | null>(null);
 
   const fetchQuestao = async () => {
     try {
@@ -24,12 +26,16 @@ export const QuestionarioComponent = ({ onFinish, conteudo, setLoading }: Questi
         return;
       }
 
-      console.log('Enviando conteúdo para API:', conteudo);
-
       const questaoGerada = await gerarQuestaoForm(conteudo);
 
       if (questaoGerada && questaoGerada.question && questaoGerada.alternatives) {
         setQuestaoData(questaoGerada);
+
+        const registeredId = await registrarQuestao({
+          question: questaoGerada.question,
+          difficulty_level: questaoGerada.difficulty || 'medium', 
+        });
+        setQuestaoId(registeredId);
       } else {
         console.error('Erro: Estrutura de dados inválida recebida da API.');
         setQuestaoData(null);
@@ -46,8 +52,7 @@ export const QuestionarioComponent = ({ onFinish, conteudo, setLoading }: Questi
     fetchQuestao();
   }, [conteudo]);
 
-
-  const handleResponder = () => {
+  const handleResponder = async () => {
     if (!resposta) {
       setFeedback('Por favor, selecione uma alternativa.');
       return;
@@ -61,15 +66,32 @@ export const QuestionarioComponent = ({ onFinish, conteudo, setLoading }: Questi
       setFeedback(`Resposta incorreta. Correto: ${questaoData.correctAnswer}`);
     }
 
+    if (questaoId) {
+      try {
+        await registrarRespostasUsuario([
+          {
+            questionId: questaoId,
+            response: resposta,
+            isCorrect,
+          },
+        ]);
+      } catch (error) {
+        console.error('Erro ao registrar a resposta do usuário:', error);
+      }
+    }
+
     setShowNextButton(true);
-    onFinish(isCorrect);
   };
 
   const handleNextQuestion = () => {
+    const isCorrect = resposta === questaoData.correctAnswer;
+    onFinish(isCorrect);
+
     setShowNextButton(false);
     setQuestaoData(null);
     setResposta('');
     setFeedback(null);
+    setQuestaoId(null);
     fetchQuestao();
   };
 
@@ -116,17 +138,17 @@ export const QuestionarioComponent = ({ onFinish, conteudo, setLoading }: Questi
             </Button>
           )}
 
-          {feedback && (
-            <Typography
-              variant="subtitle1"
-              sx={{
-                marginTop: '20px',
-                color: feedback.includes('correta') ? '#4caf50' : '#f44336',
-              }}
-            >
-              {feedback}
-            </Typography>
-          )}
+        {feedback && (
+          <Typography
+            variant="subtitle1"
+            sx={{
+              marginTop: '20px',
+              color: resposta === questaoData.correctAnswer ? '#4caf50' : '#f44336',
+            }}
+          >
+            {feedback}
+          </Typography>
+        )}
 
           {showNextButton && (
             <Button variant="contained" onClick={handleNextQuestion} sx={{ marginTop: '20px' }}>
