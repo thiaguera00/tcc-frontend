@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import { Cadastro } from './pages/cadastro';
 import { Login } from './pages/login';
+import {LoginAdm} from './pages/login-Adm';
 import PrivateRoute from './routes/privateRoute';
 import { PaginaInicial } from './pages/pagina-inicial';
 import { Perfil } from './pages/perfil';
@@ -16,7 +17,6 @@ import {GerenciarUsuario} from './pages/gerenciar-usuario'
 import { GerenciarFases } from './pages/gerenciar-fases';
 import { Home } from './pages/Home';
 
-
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Router>
@@ -24,6 +24,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Cadastro />} />
+        <Route path="/login-admin" element={<LoginAdm />} />
         <Route path="/perfil" element={<Perfil />} />
         <Route path="/editar-perfil" element={<PerfilEditar />} />
         <Route path="/atividades" element={<AtividadesPage />} />
