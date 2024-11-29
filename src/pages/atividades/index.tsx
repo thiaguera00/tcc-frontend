@@ -21,7 +21,7 @@ export const AtividadesPage = () => {
   const location = useLocation();
   const { id, title, description } = location.state || {};
   const [etapa, setEtapa] = useState<number>(0); 
-  const [conteudo, setConteudo] = useState<string[]>([]); // Atualizado para lista de strings
+  const [conteudo, setConteudo] = useState<string[]>([]);
   const [numErros, setNumErros] = useState<number>(0);
   const [numAcertos, setNumAcertos] = useState<number>(0);
   const [userId, setUserId] = useState<string | null>(null);

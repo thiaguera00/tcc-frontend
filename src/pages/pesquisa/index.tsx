@@ -85,7 +85,7 @@ export const Pesquisa = () => {
 
   const handleModalClose = () => {
     setShowModal(false);
-    navigate('/paginaInicial');
+    navigate('/playground');
   };
 
   return (

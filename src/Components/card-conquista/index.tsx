@@ -8,12 +8,12 @@ import projetofinal from "../../assets/projetofinal.svg";
 
 const Conquistas = () => {
   const conquistas = [
-    { icon: <img src={cerebro} alt="Cérebro" style={{ width: '60px', height: '70px' }} />, texto: 'VOCÊ JÁ PENSA COMO UM PROGRAMADOR!' },
-    //{ icon: <img src={cobra} alt="Cérebro" style={{ width: '60px', height: '70px' }} />, texto: 'PARABÉNS, O UNIVERSO PYTHON TE ESPERA!' },
-    { icon: <img src={variavel} alt="Cérebro" style={{ width: '60px', height: '70px' }} />, texto: 'VARIÁVEIS E TIPOS DE DADOS? FÁCIL PARA VOCÊ!' },
-    { icon: <img src={decisao} alt="Cérebro" style={{ width: '60px', height: '70px' }} />, texto: 'DECISÕES INTELIGENTES NO CÓDIGO, ÓTIMO TRABALHO!' },
-    { icon: <img src={estrutura} alt="Cérebro" style={{ width: '60px', height: '70px' }} />, texto: 'ESTRUTURAS LÓGICAS? FEITAS COM SUCESSO!' },
-    { icon: <img src={projetofinal} alt="Cérebro" style={{ width: '60px', height: '70px' }} />, texto: 'VOCÊ CHEGOU AO GRANDE DESAFIO FINAL!' }
+    { icon: <img src={cerebro} alt="Cérebro" style={{ width: '100px', height: '90px' }} />, texto: 'VOCÊ JÁ PENSA COMO UM PROGRAMADOR!' },
+    //{ icon: <img src={cobra} alt="Cérebro" style={{ width: '100px', height: '90px' }} />, texto: 'PARABÉNS, O UNIVERSO PYTHON TE ESPERA!' },
+    { icon: <img src={variavel} alt="Cérebro" style={{ width: '100px', height: '90px' }} />, texto: 'VARIÁVEIS E TIPOS DE DADOS? FÁCIL PARA VOCÊ!' },
+    { icon: <img src={decisao} alt="Cérebro" style={{ width: '100px', height: '90px' }} />, texto: 'DECISÕES INTELIGENTES NO CÓDIGO, ÓTIMO TRABALHO!' },
+    { icon: <img src={estrutura} alt="Cérebro" style={{ width: '100px', height: '90px' }} />, texto: 'ESTRUTURAS LÓGICAS? FEITAS COM SUCESSO!' },
+    { icon: <img src={projetofinal} alt="Cérebro" style={{ width: '100px', height: '90px' }} />, texto: 'VOCÊ CHEGOU AO GRANDE DESAFIO FINAL!' }
   ];
 
   return (
@@ -38,7 +38,7 @@ const Conquistas = () => {
           key={index} 
           sx={{ 
             width: '100%', 
-            maxWidth: '500px',
+            maxWidth: '700px',
             height:'500px', 
             backgroundColor: '#3F4273', 
             color: 'white',

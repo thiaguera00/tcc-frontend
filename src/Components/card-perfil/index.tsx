@@ -1,5 +1,5 @@
 import { Box, Typography, Avatar, Button, Card, CardContent } from '@mui/material';
-import pointIcon from '../../assets/points.png';
+import pointIcon from '../../assets/points.svg';
 import editarIcon from '../../assets/lapis.png';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';

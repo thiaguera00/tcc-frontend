@@ -12,9 +12,10 @@ interface QuestionarioProps {
 export const QuestionarioComponent = ({ onFinish, conteudo, setLoading }: QuestionarioProps) => {
   const [questaoData, setQuestaoData] = useState<any>(null);
   const [resposta, setResposta] = useState<string>('');
-  const [feedback, setFeedback] = useState<string | null>(null);
+  const [selectedDescription, setSelectedDescription] = useState<string | null>(null);
   const [showNextButton, setShowNextButton] = useState<boolean>(false);
   const [questaoId, setQuestaoId] = useState<string | null>(null);
+  const [correctAnswer, setCorrectAnswer] = useState<string | null>(null);
 
   const fetchQuestao = async () => {
     try {
@@ -33,7 +34,7 @@ export const QuestionarioComponent = ({ onFinish, conteudo, setLoading }: Questi
 
         const registeredId = await registrarQuestao({
           question: questaoGerada.question,
-          difficulty_level: questaoGerada.difficulty || 'medium', 
+          difficulty_level: questaoGerada.difficulty || 'medium',
         });
         setQuestaoId(registeredId);
       } else {
@@ -52,19 +53,20 @@ export const QuestionarioComponent = ({ onFinish, conteudo, setLoading }: Questi
     fetchQuestao();
   }, [conteudo]);
 
+  const handleOptionChange = (value: string, description: string) => {
+    setResposta(value);
+    setSelectedDescription(description);
+  };
+
   const handleResponder = async () => {
     if (!resposta) {
-      setFeedback('Por favor, selecione uma alternativa.');
+      setSelectedDescription('Por favor, selecione uma alternativa.');
       return;
     }
 
     const isCorrect = resposta === questaoData.correctAnswer;
 
-    if (isCorrect) {
-      setFeedback('Resposta correta! 🎉');
-    } else {
-      setFeedback(`Resposta incorreta. Correto: ${questaoData.correctAnswer}`);
-    }
+    setCorrectAnswer(questaoData.correctAnswer);
 
     if (questaoId) {
       try {
@@ -90,8 +92,9 @@ export const QuestionarioComponent = ({ onFinish, conteudo, setLoading }: Questi
     setShowNextButton(false);
     setQuestaoData(null);
     setResposta('');
-    setFeedback(null);
+    setSelectedDescription(null);
     setQuestaoId(null);
+    setCorrectAnswer(null);
     fetchQuestao();
   };
 
@@ -118,37 +121,59 @@ export const QuestionarioComponent = ({ onFinish, conteudo, setLoading }: Questi
             <RadioGroup
               name="alternativas"
               value={resposta}
-              onChange={(e) => setResposta(e.target.value)}
+              onChange={(e) => {
+                const selectedOption = questaoData.alternatives.find(
+                  (option: { id: string }) => option.id === e.target.value
+                );
+                handleOptionChange(e.target.value, selectedOption.description);
+              }}
             >
-              {questaoData.alternatives.map((option: { id: string, text: string }, index: number) => (
-                <FormControlLabel
-                  key={index}
-                  value={option.id}
-                  control={<Radio />}
-                  label={`${option.id}. ${option.text}`}
-                  sx={{ color: '#ffffff' }}
-                />
-              ))}
+              {questaoData.alternatives.map(
+                (
+                  option: { id: string; text: string; description: string },
+                  index: number
+                ) => (
+                  <FormControlLabel
+                    key={index}
+                    value={option.id}
+                    control={<Radio />}
+                    label={`${option.id}. ${option.text}`}
+                    sx={{
+                      color:
+                        showNextButton && option.id === questaoData.correctAnswer
+                          ? '#4caf50'
+                          : showNextButton && option.id === resposta
+                          ? '#f44336'
+                          : '#ffffff',
+                    }}
+                  />
+                )
+              )}
             </RadioGroup>
           </FormControl>
+
+          {showNextButton && selectedDescription && (
+            <Typography
+              variant="body1"
+              sx={{
+                marginTop: '10px',
+                color:
+                  showNextButton && resposta === correctAnswer
+                    ? '#4caf50'
+                    : showNextButton && resposta !== correctAnswer
+                    ? '#f44336'
+                    : '#9e9e9e',
+              }}
+            >
+              {selectedDescription}
+            </Typography>
+          )}
 
           {!showNextButton && (
             <Button variant="contained" onClick={handleResponder} sx={{ marginTop: '20px' }}>
               Responder
             </Button>
           )}
-
-        {feedback && (
-          <Typography
-            variant="subtitle1"
-            sx={{
-              marginTop: '20px',
-              color: resposta === questaoData.correctAnswer ? '#4caf50' : '#f44336',
-            }}
-          >
-            {feedback}
-          </Typography>
-        )}
 
           {showNextButton && (
             <Button variant="contained" onClick={handleNextQuestion} sx={{ marginTop: '20px' }}>
