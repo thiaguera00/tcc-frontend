@@ -42,7 +42,6 @@ const ProfileCard = () => {
     return <p>{error}</p>;
   }
 
-
   return (
     <Box 
       sx={{

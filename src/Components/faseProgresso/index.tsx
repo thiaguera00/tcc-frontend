@@ -73,8 +73,8 @@ const FaseProgresso: React.FC<FaseProgressoProps> = ({ fase, conquista, onNextFa
           </Typography>
         </Box>
 
-        <Button variant="contained" onClick={onNextFase}>
-          Avançar para a próxima fase
+        <Button variant="contained" onClick={onNextFase} >
+          Concluir
         </Button>
       </Box>
     </Modal>
