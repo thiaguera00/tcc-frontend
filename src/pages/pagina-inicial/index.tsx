@@ -47,7 +47,8 @@ export const PaginaInicial = () => {
     const fetchFases = async () => {
       try {
         const fasesData = await buscarFases();
-        setFases(fasesData);
+        const fasesOrdenadas = ordenarFases(fasesData);
+        setFases(fasesOrdenadas);
       } catch (err) {
         console.error("Erro ao buscar fases:", err);
         setError('Erro ao buscar fases');
@@ -56,6 +57,26 @@ export const PaginaInicial = () => {
 
     fetchFases();
   }, []);
+
+  const ordenarFases = (fases: Fase[]) => {
+    // Ordenar fases com base no título
+    return fases.sort((a, b) => {
+      const numeroA = parseInt(a.title.split(' ')[1]);
+      const numeroB = parseInt(b.title.split(' ')[1]);
+      return numeroA - numeroB;
+    });
+  };
+
+  const getCardColor = (index: number) => {
+    const colors = [
+      "#9ade5b",
+      "#f6b93b", 
+      "#4b7bec", 
+      "#e84118", 
+      "#7f8c8d", 
+    ];
+    return colors[index % colors.length]; 
+  };
 
   if (loading) {
     return <p>Carregando...</p>;
@@ -71,29 +92,29 @@ export const PaginaInicial = () => {
       <NavLateral />
 
       <Box
-      sx={{
-        position: 'absolute', 
-        top: '40%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)', 
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: '24px',
-      }}
+        sx={{
+          position: 'absolute', 
+          top: '40%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)', 
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '100px',
+        }}
       >
         <Typography variant="h4" gutterBottom>
           Olá, {usuario?.name}
         </Typography>
 
         <Box sx={{ marginTop: '32px', display: 'flex', flexDirection: 'column', gap: '36px', alignItems: 'center' }}>
-          {fases.map((fase) => (
+          {fases.map((fase, index) => (
             <CardFase
               key={fase.id}
               id={fase.id}
-              title={`Fase ${fase.title}`}
+              title={`${fase.title}`}
               description={fase.description}
-              corFundo="#9ade5b"
+              corFundo={getCardColor(index)} 
               caminho='/atividades'
             />
           ))}

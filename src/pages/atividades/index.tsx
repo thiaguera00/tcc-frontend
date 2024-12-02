@@ -16,6 +16,7 @@ import variavel from "../../assets/variavel.svg";
 import decisao from "../../assets/decisao.svg";
 import estrutura from "../../assets/estrutura.svg";
 import projetofinal from "../../assets/projetofinal.svg";
+import './style.css'
 
 export const AtividadesPage = () => {
   const location = useLocation();
@@ -150,12 +151,13 @@ export const AtividadesPage = () => {
 
   return (
     <>
-      <NavBarPerfil />
-      <Box sx={{ display: 'flex', justifyContent: 'center', paddingTop: '80px' }}>
-        <CardFase id={id} title={title} description={description} corFundo="#9ade5b" caminho="#" />
-      </Box>
+      <div className='main'> 
+        <NavBarPerfil />
+        <Box sx={{ display: 'flex', justifyContent: 'center', paddingTop: '80px' }}>
+          <CardFase id={id} title={title} description={description} corFundo="#9ade5b" caminho="#" />
+        </Box>
 
-      <Box sx={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
+        <Box sx={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
         <LinearProgress
           variant="determinate"
           value={(etapa / totalEtapas) * 100}
@@ -164,13 +166,13 @@ export const AtividadesPage = () => {
             borderRadius: '5px',
             backgroundColor: '#555',
             '& .MuiLinearProgress-bar': {
-              backgroundColor: '#4caf50',
+              backgroundColor: '#4caf50'
             }
           }}
         />
-      </Box>
+        </Box>
 
-      <Box sx={{ padding: '40px 20px', maxWidth: '1200px', margin: '0 auto', marginTop: '20px' }}>
+        <Box sx={{ padding: '40px 20px', maxWidth: '1200px', margin: '0 auto', marginTop: '20px' }}>
         {conteudo.length > 0 && (
           <>
             {title === 'Fase Lógica de programação' ? (
@@ -200,22 +202,25 @@ export const AtividadesPage = () => {
             )}
           </>
         )}
-      </Box>
+        </Box>
 
-      {faseConcluida && (
+        {faseConcluida && (
         <FaseProgresso
           fase={{ fase: etapa, acertos: numAcertos, erros: numErros, pontos: 50, mensagem: "Você completou a fase com sucesso!" }}
           conquista={conquistas[etapa - 1]} 
           onNextFase={() => navigate('/playground')}
         />
-      )}
+        )}
 
-      <ErroModal
-        titulo="Acesso Negado"
-        open={modalOpen}
-        onClose={handleCloseModal}
-        descricao="Você não tem permissão para acessar esta fase. Complete a fase anterior primeiro."
-      />
+        <ErroModal
+          titulo="Acesso Negado"
+          open={modalOpen}
+          onClose={handleCloseModal}
+          descricao="Você não tem permissão para acessar esta fase. Complete a fase anterior primeiro."
+        />
+      </div>
     </>
+
+    
   );
 };

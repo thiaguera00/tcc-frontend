@@ -1,0 +1,13 @@
+.list-item {
+    padding: 10px;
+    border-radius: 5px;
+    transition: color 0.3s ease; 
+  }
+  
+  .list-item:hover .MuiListItemText-root {
+    color: #A66FD9; 
+  }
+  
+  .list-item.selected .MuiListItemText-root {
+    color: #A66FD9; 
+  }
