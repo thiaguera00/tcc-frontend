@@ -7,7 +7,13 @@ interface IAtualizarUsuario {
   email?: string;
   level?: string;
   points?: number;
+  passwords?: string
   is_first_access?: boolean;
+}
+
+interface IResetSenha {
+  token: string;
+  newPassword: string;
 }
 
 export const registrarEstudante = async  (name: string, email: string, password: string) => {
@@ -106,6 +112,22 @@ export const registrarQuestao = async (questao: { question: string; difficulty_l
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
+        },
+      });
+  
+      return response.data;
+    } catch (error) {
+      console.error('Erro ao registrar UserQuestion:', error);
+      throw error;
+    }
+  };
+
+  export const resetarSenha = async (data: IResetSenha) => {
+    try {
+  
+      const response = await axios.post(`${API_URL}/users/reset-password`, data, {
+        headers: {
+          'Content-Type': 'application/json',
         },
       });
   

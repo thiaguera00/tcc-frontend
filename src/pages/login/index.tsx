@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FormGenerate } from "../../Components/form-generate";
 import { NavBarButton } from "../../Components/nav-bar-button";
-import { Box } from '@mui/material';
+import { Box, Button, Modal, Typography, TextField } from '@mui/material';
 import { loginEstudante } from "../../services/authService";
 import { useNavigate } from 'react-router-dom';
 import './index.css';
@@ -12,8 +12,17 @@ export const Login = () => {
     email: '',
     password: '',
   });
-
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [recoveryEmail, setRecoveryEmail] = useState('');
+  const [modalMessage, setModalMessage] = useState<string | null>(null);
+
+  const handleModalOpen = () => setIsModalOpen(true);
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setRecoveryEmail('');
+    setModalMessage(null);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -29,7 +38,7 @@ export const Login = () => {
 
     try {
       const response = await loginEstudante(formData.email, formData.password);
-      
+
       if (response?.token) {
         localStorage.setItem('token', response.token);
         navigate('/playground');
@@ -42,6 +51,32 @@ export const Login = () => {
     }
   };
 
+  const handlePasswordRecovery = async () => {
+    try {
+      setModalMessage(null);
+  
+      const response = await fetch(`http://localhost:3000/users/recovery-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: recoveryEmail }),
+      });
+  
+      if (response.status === 404) {
+        setModalMessage("E-mail não encontrado.");
+        return;
+      }
+  
+      if (!response.ok) {
+        throw new Error("Erro inesperado no servidor.");
+      }
+  
+      setModalMessage("E-mail de recuperação enviado com sucesso.");
+    } catch (error) {
+      console.error("Erro ao enviar e-mail de recuperação:", error);
+      setModalMessage("Erro ao enviar o e-mail. Tente novamente.");
+    }
+  };
+
   const formInputs = [
     { name: 'email', type: 'email', placeholder: 'E-mail', value: formData.email, onChange: handleChange },
     { name: 'password', type: 'password', placeholder: 'Senha', value: formData.password, onChange: handleChange },
@@ -49,7 +84,7 @@ export const Login = () => {
 
   return (
     <>
-      <NavBarButton buttonName="Cadastrar" navigateTo="/cadastro"/>
+      <NavBarButton buttonName="Cadastrar" navigateTo="/cadastro" />
       <Box
         sx={{
           minHeight: '100vh',
@@ -63,24 +98,80 @@ export const Login = () => {
         <div>
           <img src="/assets/nixPurple.svg" alt="cabeça nix" />
         </div>
-        <div style={{ alignItems: 'center'}}>
-          <h3 style={{fontSize: '40px'}}>
-            Entrar
-          </h3>
+        <div style={{ alignItems: 'center' }}>
+          <h3 style={{ fontSize: '40px' }}>Entrar</h3>
         </div>
         <div>
-          <p style={{fontSize: '18px', color: '#9fa0b9'}}>Se você já é cadastrado, pode fazer login com seu <br/> endereço de e-mail e senha.</p>
+          <p style={{ fontSize: '18px', color: '#9fa0b9' }}>
+            Se você já é cadastrado, pode fazer login com seu <br /> endereço de e-mail e senha.
+          </p>
         </div>
-        <hr style={{width: '25%'}}/>
-        <FormGenerate 
-          inputs={formInputs} 
-          action={handleSubmit} 
+        <hr style={{ width: '25%' }} />
+        <FormGenerate
+          inputs={formInputs}
+          action={handleSubmit}
           method="POST"
-          buttonName="Entrar" 
+          buttonName="Entrar"
         />
-        {errorMessage && (
-          <p style={{ color: 'red', marginTop: '16px' }}>{errorMessage}</p>
-        )}
+        {errorMessage && <p style={{ color: 'red', marginTop: '16px' }}>{errorMessage}</p>}
+        {/*estilizar corretamente o botão - Wellington*/}
+        <Button
+          onClick={handleModalOpen}
+          style={{ marginTop: '16px', textTransform: 'none' }}
+        >
+          Esqueci minha senha
+        </Button>
+
+        {/* Modal estilizar corretamente - Wellington */}
+        <Modal
+          open={isModalOpen}
+          onClose={handleModalClose}
+          aria-labelledby="modal-title"
+          aria-describedby="modal-description"
+        >
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: 400,
+              bgcolor: 'background.paper',
+              boxShadow: 24,
+              p: 4,
+              borderRadius: 2,
+            }}
+          >
+            <Typography id="modal-title" variant="h6" component="h2">
+              Recuperar Senha
+            </Typography>
+            <Typography id="modal-description" sx={{ mt: 2 }}>
+              Insira o e-mail cadastrado para receber as instruções de recuperação de senha.
+            </Typography>
+            <TextField
+              fullWidth
+              label="E-mail"
+              variant="outlined"
+              margin="normal"
+              value={recoveryEmail}
+              onChange={(e) => setRecoveryEmail(e.target.value)}
+            />
+            <Button
+              fullWidth
+              variant="contained"
+              color="primary"
+              onClick={handlePasswordRecovery}
+              sx={{ mt: 2 }}
+            >
+              Enviar
+            </Button>
+            {modalMessage && (
+              <Typography sx={{ mt: 2, color: modalMessage.includes('sucesso') ? 'green' : 'red' }}>
+                {modalMessage}
+              </Typography>
+            )}
+          </Box>
+        </Modal>
       </Box>
     </>
   );

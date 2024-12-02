@@ -7,7 +7,7 @@ import { Cadastro } from './pages/cadastro';
 import { Login } from './pages/login';
 import {LoginAdm} from './pages/login-Adm';
 import PrivateRoute from './routes/privateRoute';
-import { PaginaInicial } from './pages/pagina-inicial';
+import { Playground } from './pages/pagina-inicial';
 import { Perfil } from './pages/perfil';
 import { Pesquisa } from './pages/pesquisa';
 import { PerfilEditar } from './pages/perfil-editar';
@@ -16,6 +16,7 @@ import { TelaConquista } from './pages/conquistas/conquistas';
 import {GerenciarUsuario} from './pages/gerenciar-usuario'
 import { GerenciarFases } from './pages/gerenciar-fases';
 import { Home } from './pages/Home';
+import { ResetPassword } from './pages/trocar-senha';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -31,11 +32,12 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/conquistas" element={<TelaConquista />} />
         <Route path="/gerenciar-usuario" element={<GerenciarUsuario />} />
         <Route path="/gerenciar-fases" element={<GerenciarFases />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route
           path="/playground"
           element={
             <PrivateRoute>
-              <PaginaInicial />
+              <Playground />
             </PrivateRoute>
           }
         />

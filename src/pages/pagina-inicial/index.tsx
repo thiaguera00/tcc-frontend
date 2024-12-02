@@ -15,7 +15,7 @@ interface Fase {
   content: { description: string };
 }
 
-export const PaginaInicial = () => {
+export const Playground = () => {
   const [usuario, setUsuario] = useState<Usuario | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
