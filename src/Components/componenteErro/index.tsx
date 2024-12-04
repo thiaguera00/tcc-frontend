@@ -1,6 +1,7 @@
 import React from 'react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material';
-import iconaviso from '../../assets/aviso.png'; // Ícone padrão
+import { useNavigate } from 'react-router-dom';
+import iconaviso from '../../assets/aviso.png';
 
 interface ErroModalProps {
   titulo: string;
@@ -11,12 +12,15 @@ interface ErroModalProps {
 }
 
 const ErroModal: React.FC<ErroModalProps> = ({ titulo, open, onClose, iconPath, descricao }) => {
+  const navigate = useNavigate();
+
   const handleConfirm = () => {
     onClose();
+    navigate('/playground');
   };
 
   return (
-    <Dialog open={open} onClose={onClose} aria-labelledby="alert-dialog-title" >
+    <Dialog open={open} onClose={onClose} aria-labelledby="alert-dialog-title">
       <DialogTitle id="alert-dialog-title" sx={{ display: 'flex', alignItems: 'center' }}>
         <img 
           src={iconPath || iconaviso} 
@@ -25,13 +29,13 @@ const ErroModal: React.FC<ErroModalProps> = ({ titulo, open, onClose, iconPath, 
         />
         <Typography variant="h6">{titulo}</Typography>
       </DialogTitle>
-      <DialogContent >
+      <DialogContent>
         <Typography variant="body2" color="textSecondary">
-        {descricao}
+          {descricao}
         </Typography>
       </DialogContent>
       <DialogActions>
-        <IconButton style={{ fontSize:'15px', fontFamily:'arial'}}  onClick={handleConfirm} color="primary">
+        <IconButton style={{ fontSize: '15px', fontFamily: 'arial' }} onClick={handleConfirm} color="primary">
           Confirmar
         </IconButton>
       </DialogActions>
