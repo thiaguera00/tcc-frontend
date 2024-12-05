@@ -4,7 +4,6 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import IconButton from '@mui/material/IconButton';
 import { useNavigate,useLocation } from 'react-router-dom';
-import perfil from '../../assets/perfil.png';
 import user from '../../assets/addUser.png';
 import curso from '../../assets/curso.png'
 import './style.css';
@@ -18,28 +17,6 @@ export default function NavAdm() {
   return (
     <div className="sidebar-container">
       <List>
-        <ListItem
-          onClick={() => navigate('/perfil')}
-          className={`list-item ${isSelected('/perfil') ? 'selected' : ''}`}
-          style={{ cursor: 'pointer' }}
-        >
-          <ListItemIcon>
-            <IconButton>
-              <img
-                src={perfil}
-                alt="Perfil"
-                style={{
-                  width: '40px',
-                  height: '40px',
-                  objectFit: 'cover',
-                  borderRadius: '50%',
-                }}
-              />
-            </IconButton>
-          </ListItemIcon>
-          <ListItemText primary="PERFIL" />
-        </ListItem>
-
         <ListItem
           onClick={() => navigate('/gerenciar-usuario')}
           className={`list-item ${isSelected('/gerenciar-usuario') ? 'selected' : ''}`}

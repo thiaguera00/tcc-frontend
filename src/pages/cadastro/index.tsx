@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { FormGenerate } from "../../Components/form-generate";
 import { NavBarButton } from "../../Components/nav-bar-button";
-import { Box } from '@mui/material';
+import { Box, Checkbox, FormControlLabel } from '@mui/material';
 import { registrarEstudante } from "../../services/userService";
 import { useNavigate } from 'react-router-dom';
+import TermosDeUso from '../../Components/Termo-de-uso/index'; 
 
 export const Cadastro = () => {
   const navigate = useNavigate();
@@ -17,6 +18,8 @@ export const Cadastro = () => {
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isTermsAccepted, setIsTermsAccepted] = useState(false); 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -33,6 +36,11 @@ export const Cadastro = () => {
 
     if (formData.password !== formData.confirmPassword) {
       setErrorMessage('As senhas não coincidem');
+      return;
+    }
+
+    if (!isTermsAccepted) {
+      setErrorMessage('Você precisa aceitar os Termos de Uso para se cadastrar.');
       return;
     }
 
@@ -57,6 +65,18 @@ export const Cadastro = () => {
     { name: 'password', type: 'password', placeholder: 'Senha', value: formData.password, onChange: handleChange },
     { name: 'confirmPassword', type: 'password', placeholder: 'Confirme sua senha', value: formData.confirmPassword, onChange: handleChange },
   ];
+
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsTermsAccepted(event.target.checked); 
+    if (event.target.checked) {
+      setIsModalOpen(true); 
+    }
+  };
+
+  const handleCloseTermos = (accepted: boolean) => {
+    setIsModalOpen(false); 
+    setIsTermsAccepted(accepted); 
+  };
 
   return (
     <>
@@ -83,12 +103,20 @@ export const Cadastro = () => {
         <p style={{ fontSize: '18px', color: '#9fa0b9' }}>Cadastre-se para aprender de forma personalizada com Inteligência Artificial.</p>
       </div>
       <hr style={{ width: '37%' }} />
+
       <FormGenerate 
         inputs={formInputs} 
         action={handleSubmit} 
         method="POST"
         buttonName="Cadastrar"
       />
+
+      <FormControlLabel
+        control={<Checkbox checked={isTermsAccepted} onChange={handleCheckboxChange} />}
+        label="Aceito os Termos de Uso"
+        sx={{ marginTop: '20px' }} 
+      />
+
       {errorMessage && (
         <p style={{ color: 'red', marginTop: '16px' }}>{errorMessage}</p>
       )}
@@ -96,6 +124,12 @@ export const Cadastro = () => {
         <p style={{ color: 'green', marginTop: '16px' }}>{successMessage}</p>
       )}
     </Box>
+
+    {/* Modal para exibir os Termos de Uso */}
+    <TermosDeUso 
+      open={isModalOpen} 
+      onClose={handleCloseTermos} 
+    />
     </>
   );
 };

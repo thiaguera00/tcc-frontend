@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { resetarSenha } from '../../services/userService';
+import { TextField, Button, Box, Typography, CircularProgress } from '@mui/material';
 
 export const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState('');
@@ -40,36 +41,70 @@ export const ResetPassword = () => {
   };
 
   return (
-    <div className="reset-password">
-      <h2>Redefinir Senha</h2>
-      {message && <p style={{ color: 'green' }}>{message}</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+    <Box 
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        height: '100vh', 
+        padding: 2,
+      }}
+      className="reset-password"
+    >
+      <Box
+        sx={{
+          backgroundColor: '#4A3F7D',  
+          padding: 4,
+          borderRadius: 3,
+          width: '100%',
+          maxWidth: '400px',
+          boxShadow: 3,
+        }}
+      >
+        <Typography variant="h4" sx={{ color: 'white', marginBottom: 3, textAlign: 'center' }}>
+          Redefinir Senha
+        </Typography>
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="newPassword">Nova Senha:</label>
-          <input
+        {message && <Typography color="success.main" sx={{ marginBottom: 2, textAlign: 'center' }}>{message}</Typography>}
+        {error && <Typography color="error.main" sx={{ marginBottom: 2, textAlign: 'center' }}>{error}</Typography>}
+
+        <form onSubmit={handleSubmit} style={{ width: '100%' }}>
+          <TextField
+            label="Nova Senha"
             type="password"
-            id="newPassword"
+            variant="outlined"
+            fullWidth
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             required
+            sx={{ marginBottom: 2 ,color: '#FFF' ,backgroundColor:'#343661'}}
           />
-        </div>
-        <div>
-          <label htmlFor="confirmPassword">Confirmar Nova Senha:</label>
-          <input
+
+          <TextField
+            label="Confirmar Nova Senha"
             type="password"
-            id="confirmPassword"
+            variant="outlined"
+            fullWidth
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
+            sx={{ marginBottom: 2,backgroundColor:'#343661',color: '#FFF' }}
           />
-        </div>
-        <button type="submit" disabled={loading}>
-          {loading ? 'Redefinindo...' : 'Redefinir Senha'}
-        </button>
-      </form>
-    </div>
+
+          <Button
+            type="submit"
+            variant="contained"
+            color="secondary" 
+            fullWidth
+            disabled={loading}
+            sx={{ marginTop: 2 }}
+          >
+            {loading ? <CircularProgress size={24} sx={{ color: '#FFF' }} /> : 'Redefinir Senha'}
+          </Button>
+        </form>
+      </Box>
+    </Box>
   );
 };
