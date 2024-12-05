@@ -75,11 +75,11 @@ export const Playground = () => {
 
   const getCardColor = (index: number) => {
     const colors = [
-      "#9ade5b",
-      "#f6b93b", 
-      "#4b7bec", 
-      "#e84118", 
-      "#7f8c8d", 
+      "#A2D96F",
+      "#C19FE6",       
+      "#6FD7D9", 
+      "#D9716F", 
+      "#FB9F67", 
     ];
     return colors[index % colors.length]; 
   };

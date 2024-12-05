@@ -186,7 +186,7 @@ export const AtividadesPage = () => {
         <Box sx={{ padding: '40px 20px', maxWidth: '1200px', margin: '0 auto', marginTop: '20px' }}>
           {conteudo.length > 0 && (
             <>
-              {title === 'Lógica de programação' ? (
+              {title === 'Introdução a logica de programação ' ? (
                 // Se for a fase "Fase Lógica de programação", todas as etapas são Questionário
                 <>
                   {etapa === 0 && (
