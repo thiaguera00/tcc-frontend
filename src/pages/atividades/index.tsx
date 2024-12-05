@@ -108,7 +108,7 @@ export const AtividadesPage = () => {
     if (etapa + 1 >= totalEtapas) {
       const totalAcertos = numAcertos + (isCorrect ? 1 : 0);
 
-      if (totalAcertos > 2) {
+      if (totalAcertos >= 2) {
         const pontosGanhos = 50;
         atualizarPontuacaoUsuario(pontosGanhos);
         atualizarProgressoFase('concluida');

@@ -4,8 +4,9 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import IconButton from '@mui/material/IconButton';
 import { useNavigate,useLocation } from 'react-router-dom';
-import user from '../../assets/addUser.png';
-import curso from '../../assets/curso.png'
+import user from '../../assets/gerenciar-usuario.svg';
+import perfilIcon from '../../assets/perfil.svg';
+import curso from '../../assets/gerenciar-curso.svg'
 import './style.css';
 
 export default function NavAdm() {
@@ -16,12 +17,35 @@ export default function NavAdm() {
 
   return (
     <div className="sidebar-container">
+      <ListItem
+          onClick={() => navigate('/dashboard-admin')}
+          className={`list-item ${isSelected('/Gerenciar-fases') ? 'selected' : ''}`}
+          style={{ cursor: 'pointer' }}
+        >
+          <ListItemIcon>
+            <IconButton>
+              <img
+                src={perfilIcon}
+                alt="Dashboard"
+                style={{
+                  width: '35px',
+                  height: '35px',
+                  objectFit: 'cover',
+                  // borderRadius: '50%',
+                }}
+              />
+            </IconButton>
+          </ListItemIcon>
+          <ListItemText primary="Dashboard" />
+        </ListItem>
+
       <List>
         <ListItem
           onClick={() => navigate('/gerenciar-usuario')}
           className={`list-item ${isSelected('/gerenciar-usuario') ? 'selected' : ''}`}
           style={{ cursor: 'pointer' }}
         >
+          
           <ListItemIcon>
             <IconButton>
               <img
@@ -31,7 +55,7 @@ export default function NavAdm() {
                   width: '40px',
                   height: '40px',
                   objectFit: 'cover',
-                  borderRadius: '50%',
+                  // borderRadius: '50%',
                 }}
               />
             </IconButton>
@@ -53,12 +77,12 @@ export default function NavAdm() {
                   width: '35px',
                   height: '35px',
                   objectFit: 'cover',
-                  borderRadius: '50%',
+                  // borderRadius: '50%',
                 }}
               />
             </IconButton>
           </ListItemIcon>
-          <ListItemText primary="Gerenciar-fases" />
+          <ListItemText primary="Gerenciar curso" />
         </ListItem>
 
       </List>

@@ -74,7 +74,7 @@ export const GerenciarFases = () => {
 
       <Box  display="flex" justifyContent="left" alignItems="center" mt={2}  marginLeft={46.5} >
         <Typography variant="h4" component="div" align="center" color="#ffffff" >
-          Gerenciar fases
+          Gerenciar Curso
         </Typography>
       </Box>
       <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight="50vh">
