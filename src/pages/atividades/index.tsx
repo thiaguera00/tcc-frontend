@@ -16,7 +16,7 @@ import variavel from "../../assets/variavel.svg";
 import decisao from "../../assets/decisao.svg";
 import estrutura from "../../assets/estrutura.svg";
 import projetofinal from "../../assets/projetofinal.svg";
-import './style.css'
+import './style.css';
 
 export const AtividadesPage = () => {
   const location = useLocation();
@@ -30,6 +30,7 @@ export const AtividadesPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [faseConcluida, setFaseConcluida] = useState<boolean>(false);
+  const [modalFalhaOpen, setModalFalhaOpen] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const totalEtapas = 3; 
@@ -96,24 +97,30 @@ export const AtividadesPage = () => {
   };
 
   const handleNextStep = (isCorrect: boolean) => {
-    if (loading) return; 
+    if (loading) return;
   
     if (isCorrect) {
       setNumAcertos((prev) => prev + 1);
     } else {
       setNumErros((prev) => prev + 1);
     }
-
+  
     if (etapa + 1 >= totalEtapas) {
-      const pontosGanhos = 50;
-      atualizarPontuacaoUsuario(pontosGanhos);
-      atualizarProgressoFase('concluida');
-      setFaseConcluida(true);
+      const totalAcertos = numAcertos + (isCorrect ? 1 : 0);
+
+      if (totalAcertos > 2) {
+        const pontosGanhos = 50;
+        atualizarPontuacaoUsuario(pontosGanhos);
+        atualizarProgressoFase('concluida');
+        setFaseConcluida(true);
+      } else {
+        setModalFalhaOpen(true);
+      }
     } else {
       setEtapa((prev) => prev + 1);
     }
   };
-
+  
   const atualizarProgressoFase = async (status: string) => {
     try {
       const dataAtual = new Date();
@@ -149,6 +156,10 @@ export const AtividadesPage = () => {
     navigate('/playground');
   };
 
+  const handleCloseFalhaModal = () => {
+    setModalFalhaOpen(false);
+  };
+
   return (
     <>
       <div className='main'> 
@@ -158,60 +169,89 @@ export const AtividadesPage = () => {
         </Box>
 
         <Box sx={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
-        <LinearProgress
-          variant="determinate"
-          value={(etapa / totalEtapas) * 100}
-          sx={{
-            height: '10px',
-            borderRadius: '5px',
-            backgroundColor: '#555',
-            '& .MuiLinearProgress-bar': {
-              backgroundColor: '#4caf50'
-            }
-          }}
-        />
+          <LinearProgress
+            variant="determinate"
+            value={(etapa / totalEtapas) * 100}
+            sx={{
+              height: '10px',
+              borderRadius: '5px',
+              backgroundColor: '#555',
+              '& .MuiLinearProgress-bar': {
+                backgroundColor: '#4caf50'
+              }
+            }}
+          />
         </Box>
 
         <Box sx={{ padding: '40px 20px', maxWidth: '1200px', margin: '0 auto', marginTop: '20px' }}>
-        {conteudo.length > 0 && (
-          <>
-            {title === 'Fase Lógica de programação' ? (
-              <QuestionarioComponent
-                onFinish={(isCorrect: boolean) => handleNextStep(isCorrect)}
-                conteudo={conteudo} 
-                setLoading={setLoading} 
-              />
-            ) : (
-              <>
-                {etapa === 0 && (
-                  <QuestionarioComponent
-                    onFinish={(isCorrect: boolean) => handleNextStep(isCorrect)}
-                    conteudo={conteudo}
-                    setLoading={setLoading}
-                  />
-                )}
-                {etapa === 1 && <IDEComponent onFinish={(isCorrect: boolean) => handleNextStep(isCorrect)} conteudo={conteudo} />}
-                {etapa === 2 && (
-                  <QuestionarioComponent
-                    onFinish={(isCorrect: boolean) => handleNextStep(isCorrect)}
-                    conteudo={conteudo} 
-                    setLoading={setLoading} 
-                  />
-                )}
-              </>
-            )}
-          </>
-        )}
+          {conteudo.length > 0 && (
+            <>
+              {title === 'Lógica de programação' ? (
+                // Se for a fase "Fase Lógica de programação", todas as etapas são Questionário
+                <>
+                  {etapa === 0 && (
+                    <QuestionarioComponent
+                      onFinish={(isCorrect: boolean) => handleNextStep(isCorrect)}
+                      conteudo={conteudo}
+                      setLoading={setLoading}
+                    />
+                  )}
+                  {etapa === 1 && (
+                    <QuestionarioComponent
+                      onFinish={(isCorrect: boolean) => handleNextStep(isCorrect)}
+                      conteudo={conteudo}
+                      setLoading={setLoading}
+                    />
+                  )}
+                  {etapa === 2 && (
+                    <QuestionarioComponent
+                      onFinish={(isCorrect: boolean) => handleNextStep(isCorrect)}
+                      conteudo={conteudo}
+                      setLoading={setLoading}
+                    />
+                  )}
+                </>
+              ) : (
+                // Caso contrário, siga a sequência padrão de componentes
+                <>
+                  {etapa === 0 && (
+                    <QuestionarioComponent
+                      onFinish={(isCorrect: boolean) => handleNextStep(isCorrect)}
+                      conteudo={conteudo}
+                      setLoading={setLoading}
+                    />
+                  )}
+                  {etapa === 1 && <IDEComponent onFinish={(isCorrect: boolean) => handleNextStep(isCorrect)} conteudo={conteudo} />}
+                  {etapa === 2 && (
+                    <QuestionarioComponent
+                      onFinish={(isCorrect: boolean) => handleNextStep(isCorrect)}
+                      conteudo={conteudo}
+                      setLoading={setLoading}
+                    />
+                  )}
+                </>
+              )}
+            </>
+          )}
         </Box>
 
         {faseConcluida && (
-        <FaseProgresso
-          fase={{ fase: etapa, acertos: numAcertos, erros: numErros, pontos: 50, mensagem: "Você completou a fase com sucesso!" }}
-          conquista={conquistas[etapa - 1]} 
-          onNextFase={() => navigate('/playground')}
-        />
+          <FaseProgresso
+            fase={{ fase: etapa, acertos: numAcertos, erros: numErros, pontos: 50, mensagem: "Você completou a fase com sucesso!" }}
+            conquista={conquistas[etapa - 1]} 
+            onNextFase={() => navigate('/playground')}
+          />
         )}
 
+        {/* Modal para falha ao não passar de fase */}
+        <ErroModal
+          titulo="Você não passou de fase"
+          open={modalFalhaOpen}
+          onClose={handleCloseFalhaModal}
+          descricao="Você precisa acertar mais de 2 questões para completar a fase. Tente novamente!"
+        />
+
+        {/* Modal de Acesso Negado */}
         <ErroModal
           titulo="Acesso Negado"
           open={modalOpen}
@@ -220,7 +260,5 @@ export const AtividadesPage = () => {
         />
       </div>
     </>
-
-    
   );
 };
