@@ -35,11 +35,24 @@ export const Login = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setErrorMessage(null);
-
+  
     try {
       const response = await loginEstudante(formData.email, formData.password);
-
+  
       if (response?.token) {
+        const payload = JSON.parse(atob(response.token.split('.')[1]));
+        console.log('Payload:', payload);
+  
+        if (payload.deleted_at !== null) {
+          setErrorMessage('Usuário inativo. Entre em contato com o suporte.');
+          return;
+        }
+  
+        if (payload.role !== 'Estudante') {
+          setErrorMessage('Apenas usuários estudantes podem acessar esta área.');
+          return;
+        }
+  
         localStorage.setItem('token', response.token);
         navigate('/playground');
       } else {
@@ -50,6 +63,7 @@ export const Login = () => {
       console.error('Erro ao fazer login:', error);
     }
   };
+  
 
   const handlePasswordRecovery = async () => {
     try {
