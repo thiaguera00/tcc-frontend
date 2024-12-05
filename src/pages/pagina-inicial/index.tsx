@@ -13,6 +13,7 @@ interface Fase {
   title: string;
   description: string;
   content: { description: string };
+  order: number; 
 }
 
 export const Playground = () => {
@@ -47,7 +48,7 @@ export const Playground = () => {
     const fetchFases = async () => {
       try {
         const fasesData = await buscarFases();
-        const fasesOrdenadas = ordenarFases(fasesData);
+        const fasesOrdenadas = ordenarFases(fasesData); 
         setFases(fasesOrdenadas);
       } catch (err) {
         console.error("Erro ao buscar fases:", err);
@@ -59,11 +60,16 @@ export const Playground = () => {
   }, []);
 
   const ordenarFases = (fases: Fase[]) => {
-    // Ordenar fases com base no título
+    const ordemCorreta = [
+      "Introdução à Lógica de Programação", 
+      "Estrutura Básica da Linguagem", 
+      "Estruturas Lógicas", 
+      "Funções", 
+      "Desafio"
+    ];
+
     return fases.sort((a, b) => {
-      const numeroA = parseInt(a.title.split(' ')[1]);
-      const numeroB = parseInt(b.title.split(' ')[1]);
-      return numeroA - numeroB;
+      return ordemCorreta.indexOf(a.title) - ordemCorreta.indexOf(b.title);
     });
   };
 
