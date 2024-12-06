@@ -133,7 +133,18 @@ export const Login = () => {
           method="POST"
           buttonName="Entrar"
         />
-        {errorMessage && <p style={{ color: 'red', marginTop: '16px' }}>{errorMessage}</p>}
+        
+        {errorMessage && (
+          <p style={{
+            color: 'white', 
+            marginTop: '16px', 
+            backgroundColor: '#e74c3c', 
+            padding: '10px',
+            borderRadius: '5px',
+          }}>
+            {errorMessage}
+          </p>
+        )}
 
         <Button
           onClick={handleModalOpen}
@@ -220,7 +231,13 @@ export const Login = () => {
               <Loading /> 
             ) : (
               modalMessage && (
-                <Typography sx={{ mt: 2, color: modalMessage.includes('sucesso') ? 'green' : 'red' }}>
+                <Typography sx={{
+                  mt: 2, 
+                  color: modalMessage.includes('sucesso') ? 'white' : 'white', 
+                  backgroundColor: modalMessage.includes('sucesso') ? '#2ecc71' : '#e74c3c', 
+                  padding: '10px',
+                  borderRadius: '5px',
+                }}>
                   {modalMessage}
                 </Typography>
               )

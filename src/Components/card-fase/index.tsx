@@ -29,9 +29,6 @@ export const CardFase: React.FC<CardFaseProps> = ({ id, title, description, corF
         width: '100%',
         maxWidth: '500px',
         cursor: 'pointer',
-        '&:hover': {
-          backgroundColor: '#b5b5b5',
-        },
       }}
     >
       <Typography variant="h6" fontWeight="bold">
