@@ -118,10 +118,26 @@ export const Cadastro = () => {
       />
 
       {errorMessage && (
-        <p style={{ color: 'red', marginTop: '16px' }}>{errorMessage}</p>
+        <p style={{
+        color: 'white', 
+        marginTop: '16px', 
+        backgroundColor: '#e74c3c', 
+        padding: '10px',
+        borderRadius: '5px',
+      }}>
+      {errorMessage}
+      </p>
       )}
       {successMessage && (
-        <p style={{ color: 'green', marginTop: '16px' }}>{successMessage}</p>
+        <p style={{
+        color: 'white', 
+        marginTop: '16px', 
+        backgroundColor: '#2ecc71', 
+        padding: '10px',
+        borderRadius: '5px',
+        }}>
+        {successMessage}
+        </p>
       )}
     </Box>
 

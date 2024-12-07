@@ -53,6 +53,10 @@ export const ResetPassword = () => {
       }}
       className="reset-password"
     >
+      <div>
+        <img src="/assets/nixPurple.svg" alt="cabeça nix" style={{margin:'30px'}} />
+      </div>
+
       <Box
         sx={{
           backgroundColor: '#4A3F7D',  
@@ -66,9 +70,6 @@ export const ResetPassword = () => {
         <Typography variant="h4" sx={{ color: 'white', marginBottom: 3, textAlign: 'center' }}>
           Redefinir Senha
         </Typography>
-
-        {message && <Typography color="success.main" sx={{ marginBottom: 2, textAlign: 'center' }}>{message}</Typography>}
-        {error && <Typography color="error.main" sx={{ marginBottom: 2, textAlign: 'center' }}>{error}</Typography>}
 
         <form onSubmit={handleSubmit} style={{ width: '100%' }}>
           <TextField
@@ -103,6 +104,11 @@ export const ResetPassword = () => {
           >
             {loading ? <CircularProgress size={24} sx={{ color: '#FFF' }} /> : 'Redefinir Senha'}
           </Button>
+
+          {message && <Typography color="success.main" sx={{ marginBottom: 2, textAlign: 'center' }} style={{backgroundColor: '#2ecc71', color: 'white', marginTop: '16px', 
+            padding: '10px',borderRadius: '5px'}}>{message}</Typography>}
+          {error && <Typography color="error.main" sx={{ marginBottom: 2, textAlign: 'center' }} style={{ backgroundColor: '#e74c3c', color: 'white', marginTop: '16px', 
+            padding: '10px',borderRadius: '5px'}}>{error}</Typography>}
         </form>
       </Box>
     </Box>
