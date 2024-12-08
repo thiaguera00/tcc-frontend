@@ -10,11 +10,11 @@ export const buscarFases = async () => {
   return response.data;
 };
 
-export const cadastrarFase = async (title: string, description: string, contentDescription: string, count: number) => {
+export const cadastrarFase = async (title: string, description: string, contentDescription: string) => {
   const token = localStorage.getItem('token');
   const response = await axios.post(
     `${API_URL}/phases/create`,
-    { title, description, contentDescription, count },
+    { title, description, contentDescription },
     { headers: { Authorization: `Bearer ${token}` } }
   );
   return response.data;
@@ -25,12 +25,11 @@ export const atualizarFase = async (
   title: string,
   description: string,
   contentDescription: string,
-  count: number
 ) => {
   const token = localStorage.getItem('token');
   const response = await axios.put(
     `${API_URL}/phases/update/${id}`,
-    { title, description, contentDescription, count },
+    { title, description, contentDescription, },
     { headers: { Authorization: `Bearer ${token}` } }
   );
   return response.data;

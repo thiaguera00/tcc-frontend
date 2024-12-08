@@ -162,12 +162,29 @@ export const AtividadesPage = () => {
 
   return (
     <>
-      <div className='main'> 
+      <div className="main">
         <NavBarPerfil />
         <Box sx={{ display: 'flex', justifyContent: 'center', paddingTop: '80px' }}>
-          <CardFase id={id} title={title} description={description} corFundo="#9ade5b" caminho="#" />
+          {/* Verifica se o título é "Desafio" para redirecionar ou renderizar o card normalmente */}
+          {title === 'Desafio' ? (
+            <CardFase
+              id={id}
+              title={title}
+              description={description}
+              corFundo="#ffcc80"
+              caminho="/desafio"
+            />
+          ) : (
+            <CardFase
+              id={id}
+              title={title}
+              description={description}
+              corFundo="#9ade5b"
+              caminho="#"
+            />
+          )}
         </Box>
-
+  
         <Box sx={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
           <LinearProgress
             variant="determinate"
@@ -177,17 +194,17 @@ export const AtividadesPage = () => {
               borderRadius: '5px',
               backgroundColor: '#555',
               '& .MuiLinearProgress-bar': {
-                backgroundColor: '#4caf50'
-              }
+                backgroundColor: '#4caf50',
+              },
             }}
           />
         </Box>
-
+  
         <Box sx={{ padding: '40px 20px', maxWidth: '1200px', margin: '0 auto', marginTop: '20px' }}>
           {conteudo.length > 0 && (
             <>
-              {title === 'Introdução a logica de programação ' ? (
-                // Se for a fase "Fase Lógica de programação", todas as etapas são Questionário
+              {/* Lógica para fases padrão */}
+              {title === 'Introdução à Lógica de programação' ? (
                 <>
                   {etapa === 0 && (
                     <QuestionarioComponent
@@ -212,7 +229,6 @@ export const AtividadesPage = () => {
                   )}
                 </>
               ) : (
-                // Caso contrário, siga a sequência padrão de componentes
                 <>
                   {etapa === 0 && (
                     <QuestionarioComponent
@@ -221,7 +237,12 @@ export const AtividadesPage = () => {
                       setLoading={setLoading}
                     />
                   )}
-                  {etapa === 1 && <IDEComponent onFinish={(isCorrect: boolean) => handleNextStep(isCorrect)} conteudo={conteudo} />}
+                  {etapa === 1 && (
+                    <IDEComponent
+                      onFinish={(isCorrect: boolean) => handleNextStep(isCorrect)}
+                      conteudo={conteudo}
+                    />
+                  )}
                   {etapa === 2 && (
                     <QuestionarioComponent
                       onFinish={(isCorrect: boolean) => handleNextStep(isCorrect)}
@@ -234,15 +255,15 @@ export const AtividadesPage = () => {
             </>
           )}
         </Box>
-
+  
         {faseConcluida && (
           <FaseProgresso
-            fase={{ fase: etapa, acertos: numAcertos, erros: numErros, pontos: 50, mensagem: "Você completou a fase com sucesso!" }}
-            conquista={conquistas[etapa - 1]} 
+            fase={{ fase: etapa, acertos: numAcertos, erros: numErros, pontos: 50, mensagem: 'Você completou a fase com sucesso!' }}
+            conquista={conquistas[etapa - 1]}
             onNextFase={() => navigate('/playground')}
           />
         )}
-
+  
         {/* Modal para falha ao não passar de fase */}
         <ErroModal
           titulo="Você não passou de fase"
@@ -250,7 +271,7 @@ export const AtividadesPage = () => {
           onClose={handleCloseFalhaModal}
           descricao="Você precisa acertar mais de 2 questões para completar a fase. Tente novamente!"
         />
-
+  
         {/* Modal de Acesso Negado */}
         <ErroModal
           titulo="Acesso Negado"
@@ -261,4 +282,5 @@ export const AtividadesPage = () => {
       </div>
     </>
   );
+  
 };

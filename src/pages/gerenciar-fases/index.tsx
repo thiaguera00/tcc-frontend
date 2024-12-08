@@ -52,9 +52,9 @@ export const GerenciarFases = () => {
 
   const handleSalvar = async () => {
     if (faseEditando) {
-      await atualizarFase(faseEditando.id, formValues.title, formValues.description, formValues.contentDescription, formValues.count);
+      await atualizarFase(faseEditando.id, formValues.title, formValues.description, formValues.contentDescription, );
     } else {
-      await cadastrarFase(formValues.title, formValues.description, formValues.contentDescription, formValues.count);
+      await cadastrarFase(formValues.title, formValues.description, formValues.contentDescription, );
     }
     fecharFormulario();
     buscarFasesSalvas();
@@ -90,7 +90,6 @@ export const GerenciarFases = () => {
                 <TableCell style={{ fontWeight: 'bold', fontSize:'17px' }}>Título</TableCell>
                 <TableCell style={{ fontWeight: 'bold', fontSize:'17px' }}>Descrição</TableCell>
                 <TableCell style={{ fontWeight: 'bold', fontSize:'17px' }}>Conteúdo</TableCell>
-                <TableCell style={{ fontWeight: 'bold', fontSize:'17px' }}>Quantidade de Questões</TableCell>
                 <TableCell style={{ fontWeight: 'bold', fontSize:'17px' }}>Data de Criação</TableCell>
                 <TableCell style={{ fontWeight: 'bold', fontSize:'17px' }}>Ações</TableCell>
               </TableRow>
@@ -101,7 +100,6 @@ export const GerenciarFases = () => {
                   <TableCell>{fase.title}</TableCell>
                   <TableCell>{fase.description}</TableCell>
                   <TableCell>{fase.content.description}</TableCell>
-                  <TableCell>{fase.count_question}</TableCell>
                   <TableCell>{format(new Date(fase.created_at), 'dd/MM/yyyy HH:mm')}</TableCell>
                   <TableCell>
                     <Button variant="outlined" className='btns' onClick={() => abrirFormulario(fase)} style={{ marginRight: '10px' }}>
@@ -143,15 +141,6 @@ export const GerenciarFases = () => {
               margin="normal"
               value={formValues.contentDescription}
               onChange={(e) => setFormValues((prev) => ({ ...prev, contentDescription: e.target.value }))} 
-            />
-            <TextField className='campos'
-              label="Quantidade de Questões"
-              variant="outlined"
-              fullWidth
-              type="number"
-              margin="normal"
-              value={formValues.count}
-              onChange={(e) => setFormValues((prev) => ({ ...prev, count: Number(e.target.value) }))} 
             />
           </DialogContent>
           <DialogActions>

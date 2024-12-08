@@ -96,36 +96,46 @@ export const Playground = () => {
     <>
       <NavBarPerfil />
       <NavLateral />
-
+  
       <Box
         sx={{
-          position: 'absolute', 
+          position: 'absolute',
           top: '40%',
           left: '50%',
-          transform: 'translate(-50%, -50%)', 
+          transform: 'translate(-50%, -50%)',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           gap: '100px',
+          marginTop: '28px',
         }}
       >
         <Typography variant="h4" gutterBottom>
           Olá, {usuario?.name}
         </Typography>
-
-        <Box sx={{ marginTop: '32px', display: 'flex', flexDirection: 'column', gap: '36px', alignItems: 'center' }}>
+  
+        <Box
+          sx={{
+            marginTop: '32px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '36px',
+            alignItems: 'center',
+          }}
+        >
           {fases.map((fase, index) => (
             <CardFase
               key={fase.id}
               id={fase.id}
               title={`${fase.title}`}
               description={fase.description}
-              corFundo={getCardColor(index)} 
-              caminho='/atividades'
+              corFundo={getCardColor(index)}
+              caminho={fase.title === 'Desafio' ? '/desafio' : '/atividades'}
             />
           ))}
         </Box>
       </Box>
     </>
   );
+  
 };

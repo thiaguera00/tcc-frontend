@@ -18,6 +18,7 @@ import { GerenciarFases } from './pages/gerenciar-fases';
 import { Home } from './pages/Home';
 import { ResetPassword } from './pages/trocar-senha';
 import { DashboardAdmin } from './pages/dashboard-admin';
+import { DesafioPage } from './pages/desafio';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -35,6 +36,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/gerenciar-fases" element={<GerenciarFases />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/dashboard-admin" element={<DashboardAdmin />} />
+        <Route path="/desafio" element={<DesafioPage />} />
         <Route
           path="/playground"
           element={
