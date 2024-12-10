@@ -23,6 +23,7 @@ export const Playground = () => {
   const [fases, setFases] = useState<Fase[]>([]);
   const navigate = useNavigate();
 
+  // Fetch para o usuário logado
   useEffect(() => {
     const fetchUsuarioLogado = async () => {
       try {
@@ -44,12 +45,12 @@ export const Playground = () => {
     fetchUsuarioLogado();
   }, [navigate]);
 
+  // Fetch para as fases
   useEffect(() => {
     const fetchFases = async () => {
       try {
-        const fasesData = await buscarFases();
-        const fasesOrdenadas = ordenarFases(fasesData); 
-        setFases(fasesOrdenadas);
+        const fasesData = await buscarFases(); // Dados já ordenados pelo backend
+        setFases(fasesData); // Atualiza o estado diretamente
       } catch (err) {
         console.error("Erro ao buscar fases:", err);
         setError('Erro ao buscar fases');
@@ -59,20 +60,7 @@ export const Playground = () => {
     fetchFases();
   }, []);
 
-  const ordenarFases = (fases: Fase[]) => {
-    const ordemCorreta = [
-      "Introdução à Lógica de Programação", 
-      "Estrutura Básica da Linguagem", 
-      "Estruturas Lógicas", 
-      "Funções", 
-      "Desafio"
-    ];
-
-    return fases.sort((a, b) => {
-      return ordemCorreta.indexOf(a.title) - ordemCorreta.indexOf(b.title);
-    });
-  };
-
+  // Cores dos cards
   const getCardColor = (index: number) => {
     const colors = [
       "#A2D96F",
@@ -84,6 +72,7 @@ export const Playground = () => {
     return colors[index % colors.length]; 
   };
 
+  // Renderização condicional
   if (loading) {
     return <p>Carregando...</p>;
   }
@@ -137,5 +126,4 @@ export const Playground = () => {
       </Box>
     </>
   );
-  
 };

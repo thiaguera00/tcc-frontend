@@ -155,3 +155,19 @@ export const registrarQuestao = async (questao: { question: string; difficulty_l
       throw error;
     }
   };
+
+export const registrarConquista = async (userId: string, data: { conquestName: string }) => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.post(`${API_URL}/users/user-conquest/${userId}`, data, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao registrar conquista:', error);
+    throw error;
+  }
+};

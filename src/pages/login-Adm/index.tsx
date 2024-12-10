@@ -30,17 +30,17 @@ export const LoginAdm = () => {
     try {
       const { token } = await loginEstudante(formData.email, formData.password);
       console.log('Token recebido:', token);
-    
+
       const payload = JSON.parse(atob(token.split('.')[1]));
       console.log('Payload decodificado:', payload);
-    
+
       if (payload.deleted_at !== null) {
         setErrorMessage('Usuário inativo. Entre em contato com o suporte.');
         return;
       }
-    
+
       localStorage.setItem('token', token);
-    
+
       if (payload.role === 'Admin') {
         navigate('/dashboard-admin');
       } else {
@@ -50,7 +50,7 @@ export const LoginAdm = () => {
       setErrorMessage('Erro ao efetuar o login, tente novamente.');
       console.error('Erro ao efetuar login:', error);
     }
-  }
+  };
 
   const formInputs = [
     { name: 'email', type: 'email', placeholder: 'E-mail', value: formData.email, onChange: handleChange },
@@ -84,15 +84,37 @@ export const LoginAdm = () => {
         method="POST" 
         buttonName="Entrar" 
       />
+
+      {/* Mensagem de erro */}
       {errorMessage && (
-        <Typography variant="body2" style={{ color: 'red', marginTop: '16px' }}>
+        <Box
+          sx={{
+            marginTop: '16px',
+            padding: '10px',
+            borderRadius: '5px',
+            backgroundColor: '#e74c3c', // Fundo vermelho para erros
+            color: '#fff',
+            textAlign: 'center',
+          }}
+        >
           {errorMessage}
-        </Typography>
+        </Box>
       )}
+
+      {/* Mensagem de sucesso */}
       {successMessage && (
-        <Typography variant="body2" style={{ color: 'green', marginTop: '16px' }}>
+        <Box
+          sx={{
+            marginTop: '16px',
+            padding: '10px',
+            borderRadius: '5px',
+            backgroundColor: '#2ecc71', // Fundo verde para sucessos
+            color: '#fff',
+            textAlign: 'center',
+          }}
+        >
           {successMessage}
-        </Typography>
+        </Box>
       )}
     </Box>
   );

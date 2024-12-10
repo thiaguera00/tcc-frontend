@@ -85,6 +85,9 @@ export const DesafioPage: React.FC = () => {
       <Typography variant="body1" marginTop="16px">
         {desafio.explicacao}
       </Typography>
+      <Typography variant="body1" marginTop="16px">
+        <strong>OBS: Após concluir o desafio poste na nossa comunidade do discord!</strong>
+      </Typography>
     </Box>
     </div>
     </>

@@ -12,7 +12,12 @@ interface IDEProps {
 export const IDEComponent = ({ onFinish, conteudo }: IDEProps) => {
   const [codigo, setCodigo] = useState<string>('');
   const [questao, setQuestao] = useState<any>(null);
-  const [feedback, setFeedback] = useState<string | null>(null);
+  const [feedback, setFeedback] = useState<{
+    esta_correto: boolean;
+    resumo: string;
+    correcao: string;
+    melhorias?: string;
+  } | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [showNextButton, setShowNextButton] = useState<boolean>(false);
 
@@ -44,26 +49,42 @@ export const IDEComponent = ({ onFinish, conteudo }: IDEProps) => {
     setLoading(true);
     setFeedback(null);
     setShowNextButton(false);
-  
+
     try {
       const questaoTexto = questao?.titulo || '';
-  
+
       const payload = {
         questao: questaoTexto,
-        codigo: codigo
+        codigo: codigo,
       };
-  
+
       const respostaVerificacao = await corrigirCodigoIa(payload);
-  
-      if (respostaVerificacao.esta_correto) {
-        setFeedback(`Resposta correta! Muito bem! 🎉\n\n${respostaVerificacao.feedback}`);
-        setShowNextButton(true);
-      } else {
-        setFeedback(`Resposta incorreta. Aqui está o feedback:\n\n${respostaVerificacao.feedback}`);
-        setShowNextButton(true);
+
+      const feedbackData: {
+        esta_correto: boolean;
+        resumo: string;
+        correcao: string;
+        melhorias?: string;
+      } = {
+        esta_correto: respostaVerificacao.esta_correto,
+        resumo: respostaVerificacao.esta_correto
+          ? `Resposta correta! Muito bem! 🎉 ${respostaVerificacao.feedback.resumo}`
+          : `Resposta incorreta. ${respostaVerificacao.feedback.resumo}`,
+        correcao: respostaVerificacao.feedback.correcao,
+      };
+
+      if (respostaVerificacao.feedback.melhorias?.trim()) {
+        feedbackData.melhorias = respostaVerificacao.feedback.melhorias;
       }
+
+      setFeedback(feedbackData);
+      setShowNextButton(true);
     } catch (error) {
-      setFeedback('Erro ao verificar a resposta. Tente novamente mais tarde.');
+      setFeedback({
+        esta_correto: false,
+        resumo: 'Erro ao verificar a resposta. Tente novamente mais tarde.',
+        correcao: '',
+      });
       console.error('Erro ao verificar a resposta:', error);
       setShowNextButton(false);
     } finally {
@@ -138,16 +159,6 @@ export const IDEComponent = ({ onFinish, conteudo }: IDEProps) => {
             }}
           >
             {/* Avatar do Feedback no canto superior direito */}
-            <Box
-              sx={{
-                position: 'absolute',
-                top: '-70px',
-                right: '-20px',
-                cursor: 'pointer',
-              }}
-            >
-              <AvatarFeedback />
-            </Box>
             <CodeiumEditor
               value={codigo}
               language="python"
@@ -173,12 +184,22 @@ export const IDEComponent = ({ onFinish, conteudo }: IDEProps) => {
           sx={{
             marginTop: '20px',
             padding: '16px',
-            backgroundColor: feedback.includes('correta') ? '#e0f7fa' : '#ffebee',
-            color: feedback.includes('correta') ? '#006064' : '#c62828',
+            backgroundColor: feedback.esta_correto ? '#d1e2c0' : '#ffebee',
+            color: feedback.esta_correto ? '#3a7202' : '#c62828',
             borderRadius: '8px',
           }}
         >
-          <Typography variant="subtitle1">{feedback}</Typography>
+          <Typography variant="subtitle1" sx={{ fontWeight: 'bold', marginBottom: '8px' }}>
+            {feedback.resumo}
+          </Typography>
+          <Typography variant="body2" sx={{ marginBottom: '8px' }}>
+            <strong>Correção:</strong> {feedback.correcao}
+          </Typography>
+          {feedback.melhorias && (
+            <Typography variant="body2">
+              <strong>Melhorias:</strong> {feedback.melhorias}
+            </Typography>
+          )}
         </Box>
       )}
 

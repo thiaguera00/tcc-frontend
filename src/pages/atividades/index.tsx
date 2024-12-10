@@ -6,7 +6,7 @@ import { IDEComponent } from '../../Components/ide';
 import { CardFase } from '../../Components/card-fase';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { buscarConteudoDaFase } from '../../services/phaseService';
-import { atualizarUsuario, usuarioLogado } from '../../services/userService'; 
+import { atualizarUsuario, usuarioLogado, registrarConquista } from '../../services/userService'; 
 import { atualizarFaseProgresso, buscarProgresso } from '../../services/progressPhaseService';
 import { AxiosError } from 'axios';
 import ErroModal from '../../Components/componenteErro';
@@ -36,12 +36,33 @@ export const AtividadesPage = () => {
   const totalEtapas = 3; 
 
   const conquistas = [
-    { icon: <img src={cerebro} alt="Cérebro" style={{ width: '60px', height: '70px' }} />, texto: 'VOCÊ JÁ PENSA COMO UM PROGRAMADOR!' },
-    { icon: <img src={variavel} alt="Variável" style={{ width: '60px', height: '70px' }} />, texto: 'VARIÁVEIS E TIPOS DE DADOS? FÁCIL PARA VOCÊ!' },
-    { icon: <img src={decisao} alt="Decisão" style={{ width: '60px', height: '70px' }} />, texto: 'DECISÕES INTELIGENTES NO CÓDIGO, ÓTIMO TRABALHO!' },
-    { icon: <img src={estrutura} alt="Estrutura" style={{ width: '60px', height: '70px' }} />, texto: 'ESTRUTURAS LÓGICAS? FEITAS COM SUCESSO!' },
-    { icon: <img src={projetofinal} alt="Projeto Final" style={{ width: '60px', height: '70px' }} />, texto: 'VOCÊ CHEGOU AO GRANDE DESAFIO FINAL!' },
+    {
+      name: 'Cérebro',
+      icon: <img src={cerebro} alt="Cérebro" style={{ width: '60px', height: '70px' }} />,
+      texto: 'VOCÊ JÁ PENSA COMO UM PROGRAMADOR!',
+    },
+    {
+      name: 'Variável',
+      icon: <img src={variavel} alt="Variável" style={{ width: '60px', height: '70px' }} />,
+      texto: 'VARIÁVEIS E TIPOS DE DADOS? FÁCIL PARA VOCÊ!',
+    },
+    {
+      name: 'Decisão',
+      icon: <img src={decisao} alt="Decisão" style={{ width: '60px', height: '70px' }} />,
+      texto: 'DECISÕES INTELIGENTES NO CÓDIGO, ÓTIMO TRABALHO!',
+    },
+    {
+      name: 'Estrutura',
+      icon: <img src={estrutura} alt="Estrutura" style={{ width: '60px', height: '70px' }} />,
+      texto: 'ESTRUTURAS LÓGICAS? FEITAS COM SUCESSO!',
+    },
+    {
+      name: 'Projeto Final',
+      icon: <img src={projetofinal} alt="Projeto Final" style={{ width: '60px', height: '70px' }} />,
+      texto: 'VOCÊ CHEGOU AO GRANDE DESAFIO FINAL!',
+    },
   ];
+  
 
   useEffect(() => {
     const fetchConteudo = async () => {
@@ -96,7 +117,7 @@ export const AtividadesPage = () => {
     }
   };
 
-  const handleNextStep = (isCorrect: boolean) => {
+  const handleNextStep = async (isCorrect: boolean) => {
     if (loading) return;
   
     if (isCorrect) {
@@ -108,10 +129,11 @@ export const AtividadesPage = () => {
     if (etapa + 1 >= totalEtapas) {
       const totalAcertos = numAcertos + (isCorrect ? 1 : 0);
 
-      if (totalAcertos >= 2) {
+      if (totalAcertos > 2) {
         const pontosGanhos = 50;
         atualizarPontuacaoUsuario(pontosGanhos);
         atualizarProgressoFase('concluida');
+        await atribuirConquista(); // Adiciona a conquista ao usuário
         setFaseConcluida(true);
       } else {
         setModalFalhaOpen(true);
@@ -151,6 +173,21 @@ export const AtividadesPage = () => {
     }
   };
 
+  const atribuirConquista = async () => {
+    try {
+      if (userId) {
+        const conquistaAtual = conquistas[etapa]?.name;
+        if (conquistaAtual) {
+          await registrarConquista(userId, { conquestName: conquistaAtual });
+        } else {
+          console.error('Erro: Nome da conquista não encontrado para a etapa atual.');
+        }
+      }
+    } catch (error) {
+      console.error('Erro ao registrar a conquista:', error);
+    }
+  };
+
   const handleCloseModal = () => {
     setModalOpen(false);
     navigate('/playground');
@@ -165,7 +202,6 @@ export const AtividadesPage = () => {
       <div className="main">
         <NavBarPerfil />
         <Box sx={{ display: 'flex', justifyContent: 'center', paddingTop: '80px' }}>
-          {/* Verifica se o título é "Desafio" para redirecionar ou renderizar o card normalmente */}
           {title === 'Desafio' ? (
             <CardFase
               id={id}
@@ -203,7 +239,6 @@ export const AtividadesPage = () => {
         <Box sx={{ padding: '40px 20px', maxWidth: '1200px', margin: '0 auto', marginTop: '20px' }}>
           {conteudo.length > 0 && (
             <>
-              {/* Lógica para fases padrão */}
               {title === 'Introdução à Lógica de programação' ? (
                 <>
                   {etapa === 0 && (
@@ -264,7 +299,6 @@ export const AtividadesPage = () => {
           />
         )}
   
-        {/* Modal para falha ao não passar de fase */}
         <ErroModal
           titulo="Você não passou de fase"
           open={modalFalhaOpen}
@@ -272,7 +306,6 @@ export const AtividadesPage = () => {
           descricao="Você precisa acertar mais de 2 questões para completar a fase. Tente novamente!"
         />
   
-        {/* Modal de Acesso Negado */}
         <ErroModal
           titulo="Acesso Negado"
           open={modalOpen}
@@ -282,5 +315,4 @@ export const AtividadesPage = () => {
       </div>
     </>
   );
-  
 };

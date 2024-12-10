@@ -18,11 +18,12 @@ export const Cadastro = () => {
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [redirectMessage, setRedirectMessage] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isTermsAccepted, setIsTermsAccepted] = useState(false);
 
-  const [passwordValid, setPasswordValid] = useState(false); // Estado para validação da senha
-  const [passwordMessage, setPasswordMessage] = useState<string | null>(null); // Mensagem dinâmica para senha
+  const [passwordValid, setPasswordValid] = useState(false);
+  const [passwordMessage, setPasswordMessage] = useState<string | null>(null);
 
   const validatePassword = (password: string) => {
     const regex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[a-zA-Z]).{8,}$/;
@@ -45,7 +46,7 @@ export const Cadastro = () => {
     });
 
     if (name === 'password') {
-      validatePassword(value); // Valida a senha em tempo real
+      validatePassword(value);
     }
   };
 
@@ -53,6 +54,7 @@ export const Cadastro = () => {
     event.preventDefault();
     setErrorMessage(null);
     setSuccessMessage(null);
+    setRedirectMessage(null);
 
     if (!passwordValid) {
       setErrorMessage('Por favor, insira uma senha válida antes de continuar.');
@@ -72,7 +74,8 @@ export const Cadastro = () => {
     try {
       await registrarEstudante(formData.nome, formData.email, formData.password);
 
-      setSuccessMessage('Usuário registrado com sucesso! Redirecionando para a página de login...');
+      setSuccessMessage('Usuário registrado com sucesso!');
+      setRedirectMessage('Redirecionando para a página de login...');
 
       setTimeout(() => {
         navigate('/login');
@@ -130,8 +133,20 @@ export const Cadastro = () => {
 
         <FormGenerate inputs={formInputs} action={handleSubmit} method="POST" buttonName="Cadastrar" />
 
+        {/* Mensagem de validação da senha */}
         {passwordMessage && (
-          <p style={{ color: passwordValid ? 'green' : 'red', marginTop: '8px' }}>{passwordMessage}</p>
+          <Box
+            sx={{
+              marginTop: '8px',
+              padding: '10px',
+              borderRadius: '5px',
+              backgroundColor: passwordValid ? '#2ecc71' : '#e74c3c',
+              color: '#fff',
+              textAlign: 'center',
+            }}
+          >
+            {passwordMessage}
+          </Box>
         )}
 
         <FormControlLabel
@@ -140,31 +155,52 @@ export const Cadastro = () => {
           sx={{ marginTop: '20px' }}
         />
 
+        {/* Mensagem de erro */}
         {errorMessage && (
-          <p
-            style={{
-              color: 'white',
+          <Box
+            sx={{
               marginTop: '16px',
-              backgroundColor: '#e74c3c',
               padding: '10px',
               borderRadius: '5px',
+              backgroundColor: '#e74c3c',
+              color: 'white',
+              textAlign: 'center',
             }}
           >
             {errorMessage}
-          </p>
+          </Box>
         )}
+        
+        {/* Mensagem de sucesso */}
         {successMessage && (
-          <p
-            style={{
-              color: 'white',
+          <Box
+            sx={{
               marginTop: '16px',
-              backgroundColor: '#2ecc71',
               padding: '10px',
               borderRadius: '5px',
+              backgroundColor: '#2ecc71',
+              color: 'white',
+              textAlign: 'center',
             }}
           >
             {successMessage}
-          </p>
+          </Box>
+        )}
+
+        {/* Mensagem de redirecionamento */}
+        {redirectMessage && (
+          <Box
+            sx={{
+              marginTop: '8px',
+              padding: '10px',
+              borderRadius: '5px',
+              backgroundColor: '#3498db',
+              color: 'white',
+              textAlign: 'center',
+            }}
+          >
+            {redirectMessage}
+          </Box>
         )}
       </Box>
 

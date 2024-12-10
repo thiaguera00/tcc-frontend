@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Box, Typography, Button, FormControl, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 import { gerarQuestaoForm } from '../../services/iaService';
 import { registrarQuestao, registrarRespostasUsuario } from '../../services/userService';
@@ -17,7 +17,12 @@ export const QuestionarioComponent = ({ onFinish, conteudo, setLoading }: Questi
   const [questaoId, setQuestaoId] = useState<string | null>(null);
   const [correctAnswer, setCorrectAnswer] = useState<string | null>(null);
 
+  const isFetching = useRef(false);
+
   const fetchQuestao = async () => {
+    if (isFetching.current) return;
+    isFetching.current = true;
+
     try {
       setLoading(true);
 
@@ -46,11 +51,14 @@ export const QuestionarioComponent = ({ onFinish, conteudo, setLoading }: Questi
       setQuestaoData(null);
     } finally {
       setLoading(false);
+      isFetching.current = false;
     }
   };
 
   useEffect(() => {
-    fetchQuestao();
+    if (!questaoData) {
+      fetchQuestao();
+    }
   }, [conteudo]);
 
   const handleOptionChange = (value: string, description: string) => {
@@ -85,7 +93,7 @@ export const QuestionarioComponent = ({ onFinish, conteudo, setLoading }: Questi
     setShowNextButton(true);
   };
 
-  const handleNextQuestion = () => {
+  const handleNextQuestion = async () => {
     const isCorrect = resposta === questaoData.correctAnswer;
     onFinish(isCorrect);
 
@@ -95,7 +103,8 @@ export const QuestionarioComponent = ({ onFinish, conteudo, setLoading }: Questi
     setSelectedDescription(null);
     setQuestaoId(null);
     setCorrectAnswer(null);
-    fetchQuestao();
+
+    await fetchQuestao();
   };
 
   return (
@@ -153,20 +162,18 @@ export const QuestionarioComponent = ({ onFinish, conteudo, setLoading }: Questi
           </FormControl>
 
           {showNextButton && selectedDescription && (
-            <Typography
-              variant="body1"
+            <Box
               sx={{
                 marginTop: '10px',
-                color:
-                  showNextButton && resposta === correctAnswer
-                    ? '#4caf50'
-                    : showNextButton && resposta !== correctAnswer
-                    ? '#f44336'
-                    : '#9e9e9e',
+                padding: '16px',
+                borderRadius: '8px',
+                backgroundColor:
+                  resposta === correctAnswer ? '#d1e2c0' : '#ffebee',
+                color: resposta === correctAnswer ? '#3a7202' : '#c62828',
               }}
             >
-              {selectedDescription}
-            </Typography>
+              <Typography variant="body1">{selectedDescription}</Typography>
+            </Box>
           )}
 
           {!showNextButton && (

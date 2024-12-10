@@ -47,7 +47,7 @@ const FaseProgresso: React.FC<FaseProgressoProps> = ({ fase, conquista, onNextFa
         }}
       >
         <Typography variant="h5" sx={{ marginBottom: 2, fontWeight: 'bold' }}>
-          Fase {fase.fase} Concluída!
+          Fase Concluída!
         </Typography>
         <Typography variant="h6" sx={{ marginBottom: 2, fontWeight: 'bold' }}>
           PARABÉNS!
